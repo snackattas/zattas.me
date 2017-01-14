@@ -1,9 +1,7 @@
 $( document ).ready( function () {
 
   function scroller (event) {
-    console.log(event)
     var scroll_to = event.data.scroll_to
-    console.log(event.data.scroll_to)
     $('html,body').animate({
       scrollTop: $(scroll_to).offset().top
     }, 1000);

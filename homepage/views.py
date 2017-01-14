@@ -5,7 +5,6 @@ from .forms import ContactForm
 from django.core.mail import send_mail
 import logging
 import os
-# Create your views here.
 
 def helper_create_menu_tuple():
     CustomMenu = namedtuple("CustomMenu",
@@ -26,8 +25,6 @@ def homepage(request):
     return render(request, 'homepage.html',
         {'menus':  helper_create_menu_tuple(), 'form': ContactForm(),
         'message': message})
-
-
 
 def helper_send_email(data):
     Message = namedtuple("Message", ["message", "error"])
