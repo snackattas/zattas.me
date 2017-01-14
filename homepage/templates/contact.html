@@ -1,0 +1,21 @@
+<h1 id="Contact">Contact</h1>
+<form method='post' action="{% url 'homepage' %}">
+  {% csrf_token %}
+  <div class="row">
+    <div class="six columns">
+      <label for="EmailInput">Your email</label>
+      {{ form.email }}
+    </div>
+    <div class="six columns">
+      <label for="RecipientInput">Reason for contacting</label>
+      {{ form.reason_for_contacting }}
+    </div>
+  </div>
+  <label for="Message">Message</label>
+  {{ form.message }}
+  <label class="send-yourself-copy">
+    {{ form.send_to_yourself }}
+    <span class="label-body">Send a copy to yourself</span>
+  </label>
+  <input class="button-primary" type="submit" value="Submit">
+</form>

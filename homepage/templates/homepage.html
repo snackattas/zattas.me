@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>zattas</title>
+    <link href="static/images/favicon.png" rel="shortcut icon">
+    <link href="static/css/normalize.css" rel="stylesheet" type="text/css">
+    <link href="static/css/skeleton.css" rel="stylesheet" type="text/css">
+    <link href="static/css/output.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div class="table-container">
+    <div class="table-block footer-push">
+  <div class="header-video">
+    {% include 'headerVideo.html' %}
+  </div>
+  <div class="header-menu">
+    {% include 'headerMenu.html' %}
+  </div>
+  <div class="header-displace2"></div>
+  <div class="container">
+    {% if message %}
+      {% if message.error %}
+        <p class="alert alert-error">
+      {% else %}
+        <p class="alert alert-success">
+      {% endif %}
+      {{ message.message }}</p>
+    {% endif %}
+
+    {% include 'aboutMe.html' %}
+    {% include 'experience.html' %}
+    {% include 'projects.html' %}
+    {% include 'skills.html' %}
+    {% include 'contact.html' %}
+</div>
+</div>
+
+    <div class="table-block" id="footer">
+        <footer>
+          Created with <i class="fa fa-heart white"></i> by Zach Attas &#8226; View on github <a class="fa fa-github icon-underline white" href=
+            "https://github.com/snackattas/zattas.me" target="_blank"></a>
+        </footer>
+
+    </div>  <!-- end footer div.table-block -->
+  </div>
+  <script src=
+  "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+  </script>
+  <script src="static/js/homepage.js">
+  </script>
+
+</body>
+</html>
