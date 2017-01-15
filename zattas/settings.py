@@ -26,7 +26,7 @@ SECRET_KEY = '(2#23-e=v&@u%ktauw%%9^$yp&+mx$cqtdl0*ieweggv1%z+(l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['zattas.me', 'www.zattas.me']
+ALLOWED_HOSTS = ['localhost']
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = os.environ.get('HOST_EMAIL')
