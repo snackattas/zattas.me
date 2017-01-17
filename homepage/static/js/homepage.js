@@ -22,4 +22,9 @@ $( document ).ready( function () {
 
   ga('create', 'UA-90308284-1', 'auto');
   ga('send', 'pageview');
+
+  $(window).bind("load", function() {
+    console.log('here')
+  	$('.header-video').append("<video autoplay='' class='header-video__media' loop=''><source src='static/video/coding-smaller.mp4' type='video/mp4'><source src='static/video/coding.ogv' type='video/ogv'/><source src='static/video/coding.webm' type='video/webm'/>Sorry, your browser doesn't support HTML5 video.</video>");
+  });
 });
