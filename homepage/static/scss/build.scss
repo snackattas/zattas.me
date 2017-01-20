@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand:400,700');
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+$img-width: 700px;
+$img-height: 500px;
+$p-font-size: 100%;
+$p-container-width: 650px;
+
 body {
 	font-family: 'Quicksand', sans-serif;
 }
@@ -56,7 +61,8 @@ body {
 	padding-bottom: 10px;
 }
 .button-hover:hover{
-	background: rgba(0,0,0,.85)
+	background: rgba(0,0,0,.85);
+	cursor: pointer;
 }
 
 img.circle {
@@ -98,10 +104,6 @@ img.custom-icon.angel {
 	max-height: 30px;
 	max-width: 20px;
 }
-
-// .big-items figure img {
-// 	display: block;
-// }
 
 .big-items figure figcaption {
 	padding: 2em;
@@ -179,8 +181,8 @@ img.cool-effect {
 }
 
 figure.cool-effect img {
-	width: 700px;
-	height: 500px;
+	width: $img-width;
+	height: $img-height;
 	-webkit-transition: opacity 1s, -webkit-transform 1s;
 	transition: opacity 1s, transform 1s;
 	-webkit-backface-visibility: hidden;
@@ -223,14 +225,14 @@ figure.cool-effect p {
 	color: black;
 	text-transform: none;
 	font-weight: 500;
-	font-size: 95%;
+	font-size: $p-font-size;
 	-webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
 	transition: opacity 0.35s, transform 0.35s;
 	-webkit-transform: translate3d(-480px,0,0);
 	transform: translate3d(-800px,0,0);
 	float: left;
 	clear: left;
-	max-width: 650px;
+	max-width: $p-container-width;
 }
 
 figure.cool-effect {
@@ -281,7 +283,6 @@ figure.cool-effect:hover p {
 }
 
 a.button-style {
-	cursor: default;
 	color: white;
 	text-decoration: none;
 }
@@ -289,7 +290,6 @@ a.button-style:hover{
 	color: white;
 }
 a:hover{
-	cursor: default;
 }
 a {
 	color: black;
@@ -342,12 +342,45 @@ figure.cool-effect.smaller img{
     color: #C0392B;
 }
 
+
+
 @media (max-width: 800px){
 	.header-buttons {
 		width: 100% !important;
 	}
 }
+@media (max-width: 600px){
+	.header-video {
+		left: -200px;
+		width: 160%;
+	}
+}
 
+@for $i from 1 through 12 {
+	$new-width: ($img-width*(1-(.045*$i)));
+	$new-height: ($img-height*(1-(.045*$i)));
+	$max_width: (1200-(50*$i));
+	$new-font-size_percent: ($p-font-size*(1-(.05*$i)));
+	$new-h2: (42px*(1-(.05*$i)));
+	$new-h5: (24px*(1-(.05*$i)));
+	$new-p-container-width: ($p-container-width*(1-(.05*$i)));
+	@media (max-width: #{$max_width}px ){
+		figure.cool-effect img {
+			width: #{$new-width};
+			height:#{$new-height};
+		}
+		figure.cool-effect p{
+			max-width: $new-p-container-width;
+			font-size: $new-font-size_percent;
+		}
+		h2 {
+			font-size: $new-h2;
+		}
+		h5 {
+			font-size: $new-h5;
+		}
+	}
+}
 
 // footer styles
 html, body {

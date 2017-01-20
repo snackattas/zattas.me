@@ -52,7 +52,8 @@ body {
   padding-bottom: 10px; }
 
 .button-hover:hover {
-  background: rgba(0, 0, 0, 0.85); }
+  background: rgba(0, 0, 0, 0.85);
+  cursor: pointer; }
 
 img.circle {
   border-radius: 50%;
@@ -191,7 +192,7 @@ figure.cool-effect p {
   color: black;
   text-transform: none;
   font-weight: 500;
-  font-size: 95%;
+  font-size: 100%;
   -webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
   transition: opacity 0.35s, transform 0.35s;
   -webkit-transform: translate3d(-480px, 0, 0);
@@ -339,15 +340,11 @@ figure.cool-effect:hover p {
   transform: translate3d(0, 0, 0); }
 
 a.button-style {
-  cursor: default;
   color: white;
   text-decoration: none; }
 
 a.button-style:hover {
   color: white; }
-
-a:hover {
-  cursor: default; }
 
 a {
   color: black; }
@@ -395,6 +392,178 @@ figure.cool-effect.smaller img {
 @media (max-width: 800px) {
   .header-buttons {
     width: 100% !important; } }
+@media (max-width: 600px) {
+  .header-video {
+    left: -200px;
+    width: 160%; } }
+@media (max-width: 1150px) {
+  figure.cool-effect img {
+    width: 668.5px;
+    height: 477.5px; }
+
+  figure.cool-effect p {
+    max-width: 617.5px;
+    font-size: 95%; }
+
+  h2 {
+    font-size: 39.9px; }
+
+  h5 {
+    font-size: 22.8px; } }
+@media (max-width: 1100px) {
+  figure.cool-effect img {
+    width: 637px;
+    height: 455px; }
+
+  figure.cool-effect p {
+    max-width: 585px;
+    font-size: 90%; }
+
+  h2 {
+    font-size: 37.8px; }
+
+  h5 {
+    font-size: 21.6px; } }
+@media (max-width: 1050px) {
+  figure.cool-effect img {
+    width: 605.5px;
+    height: 432.5px; }
+
+  figure.cool-effect p {
+    max-width: 552.5px;
+    font-size: 85%; }
+
+  h2 {
+    font-size: 35.7px; }
+
+  h5 {
+    font-size: 20.4px; } }
+@media (max-width: 1000px) {
+  figure.cool-effect img {
+    width: 574px;
+    height: 410px; }
+
+  figure.cool-effect p {
+    max-width: 520px;
+    font-size: 80%; }
+
+  h2 {
+    font-size: 33.6px; }
+
+  h5 {
+    font-size: 19.2px; } }
+@media (max-width: 950px) {
+  figure.cool-effect img {
+    width: 542.5px;
+    height: 387.5px; }
+
+  figure.cool-effect p {
+    max-width: 487.5px;
+    font-size: 75%; }
+
+  h2 {
+    font-size: 31.5px; }
+
+  h5 {
+    font-size: 18px; } }
+@media (max-width: 900px) {
+  figure.cool-effect img {
+    width: 511px;
+    height: 365px; }
+
+  figure.cool-effect p {
+    max-width: 455px;
+    font-size: 70%; }
+
+  h2 {
+    font-size: 29.4px; }
+
+  h5 {
+    font-size: 16.8px; } }
+@media (max-width: 850px) {
+  figure.cool-effect img {
+    width: 479.5px;
+    height: 342.5px; }
+
+  figure.cool-effect p {
+    max-width: 422.5px;
+    font-size: 65%; }
+
+  h2 {
+    font-size: 27.3px; }
+
+  h5 {
+    font-size: 15.6px; } }
+@media (max-width: 800px) {
+  figure.cool-effect img {
+    width: 448px;
+    height: 320px; }
+
+  figure.cool-effect p {
+    max-width: 390px;
+    font-size: 60%; }
+
+  h2 {
+    font-size: 25.2px; }
+
+  h5 {
+    font-size: 14.4px; } }
+@media (max-width: 750px) {
+  figure.cool-effect img {
+    width: 416.5px;
+    height: 297.5px; }
+
+  figure.cool-effect p {
+    max-width: 357.5px;
+    font-size: 55%; }
+
+  h2 {
+    font-size: 23.1px; }
+
+  h5 {
+    font-size: 13.2px; } }
+@media (max-width: 700px) {
+  figure.cool-effect img {
+    width: 385px;
+    height: 275px; }
+
+  figure.cool-effect p {
+    max-width: 325px;
+    font-size: 50%; }
+
+  h2 {
+    font-size: 21px; }
+
+  h5 {
+    font-size: 12px; } }
+@media (max-width: 650px) {
+  figure.cool-effect img {
+    width: 353.5px;
+    height: 252.5px; }
+
+  figure.cool-effect p {
+    max-width: 292.5px;
+    font-size: 45%; }
+
+  h2 {
+    font-size: 18.9px; }
+
+  h5 {
+    font-size: 10.8px; } }
+@media (max-width: 600px) {
+  figure.cool-effect img {
+    width: 322px;
+    height: 230px; }
+
+  figure.cool-effect p {
+    max-width: 260px;
+    font-size: 40%; }
+
+  h2 {
+    font-size: 16.8px; }
+
+  h5 {
+    font-size: 9.6px; } }
 html, body {
   height: 100%; }
 
