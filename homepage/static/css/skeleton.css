@@ -31,7 +31,7 @@
 .container {
   position: relative;
   width: 100%;
-  max-width: 960px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 20px;
   box-sizing: border-box; }
@@ -158,9 +158,9 @@ p {
 /* Links
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 a {
-  color: #1EAEDB; }
+  color: white; }
 a:hover {
-  color: #0FA0CE; }
+  color: white; }
 
 
 /* Buttons

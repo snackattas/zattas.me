@@ -1,7 +1,11 @@
 @import url("https://fonts.googleapis.com/css?family=Quicksand:400,700");
 @import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.4.0/balloon.min.css");
 body {
-  font-family: 'Quicksand', sans-serif; }
+  font-family: 'Quicksand', sans-serif;
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%; }
 
 .header-video {
   width: 100%;
@@ -23,37 +27,45 @@ body {
   bottom: 0;
   left: 0; }
 
-.container.header {
-  width: 100%; }
+.header-padding-top {
+  padding-top: 70px; }
 
-.inline {
-  display: inline-block; }
+.header-padding-left {
+  padding-left: 30px; }
 
-.header-menu {
+.header-container {
   color: white; }
 
-.no-max-width {
-  max-width: none !important; }
-
-.header-buttons {
-  width: 62% !important;
+.header-buttons-table {
   display: table;
-  table-layout: fixed; }
+  table-layout: fixed;
+  font-size: 15px; }
 
-.button-spacing {
+.header-buttons-cell {
   display: table-cell;
   text-align: left; }
 
-.padding-top {
-  padding-top: 70px; }
+.header-buttons-cell:hover {
+  background: rgba(0, 0, 0, 0.75); }
 
-.padding-buttons {
-  padding-left: 10px;
-  padding-bottom: 10px; }
+@media (max-width: 800px) {
+  .header-buttons-table {
+    width: 580px !important;
+    font-size: 12px;
+    width: 100%; }
 
-.button-hover:hover {
-  background: rgba(0, 0, 0, 0.85); }
-
+  .header-resize-to-make-buttons-flow {
+    width: 100% !important; } }
+@media (max-width: 600px) {
+  .header-buttons-table {
+    width: 370px !important;
+    padding-left: 30px;
+    font-size: 11px; } }
+@media (max-width: 400px) {
+  .header-buttons-table {
+    width: 320px !important;
+    font-size: 10px;
+    padding-left: 0; } }
 img.circle {
   border-radius: 50%;
   width: 150px;
@@ -163,7 +175,7 @@ figure.cool-effect img {
 
 .image {
   position: relative;
-  width: 100%; }
+  width: 700px; }
 
 .image-text-content {
   position: absolute;
@@ -347,13 +359,14 @@ a.button-style:hover {
   color: white; }
 
 a:hover {
-  cursor: default; }
+  cursor: pointer; }
 
-a {
-  color: black; }
+a.black {
+  color: #222222; }
 
 a.icon-underline {
-  text-decoration: none; }
+  text-decoration: none;
+  color: black; }
 
 a.fa:hover {
   color: black; }
@@ -365,9 +378,6 @@ a.fa:hover {
 figure.cool-effect p.p-inline {
   float: none;
   clear: none; }
-
-h1 {
-  margin: 3rem 0; }
 
 figure.cool-effect.smaller img {
   width: 400px;
