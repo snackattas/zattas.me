@@ -281,16 +281,16 @@ figure.cool-effect:hover p {
 }
 
 a.button-style {
-	cursor: default;
+	cursor: pointer;
 	color: white;
 	text-decoration: none;
 }
 a.button-style:hover{
 	color: white;
 }
-a:hover{
-	cursor: default;
-}
+// a:hover{
+// 	cursor: default;
+// }
 a {
 	color: black;
 }

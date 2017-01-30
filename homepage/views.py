@@ -6,17 +6,6 @@ from django.core.mail import send_mail
 import logging
 import os
 
-def helper_create_menu_tuple():
-    CustomMenu = namedtuple("CustomMenu",
-        ["fancy_number", "menu_name", "menu_name_without_spaces"])
-    menus = ["About Me", "Experience", "Projects", "Skills", "Contact"]
-    menu_tuples = []
-    for n, menu in enumerate(menus, 1):
-        menu_tuples.append(CustomMenu(
-            str(float(n)*.01)[1:],
-            menu,
-            menu.replace(" ","")))
-    return menu_tuples
 
 def homepage(request):
     message = None
@@ -25,6 +14,13 @@ def homepage(request):
     return render(request, 'homepage.html',
         {'menus':  helper_create_menu_tuple(), 'form': ContactForm(),
         'message': message})
+
+
+def headerVideo(request):
+    """
+    Simple endpoint to render html content for header video
+    """
+    return render(request, 'headerVideo.html')
 
 def helper_send_email(data):
     Message = namedtuple("Message", ["message", "error"])
@@ -55,3 +51,15 @@ def helper_send_email(data):
         message = Message("Error submitting contact form.  Are you sure your "\
             "email is valid?", True)
     return message
+
+def helper_create_menu_tuple():
+    CustomMenu = namedtuple("CustomMenu",
+        ["fancy_number", "menu_name", "menu_name_without_spaces"])
+    menus = ["About Me", "Experience", "Projects", "Skills", "Contact"]
+    menu_tuples = []
+    for n, menu in enumerate(menus, 1):
+        menu_tuples.append(CustomMenu(
+            str(float(n)*.01)[1:],
+            menu,
+            menu.replace(" ","")))
+    return menu_tuples

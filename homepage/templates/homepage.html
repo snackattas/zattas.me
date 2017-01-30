@@ -14,13 +14,13 @@
 <body>
   <div class="table-container">
     <div class="table-block footer-push">
-  <div class="header-video">
-    {% include 'headerVideo.html' %}
-  </div>
-  <div class="header-menu">
-    {% include 'headerMenu.html' %}
-  </div>
-  <div class="header-displace2"></div>
+      <div class="header-video">
+           <img class="header-video__media" src="static/images/coding-screenshot.jpg">
+          </div>
+          <div class="header-menu">
+           {% include 'headerMenu.html' %}
+          </div>
+      <div class="header-displace2"></div>
   <div class="container">
     {% if message %}
       {% if message.error %}

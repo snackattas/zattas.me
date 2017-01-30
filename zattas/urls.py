@@ -19,5 +19,6 @@ from homepage import views as homepage_views
 
 urlpatterns = [
     url(r'^$', homepage_views.homepage, name='homepage'),
+    url(r'^headerVideo/$', homepage_views.headerVideo),
     url(r'^admin/', admin.site.urls),
 ]

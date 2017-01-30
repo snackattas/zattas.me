@@ -24,6 +24,9 @@ $( document ).ready( function () {
   ga('send', 'pageview');
 });
 
+// Grab headervideo html from url and load it when everything else is loaded on the page
 window.onload = function() {
-  $('.header-video').append("<video autoplay='' class='header-video__media' loop=''><source src='static/video/coding-smaller.mp4' type='video/mp4'><source src='static/video/coding.ogv' type='video/ogv'/><source src='static/video/coding.webm' type='video/webm'/>Sorry, your browser doesn't support HTML5 video.</video>");
+  $.get("headerVideo", function (data) {
+    $('.header-video').append(data);
+  });
 };

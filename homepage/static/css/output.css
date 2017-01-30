@@ -339,15 +339,12 @@ figure.cool-effect:hover p {
   transform: translate3d(0, 0, 0); }
 
 a.button-style {
-  cursor: default;
+  cursor: pointer;
   color: white;
   text-decoration: none; }
 
 a.button-style:hover {
   color: white; }
-
-a:hover {
-  cursor: default; }
 
 a {
   color: black; }
