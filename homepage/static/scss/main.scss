@@ -11,6 +11,7 @@ body {
 	height: 100%;
 }
 @import 'header';
+@import 'build';
 
 img.circle {
 	border-radius: 50%;
@@ -55,6 +56,9 @@ img.custom-icon.angel {
 	max-width: 20px;
 }
 
+.no-underline {
+  text-decoration: none;
+}
 
 .big-items figure figcaption {
 	padding: 2em;
@@ -262,6 +266,7 @@ a.fa:hover {
 figure.cool-effect p.p-inline {
 	float: none;
 	clear: none;
+	background-color: rgba(230, 230, 230, 0.95);
 }
 
 // h1 {
