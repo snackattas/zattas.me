@@ -422,4 +422,8 @@ html, body {
 .white {
   color: white; }
 
+p.p-inline {
+  background-color: rgba(230,230,230,0.95) !important;
+}
+
 /*# sourceMappingURL=output.css.map */
