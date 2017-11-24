@@ -390,7 +390,7 @@ figure.cool-effect.smaller img {
   color: #C0392B; }
 
 .no-underline {
-  text-decoration: none;
+  text-decoration: none !important;
 }
 @media (max-width: 800px) {
   .header-buttons {
