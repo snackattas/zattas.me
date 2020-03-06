@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from collections import namedtuple
 from .forms import ContactForm
-from django.core.mail import send_mail
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 import logging
 import os
 
@@ -30,7 +31,7 @@ def helper_send_email(data):
     reason_for_contacting = data.get('reason_for_contacting')
     email_body = data.get('message')
     send_to_yourself = data.get('send_to_yourself')
-
+    email_body = "This is an email sent from the contact form on http://zattas.me<br/><br/>" + email_body
     if not reason_for_contacting:
         reason_for_contacting = "Contact Form filled out on zattas.me"
 
@@ -38,15 +39,17 @@ def helper_send_email(data):
     if send_to_yourself:
         recipients.append(email)
     else:
-        add_email_to_message = "Email: %s\n\n" % email
-        email_body = add_email_to_message + email_body
+        add_email_to_message = "<br/><br/>From: %s" % email
+        email_body = email_body + add_email_to_message
     try:
-        send_mail(
-            reason_for_contacting,
-            email_body,
-            os.environ.get('HOST_EMAIL'),
-            recipients,
-            fail_silently=False)
+        mail = Mail(
+            from_email=os.environ.get('HOST_EMAIL'),
+            to_emails=recipients,
+            subject=reason_for_contacting,
+            html_content=email_body)
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(mail)
+        print(response.status_code, response.body, response.headers)
     except:
         message = Message("Error submitting contact form.  Are you sure your "\
             "email is valid?", True)
