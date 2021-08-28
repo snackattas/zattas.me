@@ -58,7 +58,7 @@ def helper_send_email(data):
 def helper_create_menu_tuple():
     CustomMenu = namedtuple("CustomMenu",
         ["fancy_number", "menu_name", "menu_name_without_spaces"])
-    menus = ["About Me", "Experience", "Speaking", "Podcasts", "Projects", "Skills", "Contact"]
+    menus = ["About Me", "Experience", "Speaking", "Podcasts", "Projects", "Contact"]
     menu_tuples = []
     for n, menu in enumerate(menus, 1):
         menu_tuples.append(CustomMenu(
