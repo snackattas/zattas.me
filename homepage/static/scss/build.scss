@@ -1,7 +1,9 @@
+@import url('https://unpkg.com/micromodal/dist/micromodal.min.js');
 @import url('https://fonts.googleapis.com/css?family=Quicksand:400,700');
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-body {
-	font-family: 'Quicksand', sans-serif;
+
+html {
+	font-family: 'Quicksand', sans-serif !important;
 }
 .header-video {
 	width: 100%;
