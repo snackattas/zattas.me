@@ -1,0 +1,135 @@
+<h1 class="text-left" id="Skills">Skills</h1>
+<div class="row">
+    <h4 class='text-left'>Testing topics that I am passionate about:</h4>
+</div>
+
+<div class="row">
+  <div class="three columns">
+    <h5 class='text-left'><i>Test Reporting</i></h2>
+  </div>
+  <div class="offset-by-one eight columns">
+    <li>Test reports should look as nice as possible. Spend time making them easy to read.</li>
+    <br>
+
+    <li>Test errors should have clear next steps and clear error messages for what systems to investigate.</li>
+    <br>
+
+    <li>A failed test should report the username/password/account_id used in that test, for easy troubleshooting.</li>
+    <br>
+
+    <li>All test outcomes should be reported somewhere to be analyzed for flakiness and other test trends over time.</li>
+    <br>
+
+    <li>Any file that a test generates and has assertions against, save to a s3 bucket somewhere at the end of the run.</li>
+      <ul style="padding-left: 40px;">
+        <li>That way, if an issue occurs with any test associated with one of these files, one can see the file and see what went wrong without having to rerun the test.</li>
+      </ul>
+    <br>
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="three columns">
+    <h5 class='text-left'><i>Test Architecture</i></h2>
+  </div>
+  <div class="offset-by-one eight columns">
+    <li><i>Sign</i> the data created by your test factories. This means - attach a piece of metadata to the account row created by the test, so that, all data associated with this account can be known as ‘test data' and treated as such.  When done this way:</li>
+      <ul style="padding-left: 40px;">
+        <li>Data cleanup can occur at the end of the day (not at the end of the test), since one can easily query and retrieve all data created by tests in an environment. This saves time!</li>
+        <li>If you want to mock something in the software under test, you can have it check if the data is signed or not, and mock based on that. This way, normal accounts in lower environment are not mocked, and test accounts are mocked.</li>
+      </ul>
+
+    <li>Write a cookie to the browser, which the frontend can use to mock things that make sense to be mocked on the frontend. When done this way:</li>
+    <ul style="padding-left: 40px;">
+      <li>You could mock the google autocomplete api, so test environments do not expend google credits, and you could still test google's implementation in the frontend through your mock in the cookie.</li>
+      <li>You could make toast messages not timeout, for easier selenium testing (nothing's worse than having selenium try to find a timed-out toast message).</li>
+    </ul>
+
+    <li>Have robust and clever ways to wait for asynchronous tasks, which include:</li>
+      <ul style="padding-left: 40px;">
+        <li>Querying the DB directly.</li>
+        <li>Looking for things on the frontend and reloading the page to do so.</li>
+        <li>Querying existing APIs.</li>
+        <li>Writing testing APIs in the software under test.</li>
+      </ul>
+
+    <li>For any test that depends on a microservice, in some kind of <i>before</i> hook, have that test ping its <i>/status</i> endpoint, and fail if it doesn't 200.</li>
+      <ul style="padding-left: 40px;">
+        <li>That way the test fails right there, and you know where to look to fix it.</li>
+        <li> Also, the test would have failed later on with a possibly more cryptic fail (depending on how the service not being up is handled in the software under test). No need to expend mental energy on that!</li>
+    </ul>
+
+    <li>Log in via an api and inject the token into your browser session. That way, you don't have to log in via a frontend form</li>
+      <ul style="padding-left: 40px;">
+        <li>You should still have ONE manual log in test though!</li>
+      </ul>
+    <br>
+  </div>
+</div>
+
+<div class="row">
+    <h4 class='text-left'>Cool testing features I've worked on in my career:</h4>
+</div>
+
+<div class="row">
+  <div class="three columns">
+    <h5 class='text-left'><i>Technologies</i></h2>
+  </div>
+  <div class="offset-by-one eight columns">
+    <li>Load test with <a href='https://locust.io/' target='_blank'>Locust</a>.</li>
+    <br>
+
+    <li>Cross browser tests with <a href='https://saucelabs.com/' target='_blank'>Sauce Labs</a> and <a href='https://www.browserstack.com/' target='_blank'>BrowserStack</a>.</li>
+    <br>
+
+    <li>Visual Regression testing with <a href='https://percy.io/' target='_blank'>Percy</a>.</li>
+    <br>
+
+    <li>Setting up a Selenium Grid with <a href='https://aerokube.com/selenoid/latest/' target='_blank'>Selenoid</a> (Selenium Grid,  but in Golang).</li>
+    <br>
+
+    <li>Proxying all requests in a Selenium Grid test run (generating 200mb data per run) and dumping that into a csv for analysis using <a href='https://bmp.lightbody.net/' target='_blank'>BrowserMob Proxy</a> and <a href='https://github.com/oesmith/puffing-billy' target='_blank'>Puffing Billy</a>.</li>
+    <br>
+
+    <li>Test Reporting with <a href='https://reportportal.io/' target='_blank'>ReportPortal</a> and <a href='https://github.com/vbanthia/rspec_html_reporter' target='_blank'>RspecHtmlReporter</a> (with custom code to work in parallel and with the <a href='https://github.com/NoRedInk/rspec-retry' target='_blank'>rspec-retry</a> gem and <a href='https://github.com/grosser/parallel_tests' target='_blank'>parallel_tests</a> gem).</li>
+    <br>
+
+    <li>Maintain a small <a href='https://apps.apple.com/us/app/reviewtrackers/id1224214173' target='_blank'>mobile app</a> test suite with <a href='https://appium.io/' target='_blank'>appium</a> in <a href='https://aws.amazon.com/device-farm/' target='_blank'>AWS DeviceFarm</a>.</li>
+    <br>
+
+
+    <br>
+  </div>
+</div>
+
+<div class="row">
+  <div class="three columns">
+    <h5 class='text-left'><i>Implemented Features</i></h2>
+  </div>
+  <div class="offset-by-one eight columns">
+    <li>Load test with <a href='https://locust.io/' target='_blank'>Locust</a>.</li>
+    <br>
+
+    <li>Cross browser tests with <a href='https://saucelabs.com/' target='_blank'>Sauce Labs</a> and <a href='https://www.browserstack.com/' target='_blank'>BrowserStack</a>.</li>
+    <br>
+
+    <li>Visual Regression testing with <a href='https://percy.io/' target='_blank'>Percy</a>.</li>
+    <br>
+
+    <li>Setting up a Selenium Grid with <a href='https://aerokube.com/selenoid/latest/' target='_blank'>Selenoid</a> (Selenium Grid,  but in Golang).</li>
+    <br>
+
+    <li>Proxying all requests in a Selenium Grid test run (generating 200mb data per run) and dumping that into a csv for analysis using <a href='https://bmp.lightbody.net/' target='_blank'>BrowserMob Proxy</a> and <a href='https://github.com/oesmith/puffing-billy' target='_blank'>Puffing Billy</a>.</li>
+    <br>
+
+    <li>Test Reporting with <a href='https://reportportal.io/' target='_blank'>ReportPortal</a> and <a href='https://github.com/vbanthia/rspec_html_reporter' target='_blank'>RspecHtmlReporter</a> (with custom code to work in parallel and with the <a href='https://github.com/NoRedInk/rspec-retry' target='_blank'>rspec-retry</a> gem and <a href='https://github.com/grosser/parallel_tests' target='_blank'>parallel_tests</a> gem).</li>
+    <br>
+
+    <li>Maintain a small <a href='https://apps.apple.com/us/app/reviewtrackers/id1224214173' target='_blank'>mobile app</a> test suite with <a href='https://appium.io/' target='_blank'>appium</a> in <a href='https://aws.amazon.com/device-farm/' target='_blank'>AWS DeviceFarm</a>.</li>
+    <br>
+
+
+    <br>
+  </div>
+</div>

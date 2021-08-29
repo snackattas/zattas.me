@@ -6,6 +6,7 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 import logging
 import os
+import sys
 
 
 def homepage(request):
@@ -31,7 +32,7 @@ def helper_send_email(data):
     reason_for_contacting = data.get('reason_for_contacting')
     email_body = data.get('message')
     send_to_yourself = data.get('send_to_yourself')
-    email_body = "This is an email sent from the contact form on http://zattas.me<br/><br/>" + email_body
+    email_body = "This is an email sent from the contact form on https://zattas.me<br/><br/>" + email_body
     if not reason_for_contacting:
         reason_for_contacting = "Contact Form filled out on zattas.me"
 
@@ -42,6 +43,7 @@ def helper_send_email(data):
         add_email_to_message = "<br/><br/>From: %s" % email
         email_body = email_body + add_email_to_message
     try:
+
         mail = Mail(
             from_email=os.environ.get('HOST_EMAIL'),
             to_emails=recipients,
@@ -51,14 +53,14 @@ def helper_send_email(data):
         response = sg.send(mail)
         print(response.status_code, response.body, response.headers)
     except:
-        message = Message("Error submitting contact form.  Are you sure your "\
-            "email is valid?", True)
+        print(sys.exc_info()[0])
+        message = Message("Error submitting contact form", True)
     return message
 
 def helper_create_menu_tuple():
     CustomMenu = namedtuple("CustomMenu",
         ["fancy_number", "menu_name", "menu_name_without_spaces"])
-    menus = ["About Me", "Experience", "Speaking", "Podcasts", "Projects", "Contact"]
+    menus = ["About Me", "Experience", "Speaking", "Skills", "Podcasts", "Projects", "Contact"]
     menu_tuples = []
     for n, menu in enumerate(menus, 1):
         menu_tuples.append(CustomMenu(
