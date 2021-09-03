@@ -1,0 +1,253 @@
+<h1 class="text-left" id="SeleniumFun">Selenium Fun</h1>
+<div class="modal micromodal-slide" id="seleniumFun" aria-hidden="true">
+  <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+    <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+      <header class="modal__header">
+        <h4 id="modal-1-title">
+          Selenium Fun
+        </h4>
+        <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+      </header>
+      <main class="modal__content" id="modal-1-content">
+        <!-- <div class="outerwrapper"> -->
+        <div class="replace_when_selenium">
+          <h5>Run this Selenium script on your computer to get a fun message!</h5>
+
+          <div class='wrapper'>
+            <input type="radio" name="select" id="ruby" value="ruby" checked>
+            <input type="radio" name="select" id="python" value="python">
+            <input type="radio" name="select" id="javascript" value="javascript">
+            <!-- <input type="radio" name="select" id="java" value="java">
+          <input type="radio" name="select" id="go" value="go"> -->
+
+            <label for="ruby" class="option ruby">
+              <div class="dot"></div>
+              <span>Ruby</span>
+            </label>
+            <label for="python" class="option python">
+              <div class="dot"></div>
+              <span>Python</span>
+            </label>
+            <label for="javascript" class="option javascript">
+              <div class="dot"></div>
+              <span>Javascript</span>
+            </label>
+            <!-- <label for="java" class="option java">
+            <div class="dot"></div>
+            <span>Java</span>
+          </label>
+          <label for="go" class="option go">
+            <div class="dot"></div>
+            <span>Go</span>
+          </label> -->
+          </div>
+          <br>
+          <br>
+          <div id='rubycode'>
+            <h5>To install packages:</h5>
+            <pre>
+<code class="language-bash">gem install selenium-webdriver
+gem install webdrivers
+</code>
+</pre>
+
+            <h5>To run the Selenium script:</h5>
+            <pre>
+<code class="language-ruby">require "selenium-webdriver"
+require "webdrivers/chromedriver"
+
+driver = Selenium::WebDriver.for :chrome
+driver.navigate.to "https://www.zattas.me"
+cookie = { name: "name", value: `whoami`.chomp }
+driver.manage.add_cookie(cookie)
+driver.manage.window.maximize
+
+sleep 1000 # Take your time and enjoy the site!
+
+driver.quit
+</code>
+</pre>
+          </div>
+
+
+          <div id='pythoncode'>
+            <h5>To install packages:</h5>
+            <pre>
+<code class="language-bash">pip install selenium
+# Export the chromedriver executable into your PATH variable
+# You can get a copy of the chromedriver executable here:
+#   https://chromedriver.storage.googleapis.com/index.html
+# Let's say for example's sake you put it in your $HOME/drivers/chromedriver.
+#   Then you would run:
+export PATH=$HOME/drivers:$PATH
+</code>
+</pre>
+
+            <h5>To run the Selenium script:</h5>
+            <pre>
+<code class="language-python">from selenium import webdriver
+import getpass
+import time
+
+driver = webdriver.Chrome()
+driver.get("https://www.zattas.me")
+cookie = { 'name': 'name', 'value': getpass.getuser() }
+driver.add_cookie(cookie)
+driver.maximize_window()
+time.sleep(1000) # Take your time and enjoy the site!
+
+driver.close()
+</code>
+</pre>
+          </div>
+
+
+          <div id='javascriptcode'>
+            <h5>To install packages:</h5>
+            <pre>
+<code class="language-bash">npm install selenium-webdriver
+# Export the chromedriver executable into your PATH variable
+# You can get a copy of the chromedriver executable here:
+#   https://chromedriver.storage.googleapis.com/index.html
+# Let's say for example's sake you put it in your $HOME/drivers/chromedriver.
+#   Then you would run:
+export PATH=$HOME/drivers:$PATH
+</code>
+</pre>
+
+            <h5>To run the Selenium script:</h5>
+            <pre>
+<code class="language-javascript">const webdriver = require("selenium-webdriver");
+const os = require("os")
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+let driver = new webdriver.Builder().forBrowser('chrome').build();
+(async function example() {
+  try {
+    await driver.get("https://www.zattas.me");
+    var cookie = { "name": "name", "value": os.userInfo().username };
+    await driver.manage().addCookie(cookie);
+    await driver.manage().window().maximize();
+    await sleep(1000000); // Take your time and enjoy the site!
+  } finally {
+    await driver.quit();
+  }
+})()
+
+</code>
+</pre>
+          </div>
+
+
+        </div>
+      </main>
+      <footer class="modal__footer">
+        <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
+      </footer>
+    </div>
+  </div>
+</div>
+<button class="myButton" data-micromodal-trigger="seleniumFun">Selenium Fun</button>
+
+<!-- <div class="row" id="Jellyvision">
+  <div class="offset-by-one ten columns big-items">
+    <figure class="cool-effect u-center-abs u-text-center">
+      <div class="image">
+        <img alt="ReviewTrackers" src="static/images/rt.svg" style="background:rgba(0, 0, 0, 0.2);">
+        <div class="image-text-content text-left">
+          <a href="https://www.reviewtrackers.com" target="_blank" class="no-underline">
+          <h2><b>ReviewTrackers</b></h2><br>
+          <h5><span>Lead SDET Feb '20 - now</span></h5>
+          <h5><span>Senior SDET March '18 - Feb '20</span></h5>
+          <h5>Chicago, IL</h5>
+        </a>
+          <div>
+            <p>Shaved end-to-end suite runtime from 30+ mins down to 5 mins in CI and 10 mins in CD</p>
+            <p>Cultivate engineering culture so anyone can contribute to end-to-end tests</p>
+            <p>Develop mock servers to test 3rd party api integrations</p>
+            <p>Rolled a custom integration with <a href='https://reportportal.io/' target="_blank">Report Portal</a> to monitor suite health over time</p>
+            <p>Manage a team of 3</p>
+          </div>
+        </div>
+      </div>
+    </figure>
+  </div>
+  <div class="one column"></div>
+</div>
+
+<div class="row" id="Jellyvision">
+  <div class="offset-by-one ten columns big-items">
+    <figure class="cool-effect u-center-abs u-text-center">
+      <div class="image">
+        <img alt="Jellyvision" src="static/images/jellyvision.png">
+        <div class="image-text-content text-left">
+          <a href="http://www.jellyvision.com" target="_blank" class="no-underline">
+          <h2><b>Jellyvision</b></h2><br>
+          <h5><span>SDET</span></h5>
+          <h5>Chicago, IL</h5>
+          <h5>Mar '17 - Mar '18</h5>
+        </a>
+          <div>
+            <p>Created end-to-end analytics tests with proxying</p>
+            <p>Developed new infrastructure to run browser tests in continuous integration pipelines</p>
+            <p>Reduced runtime of all automated tests by >50% through engineering practices and implicit waits</p>
+          </div>
+        </div>
+      </div>
+    </figure>
+  </div>
+  <div class="one column"></div>
+</div>
+
+<div class="row" id="Chef">
+  <div class="offset-by-one ten columns big-items">
+    <figure class="cool-effect u-center-abs u-text-center">
+      <div class="image">
+        <img alt="Chef" src="static/images/robinia.jpg">
+        <div class="image-text-content text-left">
+          <a href="https://www.facebook.com/robiniacourtyard/" target="_blank" class="no-underline">
+          <h2><b>Robinia Courtyard</b></h2><br>
+          <h5><span>Prep Chef</span></h5>
+          <h5>Madison, WI</h5>
+          <h5>Oct '15 - Aug '16</h5>
+        </a>
+          <div>
+            <p>Organized walk-in</p>
+            <p>Ground meat, daily</p>
+            <p>Cooked all house stocks</p>
+            <p>Prepped ingredients and recipes for a 35+ item menu</p>
+            <p>Completed <a href='https://www.udacity.com/course/intro-to-programming-nanodegree--nd000' target='_blank'>Intro to Programming</a> and <a href='https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd0044' target='_blank'>Full Stack</a> Nanodegrees while being a chef</p>
+          </div>
+        </div>
+      </div>
+    </figure>
+  </div>
+  <div class="one column"></div>
+</div>
+
+<div class="row" id="Epic">
+  <div class="offset-by-one ten columns big-items">
+    <figure class="cool-effect u-center-abs u-text-center">
+      <div class="image">
+        <img alt="Epic Systems" src="static/images/epic.jpg">
+        <div class="image-text-content text-left">
+          <a href="http://www.epic.com" target="_blank" class="no-underline">
+          <h2><b>Epic</b></h2><br>
+          <h5><span>Quality Assurance</span></h5>
+          <h5>Madison, WI</h5>
+          <h5>Aug '13 - Oct '15</h5>
+        </a>
+          <div>
+            <p>Wrote unit tests for core backend APIs and internationalization tools</p>
+            <p>Developed one-off testing tools, .e.g., a script to grade internal projects</p>
+            <p>Managed error investigation and disclosure for serious low-level technical issues</p>
+          </div>
+        </div>
+      </div>
+    </figure>
+  </div>
+  <div class="one column"></div>
+</div> -->

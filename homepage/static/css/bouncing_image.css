@@ -1,0 +1,25 @@
+img.bounce {
+  width: 250px;
+  height: 250px;
+  position: absolute;
+}
+
+.x {
+  animation: x 4s linear infinite alternate;
+}
+
+.y {
+  animation: y 6s linear infinite alternate;
+}
+
+@keyframes x {
+  100% {
+    transform: translateX( calc(100vw - 100px) );
+  }
+}
+
+@keyframes y {
+  100% {
+    transform: translateY( calc(100vh - 100px) );
+  }
+}
