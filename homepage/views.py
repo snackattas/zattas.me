@@ -53,8 +53,8 @@ def helper_send_email(data):
         response = sg.send(mail)
         print(response.status_code, response.body, response.headers)
     except:
-        # print(sys.exc_info())
-        message = Message(sys.exc_info(), True)
+        print(sys.exc_info()[0])
+        message = Message("Error submitting contact form", True)
     return message
 
 def helper_create_menu_tuple():
