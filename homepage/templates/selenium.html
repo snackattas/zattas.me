@@ -91,7 +91,7 @@ import time
 
 driver = webdriver.Chrome()
 driver.get("https://www.zattas.me")
-cookie = { 'name': 'name', 'value': getpass.getuser() }
+cookie = { "name": "name", "value": getpass.getuser() }
 driver.add_cookie(cookie)
 driver.maximize_window()
 time.sleep(1000) # Take your time and enjoy the site!
@@ -124,7 +124,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-let driver = new webdriver.Builder().forBrowser('chrome').build();
+let driver = new webdriver.Builder().forBrowser("chrome").build();
 (async function example() {
   try {
     await driver.get("https://www.zattas.me");
