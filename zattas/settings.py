@@ -24,9 +24,12 @@ STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../static'))
 SECRET_KEY = os.environ.get("DJANGO_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['localhost']
+if os.environ.get("PRODUCTION") == 'true':
+    DEBUG = False
+    ALLOWED_HOSTS = ['zattas.me', 'www.zattas.me']
+else:
+    DEBUG = True
+    ALLOWED_HOSTS = ['localhost']
 
 # Application definition
 
