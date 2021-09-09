@@ -9,6 +9,7 @@ import requests
 import os
 import sys
 
+logger = logging.getLogger(__name__)
 
 def homepage(request):
     message = None
@@ -35,12 +36,14 @@ def helper_send_email(data):
         'secret': os.environ.get("GOOGLE_RECAPTCHA_SECRET_KEY"),
         'response': recaptcha_response
     }
-    r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=google_data)
-    result = r.json()
+    try:
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=google_data)
+        result = r.json()
 
-    print(result)
-
-    if not result['success']:
+        logger.info(f"RECAPTCHA: {result}")
+        if not result['success']:
+            return Message("Error submitting contact form: failed recaptcha", True)
+    except:
         return Message("Error submitting contact form: failed recaptcha", True)
 
     email = data.get('email')
