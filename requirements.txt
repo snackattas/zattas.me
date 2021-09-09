@@ -53,7 +53,6 @@ toml==0.10.2
 traitlets==4.3.1
 Unidecode==0.4.20
 urllib3==1.24.3
-wagtail==1.8
 wcwidth==0.1.7
 webencodings==0.5
 Willow==0.4
