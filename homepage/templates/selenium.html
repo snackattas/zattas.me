@@ -54,9 +54,14 @@ gem install webdrivers
             <h5>To run the Selenium script:</h5>
             <pre>
 <code class="language-ruby">require "selenium-webdriver"
-require "webdrivers/chromedriver"
+require "webdrivers"
 
-driver = Selenium::WebDriver.for :chrome
+## for firefox ##
+driver = Selenium::WebDriver.for :firefox
+
+## for chrome ##
+# driver = Selenium::WebDriver.for :chrome
+
 driver.navigate.to "https://www.zattas.me"
 cookie = { name: "name", value: `whoami`.chomp }
 driver.manage.add_cookie(cookie)
@@ -74,11 +79,12 @@ driver.quit
             <h5>To install packages:</h5>
             <pre>
 <code class="language-bash">pip install selenium
-# Export the chromedriver executable into your PATH variable
-# You can get a copy of the chromedriver executable here:
-#   https://chromedriver.storage.googleapis.com/index.html
-# Let's say for example's sake you put it in your $HOME/drivers/chromedriver
-#   Then you would run:
+# Export a driver executable into your PATH variable
+# Executables:
+#   firefox - https://github.com/mozilla/geckodriver/releases
+#   chrome - https://chromedriver.storage.googleapis.com/index.html
+# Let's say for example's sake you put it in your $HOME/drivers directory
+#   Then you would this to put the directory into your path:
 export PATH=$HOME/drivers:$PATH
 </code>
 </pre>
@@ -89,7 +95,12 @@ export PATH=$HOME/drivers:$PATH
 import getpass
 import time
 
-driver = webdriver.Chrome()
+## for firefox
+driver = webdriver.Firefox()
+
+## for chrome
+# driver = webdriver.Chrome()
+
 driver.get("https://www.zattas.me")
 cookie = { "name": "name", "value": getpass.getuser() }
 driver.add_cookie(cookie)
@@ -105,12 +116,13 @@ driver.close()
           <div id='javascriptcode'>
             <h5>To install packages:</h5>
             <pre>
-<code class="language-bash">npm install selenium-webdriver
-# Export the chromedriver executable into your PATH variable
-# You can get a copy of the chromedriver executable here:
-#   https://chromedriver.storage.googleapis.com/index.html
-# Let's say for example's sake you put it in your $HOME/drivers/chromedriver
-#   Then you would run:
+<code class="language-bash">npm init && npm install --save-dev selenium-webdriver
+# Export a driver executable into your PATH variable
+# Executables:
+#   firefox - https://github.com/mozilla/geckodriver/releases
+#   chrome - https://chromedriver.storage.googleapis.com/index.html
+# Let's say for example's sake you put it in your $HOME/drivers directory
+#   Then you would this to put the directory into your path:
 export PATH=$HOME/drivers:$PATH
 </code>
 </pre>
@@ -124,7 +136,12 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-let driver = new webdriver.Builder().forBrowser("chrome").build();
+// for firefox
+let driver = new webdriver.Builder().forBrowser("firefox").build();
+
+// for chrome
+//let driver = new webdriver.Builder().forBrowser("chrome").build();
+
 (async function example() {
   try {
     await driver.get("https://www.zattas.me");
@@ -136,7 +153,6 @@ let driver = new webdriver.Builder().forBrowser("chrome").build();
     await driver.quit();
   }
 })()
-
 </code>
 </pre>
           </div>
