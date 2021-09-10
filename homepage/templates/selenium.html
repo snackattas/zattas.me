@@ -56,11 +56,8 @@ gem install webdrivers
 <code class="language-ruby">require "selenium-webdriver"
 require "webdrivers"
 
-## for firefox ##
-driver = Selenium::WebDriver.for :firefox
-
-## for chrome ##
-# driver = Selenium::WebDriver.for :chrome
+driver = Selenium::WebDriver.for :firefox # for firefox
+# driver = Selenium::WebDriver.for :chrome # for chrome
 
 driver.navigate.to "https://www.zattas.me"
 cookie = { name: "name", value: `whoami`.chomp }
@@ -96,11 +93,8 @@ export PATH=$HOME/drivers:$PATH
 import getpass
 import time
 
-## for firefox
-driver = webdriver.Firefox()
-
-## for chrome
-# driver = webdriver.Chrome()
+driver = webdriver.Firefox() # for firefox
+# driver = webdriver.Chrome() # for chrome
 
 driver.get("https://www.zattas.me")
 cookie = { "name": "name", "value": getpass.getuser() }
@@ -138,11 +132,8 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// for firefox
-let driver = new webdriver.Builder().forBrowser("firefox").build();
-
-// for chrome
-//let driver = new webdriver.Builder().forBrowser("chrome").build();
+let driver = new webdriver.Builder().forBrowser("firefox").build(); // for firefox
+//let driver = new webdriver.Builder().forBrowser("chrome").build(); // for chrome
 
 (async function example() {
   try {
