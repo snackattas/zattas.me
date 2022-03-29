@@ -29,7 +29,7 @@ jedi==0.17.2
 l18n==2020.6.1
 olefile==0.44
 openpyxl==2.6.4
-paramiko==2.7.2
+paramiko==2.10.1
 parso==0.7.1
 pathlib2==2.3.6
 pexpect==4.2.1
