@@ -43,8 +43,8 @@ export function AutomationFunModal({ isOpen, onClose, initialDetection }: Automa
         animateBackground();
         // Set window property for test verification
         if (typeof window !== 'undefined') {
-          (window as Window & typeof globalThis).__automationModalOpened = true;
-          (window as Window & typeof globalThis).__automationDetection = initialDetection;
+          (window as any).__automationModalOpened = true;
+          (window as any).__automationDetection = initialDetection;
         }
       });
     }
