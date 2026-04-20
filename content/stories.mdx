@@ -1,0 +1,116 @@
+# Stories
+
+<div className="mt-8 space-y-4">
+  <StoryCard
+    title="Building Self-Sustaining Systems"
+    hook="I build systems that don't need me anymore"
+  >
+    At Capsule, I built testing infrastructure so robust that it now runs autonomously. The end-to-end test suite I created 3 years ago still drives itself—serving as a Release Gate for 10+ daily deploys without my active maintenance.
+    
+    This wasn't accidental. I designed it with sustainability in mind: comprehensive Grafana dashboards for self-service debugging, clear documentation, and patterns that make it easy for anyone to contribute. The result? I was able to transition from actively maintaining tests to strategic platform work, while the infrastructure I built continues to reduce production incidents by 75%.
+    
+    <PillGrid>
+      <Pill>Python</Pill>
+      <Pill>Pytest</Pill>
+      <Pill>Playwright</Pill>
+      <Pill>Grafana</Pill>
+      <Pill>CI/CD</Pill>
+    </PillGrid>
+  </StoryCard>
+
+  <StoryCard
+    title="Developer Experience First"
+    hook="Developers shouldn't wait in queues to test their code"
+  >
+    At ReviewTrackers, I partnered with a DevOps engineer to transform how developers tested their work. We containerized the entire stack, allowing developers to spin up their code changes on-demand in the cloud for immediate validation—no more waiting in queues or stepping on each other's toes.
+    
+    We built a user-friendly Slackbot to trigger these test environments and continuously added features based on developer feedback. The platform became so popular that it significantly accelerated our SDLC and contributed to the organization's successful acquisition.
+    
+    This project ignited my passion for creating developer experiences that are not only efficient but also enjoyable.
+    
+    <PillGrid>
+      <Pill>Docker</Pill>
+      <Pill>Kubernetes</Pill>
+      <Pill>Slackbot</Pill>
+      <Pill>CI/CD</Pill>
+      <Pill>Golang</Pill>
+    </PillGrid>
+  </StoryCard>
+
+  <StoryCard
+    title="SDET as Software Generalist"
+    hook="If I find a race condition while testing, I don't just file a ticket—I fix it"
+  >
+    Throughout my career, I've consistently gone beyond traditional SDET work. When I'm investigating a flaky test and discover the root cause is a bug in the source code (maybe a race condition), I don't just document it—I fix it, add unit tests, and deploy the fix myself, regardless of whether it's frontend or backend.
+    
+    At ReviewTrackers, this approach led to an unexpected opportunity: while writing end-to-end tests for our search functionality, I found small bugs that exposed architectural flaws. My reward? I was picked to rebuild the entire search system, since I had the most experience with it from writing complex tests against it.
+    
+    This pattern has continued throughout my career—I'm constantly hopping into new codebases (frontend, backend, infrastructure) to accomplish testing goals, which has made me a versatile engineer who can contribute across the stack.
+    
+    <PillGrid>
+      <Pill>Python</Pill>
+      <Pill>TypeScript</Pill>
+      <Pill>Kotlin</Pill>
+      <Pill>Ruby</Pill>
+      <Pill>Golang</Pill>
+    </PillGrid>
+  </StoryCard>
+
+  <StoryCard
+    title="Quality Culture Champion"
+    hook="Good testing comes from culture, not just code"
+  >
+    I believe quality is a team sport, not a solo act. At ReviewTrackers, I championed quality through education and engagement: Security Testing seminars, Chaos Testing workshops, Risk Planning sessions, Root Cause Analysis meetings, and Bug Bashes. These weren't just educational—they were cultural shifts that made quality everyone's responsibility.
+    
+    At Capsule, I implemented Coveralls across all repos with a learning campaign and sensible override procedures. I created Grafana dashboards that became proof not just for refactoring tests, but for refactoring production code itself—in areas where it was tough to reason about flakiness because the system under test lacked good visibility.
+    
+    I also instituted Capsule's first formal QA process and hired a team of 3 QA engineers, leading to a 75% reduction in production incidents.
+    
+    <PillGrid>
+      <Pill>Coveralls</Pill>
+      <Pill>Grafana</Pill>
+      <Pill>Team Building</Pill>
+      <Pill>Process Design</Pill>
+    </PillGrid>
+  </StoryCard>
+
+  <StoryCard
+    title="Tackling Complex Migrations"
+    hook="I tackle the complex migrations everyone else avoids"
+  >
+    I have a track record of completing the "impossible" projects that others have started and stopped. At Capsule, I led the company-wide upgrade of all Kotlin applications to Spring Boot 3—a project that had stalled multiple times due to its complexity (touching API endpoints, database connections, consumers, producers, everything Spring Boot manages).
+    
+    Without prior Spring Boot experience, I dove deep into the docs and internals, created extensive testing strategies, and built a version upgrade plan that all teams signed off on. I completed what many thought was impossible.
+    
+    Similarly, I pioneered Capsule's adoption of Temporal Cloud, creating patterns for building workflows and migrating the first ones from our fragile in-house solution. I've since written a dozen workflows and am now consulted whenever new ones are designed. I've also developed load testing suites (Python/Locust), visual regression testing (JavaScript/Percy), and contract testing middleware for SNS/SQS/Kafka.
+    
+    <PillGrid>
+      <Pill>Spring Boot 3</Pill>
+      <Pill>Temporal</Pill>
+      <Pill>Locust</Pill>
+      <Pill>Percy</Pill>
+      <Pill>Kafka</Pill>
+    </PillGrid>
+  </StoryCard>
+
+  <StoryCard
+    title="Engineering Smarter Tests"
+    hook="Smart test architecture eliminates entire classes of problems"
+  >
+    I've developed innovative testing patterns that solve systemic problems. My signature approach is "signing" factory-generated test data with metadata—this simple pattern unlocks powerful capabilities: environment-wide cleanup (not per-test), conditional mocking based on signed data, and clear separation between test and production data in lower environments.
+    
+    I've also built clever async waiting strategies that go beyond simple timeouts: querying databases directly, pinging service health endpoints before tests run (so failures point to the right place immediately), and writing custom testing APIs in the software under test for precise state verification.
+    
+    For frontend testing, I write cookies to the browser that enable smart mocking—mock the Google Autocomplete API to avoid expending credits while still testing the implementation, or prevent toast messages from timing out (nothing's worse than Selenium trying to find a disappeared toast). I also log in via API and inject tokens into the browser session, eliminating slow frontend form logins while maintaining one manual login test for coverage.
+    
+    At ReviewTrackers, I implemented randomized test runs to detect unintended cross-pollination between tests. Normally, tests run in 50 parallel processes chunked by runtime for speed. But once daily, they run in random order with a recorded seed to catch hidden dependencies. I also built a custom testing logger that verbosely logs every test action alongside browser actions—making it easy to trace the exact journey a test took and the data it created, so you can log in as the failed test user and reproduce the issue.
+    
+    <PillGrid>
+      <Pill>Test Architecture</Pill>
+      <Pill>Factory Patterns</Pill>
+      <Pill>Async Testing</Pill>
+      <Pill>Selenium</Pill>
+      <Pill>RabbitMQ</Pill>
+    </PillGrid>
+  </StoryCard>
+</div>

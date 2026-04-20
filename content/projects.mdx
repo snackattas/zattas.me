@@ -1,0 +1,211 @@
+# Projects
+
+<div className="mt-8 grid gap-6">
+  <ProjectCard
+    title="Flake8 Scout Rule"
+    href="https://github.com/snackattas/flake8-scout-rule"
+    meta="Nov '24"
+    imageSrc="/images/projects/flake8scoutbanner.jpg"
+    imageAlt="flake8 scout rule"
+  >
+    <div className="not-prose text-sm leading-6 text-zinc-700 dark:text-zinc-200">
+      <ul className="list-disc space-y-1 pl-5">
+        <li>Developed this package that automatically annotates flake8 violations with <code># noqa: &lt;errors&gt;</code> inline.</li>
+        <li>Helps teams introduce stricter linting rules without fixing everything at once.</li>
+        <li>Designed for gradual cleanup: touch a file, remove the underlying warnings where it makes sense.</li>
+        <li>Use as a Flake8 formatter: <code>flake8 --format=scout .</code></li>
+      </ul>
+    </div>
+
+    <PillGrid>
+      <Pill>Python</Pill>
+      <Pill>Flake8</Pill>
+      <Pill>Linting</Pill>
+      <Pill>Formatter plugin</Pill>
+      <Pill>pip</Pill>
+    </PillGrid>
+  </ProjectCard>
+</div>
+
+<div className="not-prose mt-10">
+  <h2 className="m-0 !text-2xl sm:!text-3xl font-normal tracking-tight text-zinc-900 dark:text-zinc-50">
+    Open source
+  </h2>
+  <div className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+    A couple small contributions to projects I use.
+  </div>
+
+  <PillGrid>
+    <DetailPill
+      title="Coveralls coverage-reporter"
+      href="https://github.com/coverallsapp/coverage-reporter/pull/114"
+    >
+      <ul>
+        <li>Fixed Codefresh links by using GitHub PR number instead of the internal PR ID.</li>
+      </ul>
+    </DetailPill>
+    <DetailPill
+      title="parallel_tests"
+      href="https://github.com/grosser/parallel_tests/issues?q=+author%3Asnackattas+"
+    >
+      <ul>
+        <li>Small contributions around configuration / usage questions and documentation.</li>
+      </ul>
+    </DetailPill>
+  </PillGrid>
+</div>
+
+<div className="not-prose mt-10">
+  <h2 className="m-0 !text-2xl sm:!text-3xl font-normal tracking-tight text-zinc-900 dark:text-zinc-50">
+    Archived projects
+  </h2>
+  <div className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+    Older projects that are no longer live.
+  </div>
+
+  <div className="mt-6 grid gap-6">
+    <ProjectCard
+      title="Flights140"
+      href="https://github.com/snackattas/Flights140v2"
+      meta="Created Nov '16"
+      imageSrc="/images/projects/flights140.jpg"
+      imageAlt="Flights140"
+    >
+      <div className="not-prose text-sm leading-6 text-zinc-700 dark:text-zinc-200">
+        <ul className="list-disc space-y-1 pl-5">
+          <li>
+            Website that uses Twitter to find airfare deals and alerts users (via email and/or text)
+          </li>
+        </ul>
+      </div>
+
+      <PillGrid>
+        <Pill>Python</Pill>
+        <Pill>Javascript</Pill>
+        <Pill>Django</Pill>
+        <Pill>Jinja2</Pill>
+        <Pill>Celery</Pill>
+        <Pill>RabbitMQ</Pill>
+        <Pill>PostgreSQL</Pill>
+        <Pill>Python Social Auth</Pill>
+        <Pill>Google Places API</Pill>
+        <Pill>AJAX</Pill>
+        <Pill>Supervisor</Pill>
+        <Pill>Regex</Pill>
+        <Pill>SendGrid</Pill>
+        <Pill>Twilio</Pill>
+        <Pill>Heroku</Pill>
+        <Pill>Semantic UI</Pill>
+        <Pill>Bootstrap</Pill>
+        <Pill>Animate.css</Pill>
+      </PillGrid>
+    </ProjectCard>
+
+    <ProjectCard
+      title="Shut The Box"
+      href="https://github.com/snackattas/ShutTheBox"
+      meta="Created Nov '16"
+      imageSrc="/images/projects/shutthebox.jpg"
+      imageAlt="Shut The Box"
+    >
+      <div className="not-prose text-sm leading-6 text-zinc-700 dark:text-zinc-200">
+        <ul className="list-disc space-y-1 pl-5">
+          <li>Website implementation of the British dice rolling game Shut The Box</li>
+        </ul>
+      </div>
+
+      <PillGrid>
+        <Pill>Node.js</Pill>
+        <Pill>Express</Pill>
+        <Pill>Promise.js</Pill>
+        <Pill>Webpack</Pill>
+        <Pill>jQuery</Pill>
+        <Pill>Underscore.js</Pill>
+        <Pill>Semantic UI</Pill>
+        <Pill>Animate.css</Pill>
+        <Pill>pug</Pill>
+        <Pill>Python</Pill>
+        <Pill>Google Cloud Endpoints</Pill>
+        <Pill>Heroku</Pill>
+      </PillGrid>
+    </ProjectCard>
+
+    <ProjectCard
+      title="Obey The Testing Goat"
+      href="https://github.com/snackattas/superlists"
+      meta="Created Nov '16"
+      imageSrc="/images/projects/testing_goat.png"
+      imageAlt="Obey The Testing Goat"
+    >
+      <div className="not-prose text-sm leading-6 text-zinc-700 dark:text-zinc-200">
+        <ul className="list-disc space-y-1 pl-5">
+          <li>
+            Went through this amazing book, chapter by chapter
+          </li>
+          <li>
+            Created a website using TDD with 100% test coverage
+          </li>
+        </ul>
+      </div>
+
+      <PillGrid>
+        <Pill>Python</Pill>
+        <Pill>Django</Pill>
+        <Pill>Gunicorn</Pill>
+        <Pill>Selenium</Pill>
+        <Pill>Fabric</Pill>
+        <Pill>Digital Ocean</Pill>
+        <Pill>Jenkins</Pill>
+      </PillGrid>
+    </ProjectCard>
+
+    <ProjectCard
+      title="Lizard Mgmt Tool"
+      href="https://github.com/snackattas/LizardAppLive"
+      meta="Created Sept '16"
+      imageSrc="/images/projects/lizardapp.jpg"
+      imageAlt="Lizard Mgmt Tool"
+    >
+      <div className="not-prose text-sm leading-6 text-zinc-700 dark:text-zinc-200">
+        <ul className="list-disc space-y-1 pl-5">
+          <li>Add, edit, and delete lizards and lizard's hobbies</li>
+          <li>Accepts login from Google and/or Facebook</li>
+          <li>Logs all recent activity on the homepage</li>
+        </ul>
+      </div>
+
+      <PillGrid>
+        <Pill>Python</Pill>
+        <Pill>Flask</Pill>
+        <Pill>SQLAlchemy</Pill>
+        <Pill>PostgreSQL</Pill>
+        <Pill>Jinja2</Pill>
+        <Pill>Bootstrap</Pill>
+        <Pill>Heroku</Pill>
+      </PillGrid>
+    </ProjectCard>
+
+    <ProjectCard
+      title="Note-Taker"
+      href="https://github.com/snackattas/Stage5FinalProject"
+      meta="Created April '16"
+      imageSrc="/images/projects/firstproject.jpg"
+      imageAlt="Note-Taker"
+    >
+      <div className="not-prose text-sm leading-6 text-zinc-700 dark:text-zinc-200">
+        <ul className="list-disc space-y-1 pl-5">
+          <li>Final project for Udacity's Intro to Programming Nanodegree</li>
+          <li>Note-taking app with heirarchy of note types</li>
+          <li>Responsive design</li>
+        </ul>
+      </div>
+
+      <PillGrid>
+        <Pill>Python</Pill>
+        <Pill>jQuery</Pill>
+        <Pill>Bootstrap</Pill>
+        <Pill>Google App Engine</Pill>
+      </PillGrid>
+    </ProjectCard>
+  </div>
+</div>

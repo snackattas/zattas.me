@@ -1,0 +1,44 @@
+{
+  "name": "2zattas.me",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run docker:dev",
+    "build": "npm run build:next",
+    "start": "npm run start:next",
+    "lint": "npm run lint:docker",
+    "test": "npm run test:docker",
+    "dev:next": "next dev",
+    "build:next": "next build",
+    "start:next": "next start",
+    "lint:next": "eslint",
+    "test:next": "echo \"No tests configured yet\" && exit 0",
+    "docker:dev": "sh -c 'ENV_FILE=.env; [ -f .env ] || ENV_FILE=template.env; docker compose --env-file $ENV_FILE up --build'",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f --tail=100",
+    "lint:docker": "sh -c 'ENV_FILE=.env; [ -f .env ] || ENV_FILE=template.env; docker compose --env-file $ENV_FILE run -T --rm web npm run lint:next'",
+    "test:docker": "sh -c 'ENV_FILE=.env; [ -f .env ] || ENV_FILE=template.env; docker compose --env-file $ENV_FILE run -T --rm web npm run test:next'",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@mdx-js/loader": "^3.1.1",
+    "@next/mdx": "^16.1.6",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-syntax-highlighter": "^16.1.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "babel-plugin-react-compiler": "1.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "husky": "^9.1.7",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

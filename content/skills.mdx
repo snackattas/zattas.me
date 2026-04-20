@@ -1,0 +1,95 @@
+# Skills
+
+<h2 className="not-prose mt-8 !text-xl sm:!text-xl font-normal tracking-tight text-zinc-900 dark:text-zinc-50">
+  Focus areas
+</h2>
+
+<div className="mt-6 not-prose">
+  <PillGrid>
+    <DetailPill title="Test reporting">
+      <ul>
+        <li>Make reports easy to scan: clear sections, minimal noise.</li>
+        <li>Error output should include next steps + what system to investigate.</li>
+        <li>Log key test context (e.g. account identifiers) for fast debugging.</li>
+        <li>Persist run artifacts (e.g. generated files) for post-mortems.</li>
+      </ul>
+    </DetailPill>
+
+    <DetailPill title="Test data strategy">
+      <ul>
+        <li>"Sign" factory data with metadata so it can be identified and cleaned up later.</li>
+        <li>Enable environment-wide cleanup without paying the cost per test.</li>
+        <li>Allow product code to behave differently for signed test data when appropriate.</li>
+      </ul>
+    </DetailPill>
+
+    <DetailPill title="Frontend test ergonomics">
+      <ul>
+        <li>Use browser cookies/local config to toggle safe UI mocks when needed.</li>
+        <li>Mock expensive or flaky third-party UI integrations in lower envs.</li>
+        <li>Make UI timing behavior test-friendly (e.g. non-expiring toasts).</li>
+      </ul>
+    </DetailPill>
+
+    <DetailPill title="Waiting for async work">
+      <ul>
+        <li>Prefer deterministic waits: DB checks, API polls, or explicit status endpoints.</li>
+        <li>Reload/retry patterns where appropriate (but keep timeouts bounded).</li>
+        <li>Sometimes the right move is adding a purpose-built testing API.</li>
+      </ul>
+    </DetailPill>
+
+    <DetailPill title="Service health checks">
+      <ul>
+        <li>Before running tests, verify dependent services via their <code>/status</code> endpoints.</li>
+        <li>Fail early with a clear error so the root cause is obvious.</li>
+      </ul>
+    </DetailPill>
+
+    <DetailPill title="Auth in E2E tests">
+      <ul>
+        <li>Log in via API and inject tokens into the browser session.</li>
+        <li>Keep a single end-to-end UI login test to validate the real flow.</li>
+      </ul>
+    </DetailPill>
+  </PillGrid>
+</div>
+
+<h2 className="not-prose mt-10 !text-xl sm:!text-xl font-normal tracking-tight text-zinc-900 dark:text-zinc-50">
+  Things I've built
+</h2>
+
+<h3 className="not-prose mt-4 !text-base sm:!text-base font-normal tracking-tight text-zinc-900 dark:text-zinc-50">
+  Tools & platforms
+</h3>
+
+<PillGrid>
+  <Pill href="https://locust.io/">Locust</Pill>
+  <Pill href="https://saucelabs.com/">Sauce Labs</Pill>
+  <Pill href="https://www.browserstack.com/">BrowserStack</Pill>
+  <Pill href="https://percy.io/">Percy</Pill>
+  <Pill href="https://aerokube.com/selenoid/latest/">Selenoid</Pill>
+  <Pill href="https://bmp.lightbody.net/">BrowserMob Proxy</Pill>
+  <Pill href="https://github.com/oesmith/puffing-billy">Puffing Billy</Pill>
+  <Pill href="https://reportportal.io/">ReportPortal</Pill>
+  <Pill href="https://github.com/vbanthia/rspec_html_reporter">RspecHtmlReporter</Pill>
+  <Pill href="https://github.com/NoRedInk/rspec-retry">rspec-retry</Pill>
+  <Pill href="https://github.com/grosser/parallel_tests">parallel_tests</Pill>
+  <Pill href="https://apps.apple.com/us/app/reviewtrackers/id1224214173">mobile app</Pill>
+  <Pill href="https://appium.io/">appium</Pill>
+  <Pill href="https://aws.amazon.com/device-farm/">AWS DeviceFarm</Pill>
+</PillGrid>
+
+<h3 className="not-prose mt-6 !text-base sm:!text-base font-normal tracking-tight text-zinc-900 dark:text-zinc-50">
+  Implementations
+</h3>
+
+<PillGrid>
+  <Pill href="http://sinatrarb.com/">Sinatra mock server (contract testing)</Pill>
+  <Pill href="https://aerokube.com/selenoid/latest/">Selenium Grid via Selenoid</Pill>
+  <Pill>Run a specific test in CI</Pill>
+  <Pill>Overnight healthcheck runs (repeat suite)</Pill>
+  <Pill>Randomized parallel grouping (seeded)</Pill>
+  <Pill>Timestamped test logger + browser console capture</Pill>
+  <Pill>RabbitMQ consumer for E2E test data setup</Pill>
+</PillGrid>
