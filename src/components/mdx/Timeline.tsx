@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 
 export function Timeline({ children }: { children: ReactNode }) {
-  return <div className="mt-6 space-y-10">{children}</div>;
+  return <div style={{ marginTop: "24px", display: "flex", flexDirection: "column", gap: "40px" }}>{children}</div>;
 }
 
 function formatDate(
@@ -86,35 +86,43 @@ export function TimelineItem({
   const dateRange = formatDateRange(startDate, endDate, isCurrent, createdDate, monthDisplay, yearDisplay, showCreated);
 
   return (
-    <div className="group relative">
-      <div className="transition-transform duration-150 will-change-transform motion-safe:hover:-translate-y-1 motion-safe:hover:scale-[1.03] motion-safe:hover:drop-shadow-lg">
-        <div className="space-y-2">
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <h3 className="m-0 text-lg font-semibold leading-7">{title}</h3>
-            {dateRange ? (
-              <span className="text-sm text-zinc-500 dark:text-zinc-400">{dateRange}</span>
-            ) : null}
-          </div>
-          {subtitle ? (
-            <p className="m-0 text-sm text-zinc-600 dark:text-zinc-300">{subtitle}</p>
-          ) : null}
-          {children ? (
-            <div className="prose prose-zinc dark:prose-invert [&_li]:rounded-md [&_li]:px-2 [&_li]:py-1 [&_li]:transition-colors [&_li:hover]:bg-zinc-200/70 dark:[&_li:hover]:bg-white/15">
-              {children}
-            </div>
+    <div className="reveal" style={{ position: "relative" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "12px 12px" }}>
+          <h3 style={{ margin: 0, fontSize: "1.125rem", fontWeight: 600, lineHeight: 1.75, fontFamily: "var(--font-syne)" }}>{title}</h3>
+          {dateRange ? (
+            <span style={{ fontSize: "0.875rem", color: "var(--muted)", fontFamily: "var(--font-space-mono)" }}>{dateRange}</span>
           ) : null}
         </div>
+        {subtitle ? (
+          <p style={{ margin: 0, fontSize: "0.875rem", color: "var(--fg)" }}>{subtitle}</p>
+        ) : null}
+        {children ? (
+          <div style={{ fontSize: "0.875rem", lineHeight: 1.6, color: "var(--fg)" }}>
+            {children}
+          </div>
+        ) : null}
       </div>
 
       {imageSrc ? (
-        <div className="pointer-events-none fixed right-6 top-24 z-50 hidden w-96 opacity-0 transition-opacity duration-150 group-hover:opacity-100 xl:block">
-          <div className="overflow-hidden rounded-xl border border-zinc-200/70 bg-white/70 shadow-lg backdrop-blur dark:border-zinc-800/70 dark:bg-black/40">
+        <div style={{
+          pointerEvents: "none",
+          position: "fixed",
+          right: "24px",
+          top: "96px",
+          zIndex: 50,
+          width: "384px",
+          opacity: 0,
+          transition: "opacity 0.15s",
+          display: "none",
+        }}>
+          <div style={{ overflow: "hidden", border: "2px solid var(--border)", background: "var(--surface)", boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)" }}>
             <Image
               src={imageSrc}
               alt={imageAlt ?? ""}
               width={960}
               height={540}
-              className="h-auto w-full"
+              style={{ width: "100%", height: "auto" }}
             />
           </div>
         </div>

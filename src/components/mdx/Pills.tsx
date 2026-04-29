@@ -6,7 +6,7 @@ import { useEffect, useId, useRef, useState } from "react";
 
 export function PillGrid({ children }: { children?: ReactNode }) {
   return (
-    <div className="not-prose mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "8px", marginTop: "16px" }}>
       {children}
     </div>
   );
@@ -19,26 +19,48 @@ export function Pill({
   href?: string;
   children: ReactNode;
 }) {
-  const className =
-    "inline-flex w-full items-center justify-between gap-3 rounded-xl border border-zinc-200/70 bg-white px-3 py-2 text-sm font-medium text-zinc-900 shadow-sm transition hover:border-zinc-300/80 hover:shadow-md dark:border-zinc-800/70 dark:bg-zinc-950 dark:text-zinc-50 dark:hover:border-zinc-700/80";
+  const styles = {
+    display: "inline-flex",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "12px",
+    border: "2px solid var(--border)",
+    background: "var(--bg)",
+    padding: "8px 12px",
+    fontSize: "0.875rem",
+    fontWeight: 600,
+    color: "var(--fg)",
+    fontFamily: "var(--font-space-mono)",
+    textDecoration: "none",
+    transition: "all 0.12s",
+    textTransform: "uppercase",
+    cursor: "pointer",
+  } as const;
 
   if (href) {
     return (
       <Link
         href={href}
-        className={className}
+        style={styles}
         target="_blank"
         rel="noopener noreferrer"
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLElement).style.background = "var(--accent)";
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLElement).style.background = "var(--bg)";
+        }}
       >
-        <span className="truncate">{children}</span>
-        <span className="text-xs text-zinc-500 dark:text-zinc-400">↗</span>
+        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{children}</span>
+        <span style={{ fontSize: "0.75rem", color: "var(--fg)" }}>↗</span>
       </Link>
     );
   }
 
   return (
-    <div className={className}>
-      <span className="truncate">{children}</span>
+    <div style={styles}>
+      <span>{children}</span>
     </div>
   );
 }
@@ -70,22 +92,37 @@ export function DetailPill({
 
     document.addEventListener("pointerdown", onPointerDown);
     return () => document.removeEventListener("pointerdown", onPointerDown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  const baseClassName =
-    "inline-flex w-full items-center justify-between gap-3 rounded-xl border border-zinc-200/70 bg-white px-3 py-2 text-sm font-medium text-zinc-900 shadow-sm transition hover:border-zinc-300/80 hover:shadow-md dark:border-zinc-800/70 dark:bg-zinc-950 dark:text-zinc-50 dark:hover:border-zinc-700/80";
+  const baseStyle = {
+    display: "inline-flex",
+    width: "100%" as const,
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "12px",
+    border: "2px solid var(--border)",
+    background: "var(--bg)",
+    padding: "8px 12px",
+    fontSize: "0.875rem",
+    fontWeight: 600,
+    color: "var(--fg)",
+    fontFamily: "var(--font-space-mono)",
+    textDecoration: "none",
+    transition: "all 0.12s",
+    textTransform: "uppercase" as const,
+    cursor: "pointer" as const,
+  };
 
   return (
     <div
       ref={rootRef}
-      className="group relative"
+      style={{ position: "relative", display: "inline-block" }}
       data-open={open ? "true" : "false"}
     >
       {href ? (
         <Link
           href={href}
-          className={baseClassName}
+          style={baseStyle}
           target="_blank"
           rel="noopener noreferrer"
           aria-describedby={descriptionId}
@@ -97,15 +134,13 @@ export function DetailPill({
             if (e.key === "Escape") setOpen(false);
           }}
         >
-          <span className="truncate">{title}</span>
-          <span className="text-xs text-zinc-500 transition group-hover:text-zinc-700 dark:text-zinc-400 dark:group-hover:text-zinc-200">
-            ↗
-          </span>
+          <span>{title}</span>
+          <span style={{ fontSize: "0.75rem", color: "var(--fg)" }}>↗</span>
         </Link>
       ) : (
         <button
           type="button"
-          className={baseClassName}
+          style={baseStyle}
           aria-expanded={open}
           aria-describedby={descriptionId}
           onClick={() => setOpen((v) => !v)}
@@ -113,20 +148,32 @@ export function DetailPill({
             if (e.key === "Escape") setOpen(false);
           }}
         >
-          <span className="truncate">{title}</span>
-          <span className="text-xs text-zinc-500 transition group-hover:text-zinc-700 dark:text-zinc-400 dark:group-hover:text-zinc-200">
-            ▾
-          </span>
+          <span>{title}</span>
+          <span style={{ fontSize: "0.75rem", color: "var(--fg)" }}>▾</span>
         </button>
       )}
 
       <div
         id={descriptionId}
-        className={
-          "pointer-events-none absolute left-1/2 top-full z-10 mt-2 w-[min(36rem,calc(100vw-2rem))] -translate-x-1/2 origin-top rounded-xl border border-zinc-200/70 bg-white p-4 text-zinc-700 shadow-lg opacity-0 ring-1 ring-black/5 transition dark:border-zinc-800/70 dark:bg-zinc-950 dark:text-zinc-200 dark:ring-white/10 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 data-[open=true]:pointer-events-auto data-[open=true]:opacity-100"
-        }
+        style={{
+          pointerEvents: open ? "auto" : "none",
+          position: "absolute",
+          left: "50%",
+          top: "100%",
+          zIndex: 10,
+          marginTop: "8px",
+          width: "min(36rem, calc(100vw - 2rem))",
+          transform: "translateX(-50%)",
+          border: "2px solid var(--border)",
+          background: "var(--surface)",
+          padding: "16px",
+          fontSize: "0.875rem",
+          color: "var(--fg)",
+          opacity: open ? 1 : 0,
+          transition: "opacity 0.12s",
+        }}
       >
-        <div className="prose prose-zinc max-w-none text-base leading-7 dark:prose-invert">
+        <div style={{ lineHeight: 1.6 }}>
           {children}
         </div>
       </div>

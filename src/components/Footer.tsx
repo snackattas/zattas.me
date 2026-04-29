@@ -1,21 +1,42 @@
 export function Footer() {
   return (
-    <footer className="w-full border-t border-zinc-200 dark:border-zinc-800 mt-16 bg-zinc-200 dark:bg-zinc-900">
-      <div className="mx-auto max-w-3xl px-6 py-4">
-        <div className="flex flex-wrap items-center justify-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
-          <span className="flex items-center gap-1">
-            Created with <span className="text-red-500">♥</span> by Zach Attas
-          </span>
-          <span className="hidden sm:inline">•</span>
-          <a
-            href="https://github.com/snackattas/zattas.me"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors underline decoration-zinc-400 hover:decoration-zinc-900 dark:hover:decoration-zinc-100"
-          >
-            View on GitHub
-          </a>
-        </div>
+    <footer
+      style={{
+        maxWidth: "1200px",
+        margin: "0 auto",
+        marginTop: "100px",
+        padding: "24px var(--gutter)",
+        borderTop: "2px solid var(--border)",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: "12px",
+        fontFamily: "var(--font-space-mono)",
+        fontSize: "0.72rem",
+        color: "var(--muted)",
+      }}
+    >
+      <span>© {new Date().getFullYear()} Zach Attas</span>
+
+      {/* Konami hint */}
+      <span style={{ fontSize: "0.68rem" }}>↑↑↓↓←→←→BA</span>
+
+      <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+        <a
+          href="https://github.com/snackattas/zattas.me"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ textDecoration: "none", color: "var(--muted)" }}
+        >
+          source ↗
+        </a>
+        <a
+          href="mailto:zach.attas@gmail.com"
+          style={{ textDecoration: "none", color: "var(--muted)" }}
+        >
+          zach.attas@gmail.com
+        </a>
       </div>
     </footer>
   );

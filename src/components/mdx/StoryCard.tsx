@@ -14,40 +14,61 @@ export function StoryCard({
   const [clickedState, setClickedState] = useState<boolean | null>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  // If clicked, use clicked state; otherwise use hover state
   const shouldShow = clickedState !== null ? clickedState : isHovered;
 
   const handleClick = () => {
-    // Toggle the current visible state and make it sticky
     setClickedState(!shouldShow);
   };
 
   return (
-    <div 
-      className="group relative overflow-hidden rounded-xl border border-zinc-200/70 bg-white/50 shadow-sm transition-all hover:shadow-md dark:border-zinc-800/70 dark:bg-zinc-900/50"
+    <div
+      className="reveal tilt-card"
+      style={{
+        border: "2px solid var(--border)",
+        background: "var(--surface)",
+        overflow: "hidden",
+        transition: "all 0.12s",
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <button
         type="button"
         onClick={handleClick}
-        className="w-full px-5 py-4 text-left transition-colors hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30"
+        style={{
+          width: "100%",
+          padding: "20px",
+          textAlign: "left",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          transition: "background 0.12s",
+        }}
         aria-expanded={shouldShow}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLElement).style.background = "rgba(0, 0, 0, 0.02)";
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLElement).style.background = "transparent";
+        }}
       >
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <h3 className="m-0 text-lg font-semibold leading-7 text-zinc-900 dark:text-zinc-50">
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px" }}>
+          <div style={{ flex: 1 }}>
+            <h3 style={{ margin: 0, fontSize: "1.125rem", fontWeight: 600, lineHeight: 1.75, fontFamily: "var(--font-syne)" }}>
               {title}
             </h3>
-            <p className="mt-3 mb-0 text-sm italic text-zinc-600 dark:text-zinc-400">
+            <p style={{ marginTop: "12px", marginBottom: 0, fontSize: "0.875rem", fontStyle: "italic", color: "var(--muted)", fontFamily: "var(--font-space-mono)" }}>
               &ldquo;{hook}&rdquo;
             </p>
           </div>
-          <div className="flex-shrink-0 pt-1">
+          <div style={{ flexShrink: 0, paddingTop: "4px" }}>
             <span
-              className={`inline-block text-zinc-500 transition-transform duration-200 dark:text-zinc-400 ${
-                shouldShow ? "rotate-180" : ""
-              }`}
+              style={{
+                display: "inline-block",
+                color: "var(--muted)",
+                transition: "transform 0.2s",
+                transform: shouldShow ? "rotate(180deg)" : "rotate(0deg)",
+              }}
             >
               ▾
             </span>
@@ -55,15 +76,16 @@ export function StoryCard({
         </div>
       </button>
 
-      <div 
-        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          shouldShow ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
-        }`}
+      <div
+        style={{
+          overflow: "hidden",
+          transition: "all 0.3s ease-in-out",
+          maxHeight: shouldShow ? "1000px" : "0",
+          opacity: shouldShow ? 1 : 0,
+        }}
       >
-        <div className="border-t border-zinc-200/70 px-6 pb-5 pt-4 dark:border-zinc-800/70">
-          <div className="prose prose-zinc dark:prose-invert prose-sm [&_p]:mb-4">
-            {children}
-          </div>
+        <div style={{ borderTop: "2px solid var(--border)", padding: "16px 20px 20px", fontSize: "0.875rem", lineHeight: 1.6, color: "var(--fg)" }}>
+          {children}
         </div>
       </div>
     </div>
