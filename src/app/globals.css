@@ -135,6 +135,46 @@ body.konami-active {
   font-size: 1.5rem;
 }
 
+/* Story grid layout */
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-top: 28px;
+}
+
+@media (min-width: 700px) {
+  .story-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.story-card:hover {
+  background: var(--surface);
+  position: relative;
+  z-index: 1;
+}
+
+/* Project grid layout */
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-top: 28px;
+}
+
+@media (min-width: 700px) {
+  .project-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.project-card:hover {
+  background: var(--surface);
+  position: relative;
+  z-index: 1;
+}
+
 .reveal p {
   margin-bottom: 1em;
   line-height: 1.7;

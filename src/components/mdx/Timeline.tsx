@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 
 export function Timeline({ children }: { children: ReactNode }) {
-  return <div style={{ marginTop: "24px", display: "flex", flexDirection: "column", gap: "40px" }}>{children}</div>;
+  return <div style={{ marginTop: "24px" }}>{children}</div>;
 }
 
 function formatDate(
@@ -11,16 +11,13 @@ function formatDate(
   yearDisplay: boolean
 ): string {
   if (yearDisplay) {
-    // yearDisplay: "2022" style
     return date.toLocaleDateString("en-US", { year: "numeric" });
   }
   if (monthDisplay) {
-    // monthDisplay: "Jan '22" style
     const month = date.toLocaleDateString("en-US", { month: "short" });
     const year = date.toLocaleDateString("en-US", { year: "2-digit" });
     return `${month} '${year}`;
   }
-  // Fallback to year if neither is set
   return date.toLocaleDateString("en-US", { year: "numeric" });
 }
 
@@ -33,7 +30,6 @@ function formatDateRange(
   yearDisplay: boolean = false,
   showCreated: boolean = true
 ): string | null {
-
   if (createdDate) {
     const date = new Date(createdDate);
     const formattedDate = formatDate(date, monthDisplay, yearDisplay);
@@ -54,6 +50,26 @@ function formatDateRange(
   }
 
   return startFormatted;
+}
+
+export function TimelineItemGroup({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <div style={{ marginTop: "16px", marginBottom: "4px" }}>
+      <div
+        style={{
+          fontFamily: "var(--font-space-mono)",
+          fontSize: "0.65rem",
+          fontWeight: 700,
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          color: "var(--accent)",
+        }}
+      >
+        {title}
+      </div>
+      {children}
+    </div>
+  );
 }
 
 export function TimelineItem({
@@ -86,45 +102,101 @@ export function TimelineItem({
   const dateRange = formatDateRange(startDate, endDate, isCurrent, createdDate, monthDisplay, yearDisplay, showCreated);
 
   return (
-    <div className="reveal" style={{ position: "relative" }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "12px 12px" }}>
-          <h3 style={{ margin: 0, fontSize: "1.125rem", fontWeight: 600, lineHeight: 1.75, fontFamily: "var(--font-syne)" }}>{title}</h3>
-          {dateRange ? (
-            <span style={{ fontSize: "0.875rem", color: "var(--muted)", fontFamily: "var(--font-space-mono)" }}>{dateRange}</span>
-          ) : null}
+    <div
+      className="tl-item"
+      style={{
+        padding: "24px 0",
+        borderTop: "2px solid var(--border)",
+        display: "grid",
+        gridTemplateColumns: "1fr",
+        gap: "12px",
+      }}
+    >
+      <style>{`
+        @media (min-width: 900px) {
+          .tl-item {
+            grid-template-columns: 180px 1fr !important;
+            gap: 0 40px !important;
+          }
+          .tl-left { grid-column: 1; }
+          .tl-body { grid-column: 2; }
+        }
+      `}</style>
+
+      <div className="tl-left" style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+        <div
+          className="tl-date"
+          style={{
+            fontFamily: "var(--font-space-mono)",
+            fontSize: "0.72rem",
+            color: "var(--muted)",
+            letterSpacing: "0.04em",
+          }}
+        >
+          {dateRange}
+        </div>
+        <div
+          className="tl-company"
+          style={{
+            fontFamily: "var(--font-syne)",
+            fontWeight: 700,
+            fontSize: "1rem",
+            color: "var(--accent)",
+            textDecoration: "none",
+          }}
+        >
+          {title}
         </div>
         {subtitle ? (
-          <p style={{ margin: 0, fontSize: "0.875rem", color: "var(--fg)" }}>{subtitle}</p>
-        ) : null}
-        {children ? (
-          <div style={{ fontSize: "0.875rem", lineHeight: 1.6, color: "var(--fg)" }}>
-            {children}
+          <div
+            className="tl-role"
+            style={{
+              fontFamily: "var(--font-space-mono)",
+              fontSize: "0.72rem",
+              color: "var(--muted)",
+            }}
+          >
+            {subtitle}
           </div>
         ) : null}
       </div>
 
+      {children ? (
+        <div
+          className="tl-body"
+          style={{
+            fontSize: "0.85rem",
+            lineHeight: 1.7,
+            color: "var(--muted)",
+          }}
+        >
+          {children}
+        </div>
+      ) : null}
+
       {imageSrc ? (
-        <div style={{
-          pointerEvents: "none",
-          position: "fixed",
-          right: "24px",
-          top: "96px",
-          zIndex: 50,
-          width: "384px",
-          opacity: 0,
-          transition: "opacity 0.15s",
-          display: "none",
-        }}>
-          <div style={{ overflow: "hidden", border: "2px solid var(--border)", background: "var(--surface)", boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)" }}>
-            <Image
-              src={imageSrc}
-              alt={imageAlt ?? ""}
-              width={960}
-              height={540}
-              style={{ width: "100%", height: "auto" }}
-            />
-          </div>
+        <div
+          className="tl-preview"
+          style={{
+            display: "none",
+            position: "fixed",
+            right: "32px",
+            top: "80px",
+            width: "280px",
+            zIndex: 200,
+            pointerEvents: "none",
+            border: "2px solid var(--border)",
+            boxShadow: "6px 6px 0 var(--fg)",
+            background: "var(--bg)",
+          }}
+        >
+          <Image
+            src={imageSrc}
+            alt={imageAlt ?? ""}
+            width={280}
+            height={180}
+            style={{ width: "100%", height: "auto", display: "block" }}
+          />
         </div>
       ) : null}
     </div>

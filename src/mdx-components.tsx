@@ -1,13 +1,13 @@
 import type { MDXComponents } from "mdx/types";
 import type { ComponentProps } from "react";
 
-import { Timeline, TimelineItem } from "@/components/mdx/Timeline";
+import { Timeline, TimelineItem, TimelineItemGroup } from "@/components/mdx/Timeline";
 import { ProjectCard } from "@/components/mdx/ProjectCard";
 import { Disclosure } from "@/components/mdx/Disclosure";
 import { Headshot } from "@/components/mdx/Headshot";
 import { DetailPill, Pill, PillGrid } from "@/components/mdx/Pills";
 import { StoryCard } from "@/components/mdx/StoryCard";
-import { AutomationFunButton } from "@/components/AutomationFun";
+import { AutomationFunSection } from "@/components/AutomationFun/AutomationFunSection";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -39,6 +39,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     Timeline,
     TimelineItem,
+    TimelineItemGroup,
     ProjectCard,
     Disclosure,
     Headshot,
@@ -46,7 +47,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     PillGrid,
     DetailPill,
     StoryCard,
-    AutomationFunButton,
+    AutomationFunSection,
     ...components,
   };
 }

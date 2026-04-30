@@ -24,8 +24,8 @@ export function Section({
         aria-hidden="true"
         style={{
           position: "absolute",
-          top: "-40px",
-          left: "-20px",
+          top: "60px",
+          left: "clamp(0px, -20px, 40px)",
           fontFamily: "var(--font-space-mono)",
           fontWeight: 700,
           fontSize: "clamp(5rem, 14vw, 10rem)",

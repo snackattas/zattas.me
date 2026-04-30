@@ -3,10 +3,12 @@
 import { type ReactNode, useState } from "react";
 
 export function StoryCard({
+  num,
   title,
   hook,
   children,
 }: {
+  num?: string;
   title: string;
   hook: string;
   children: ReactNode;
@@ -22,12 +24,15 @@ export function StoryCard({
 
   return (
     <div
-      className="reveal tilt-card"
+      className="story-card tilt-card"
       style={{
         border: "2px solid var(--border)",
-        background: "var(--surface)",
-        overflow: "hidden",
+        margin: "-1px 0 0 -1px",
+        padding: "24px 22px",
+        background: "var(--bg)",
         transition: "all 0.12s",
+        cursor: "default",
+        position: "relative",
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -37,43 +42,33 @@ export function StoryCard({
         onClick={handleClick}
         style={{
           width: "100%",
-          padding: "20px",
+          padding: 0,
           textAlign: "left",
           background: "transparent",
           border: "none",
           cursor: "pointer",
-          transition: "background 0.12s",
         }}
         aria-expanded={shouldShow}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.background = "rgba(0, 0, 0, 0.02)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.background = "transparent";
-        }}
       >
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px" }}>
-          <div style={{ flex: 1 }}>
-            <h3 style={{ margin: 0, fontSize: "1.125rem", fontWeight: 600, lineHeight: 1.75, fontFamily: "var(--font-syne)" }}>
-              {title}
-            </h3>
-            <p style={{ marginTop: "12px", marginBottom: 0, fontSize: "0.875rem", fontStyle: "italic", color: "var(--muted)", fontFamily: "var(--font-space-mono)" }}>
-              &ldquo;{hook}&rdquo;
-            </p>
+        {num && (
+          <div
+            style={{
+              fontFamily: "var(--font-space-mono)",
+              fontSize: "0.68rem",
+              color: "var(--accent)",
+              letterSpacing: "0.08em",
+              marginBottom: "8px",
+            }}
+          >
+            {num}
           </div>
-          <div style={{ flexShrink: 0, paddingTop: "4px" }}>
-            <span
-              style={{
-                display: "inline-block",
-                color: "var(--muted)",
-                transition: "transform 0.2s",
-                transform: shouldShow ? "rotate(180deg)" : "rotate(0deg)",
-              }}
-            >
-              ▾
-            </span>
-          </div>
-        </div>
+        )}
+        <h3 style={{ margin: "0 0 8px 0", fontSize: "1rem", fontWeight: 800, letterSpacing: "-0.02em", color: "var(--fg)", fontFamily: "var(--font-syne)", lineHeight: 1.2 }}>
+          {title}
+        </h3>
+        <p style={{ margin: 0, fontSize: "0.72rem", fontStyle: "italic", color: "var(--muted)", fontFamily: "var(--font-space-mono)", lineHeight: 1.5 }}>
+          &ldquo;{hook}&rdquo;
+        </p>
       </button>
 
       <div
@@ -84,7 +79,7 @@ export function StoryCard({
           opacity: shouldShow ? 1 : 0,
         }}
       >
-        <div style={{ borderTop: "2px solid var(--border)", padding: "16px 20px 20px", fontSize: "0.875rem", lineHeight: 1.6, color: "var(--fg)" }}>
+        <div style={{ marginTop: "16px", fontSize: "0.82rem", lineHeight: 1.7, color: "var(--muted)" }}>
           {children}
         </div>
       </div>

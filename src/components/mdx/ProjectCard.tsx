@@ -11,6 +11,7 @@ export function ProjectCard({
   imageSrc,
   imageAlt,
   children,
+  featured = false,
 }: {
   title: string;
   href?: string;
@@ -18,76 +19,79 @@ export function ProjectCard({
   imageSrc?: string;
   imageAlt?: string;
   children?: ReactNode;
+  featured?: boolean;
 }) {
+  const imageHeight = featured ? 200 : 160;
+  const cardStyle = featured ? { gridColumn: "1 / -1" } : {};
+
   return (
     <div
-      className="reveal tilt-card"
+      className="project-card tilt-card reveal"
       style={{
         border: "2px solid var(--border)",
-        background: "var(--surface)",
-        padding: "20px",
+        margin: "-1px 0 0 -1px",
+        background: "var(--bg)",
+        overflow: "hidden",
         transition: "all 0.12s",
+        ...cardStyle,
       }}
     >
       {imageSrc ? (
         <div
           style={{
-            marginBottom: "16px",
             overflow: "hidden",
-            border: "2px solid var(--border)",
+            borderBottom: "2px solid var(--border)",
+            position: "relative",
+            width: "100%",
+            height: `${imageHeight}px`,
           }}
         >
-          <div style={{ position: "relative", height: "160px", width: "100%" }}>
-            <Image
-              src={imageSrc}
-              alt={imageAlt ?? ""}
-              fill
-              sizes="(min-width: 768px) 768px, 100vw"
-              className="object-cover"
-            />
-          </div>
+          <Image
+            src={imageSrc}
+            alt={imageAlt ?? ""}
+            fill
+            sizes="(min-width: 1200px) 1200px, 100vw"
+            style={{ objectFit: "cover" }}
+          />
         </div>
       ) : null}
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          gap: "12px 16px",
-        }}
-      >
-        <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 600, lineHeight: 1.5, fontFamily: "var(--font-syne)" }}>
-          {href ? (
-            <Link
-              href={href}
-              style={{ color: "var(--fg)", textDecoration: "none" }}
-              target="_blank"
-              rel="noopener noreferrer"
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.color = "var(--accent)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.color = "var(--fg)";
-              }}
-            >
-              {title}
-            </Link>
-          ) : (
-            title
-          )}
-        </h3>
-        {meta ? (
-          <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--muted)", fontFamily: "var(--font-space-mono)" }}>
-            {meta}
-          </span>
+      <div style={{ padding: "20px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            gap: "12px 16px",
+            marginBottom: "12px",
+          }}
+        >
+          <h3 style={{ margin: 0, fontSize: "0.95rem", fontWeight: 800, letterSpacing: "-0.02em", fontFamily: "var(--font-syne)", lineHeight: 1.3 }}>
+            {href ? (
+              <Link
+                href={href}
+                style={{ color: "var(--fg)", textDecoration: "none" }}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {title}
+              </Link>
+            ) : (
+              title
+            )}
+          </h3>
+          {meta ? (
+            <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "var(--muted)", fontFamily: "var(--font-space-mono)", whiteSpace: "nowrap" }}>
+              {meta}
+            </span>
+          ) : null}
+        </div>
+        {children ? (
+          <div style={{ fontSize: "0.8rem", lineHeight: 1.65, color: "var(--muted)" }}>
+            {children}
+          </div>
         ) : null}
       </div>
-      {children ? (
-        <div style={{ marginTop: "12px", fontSize: "0.875rem", lineHeight: 1.6, color: "var(--fg)" }}>
-          {children}
-        </div>
-      ) : null}
     </div>
   );
 }
