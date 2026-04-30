@@ -222,6 +222,12 @@ body.konami-active {
   font-size: 0.875em;
 }
 
+/* Timeline bullets - normal paragraphs with spacing */
+.tl-body p {
+  margin-bottom: 1em;
+  margin-top: 0;
+}
+
 /* Reset Tailwind defaults to work with new theme */
 @theme inline {
   --color-background: var(--bg);

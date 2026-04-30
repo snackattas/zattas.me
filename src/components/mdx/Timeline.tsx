@@ -153,10 +153,18 @@ function TimelineItemContent({
             fontFamily: "var(--font-syne)",
             fontWeight: 700,
             fontSize: "1rem",
-            color: "var(--accent)",
-            textDecoration: "none",
           }}
         >
+          <style>{`
+            .tl-company a {
+              color: var(--fg) !important;
+              text-decoration: none !important;
+              transition: color 0.12s;
+            }
+            .tl-company a:hover {
+              color: var(--accent) !important;
+            }
+          `}</style>
           {title}
         </div>
         {subtitle ? (
