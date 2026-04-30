@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import type { AutomationDetection } from "./AutomationDetector";
@@ -212,11 +212,14 @@ function ScriptDisplay({ tool, language }: ScriptDisplayProps) {
   const languageName = getLanguageName(language);
   const installInstructions = getInstallInstructions(tool, language);
 
-  const handleCopyScript = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1000);
-  };
+  const handleCopyScript = useCallback(() => {
+    navigator.clipboard.writeText(code).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1000);
+    }).catch(err => {
+      console.error('Failed to copy:', err);
+    });
+  }, [code]);
 
   if (!code) {
     return <p className="text-zinc-500 dark:text-zinc-400">No script available for this combination.</p>;
@@ -237,7 +240,12 @@ function ScriptDisplay({ tool, language }: ScriptDisplayProps) {
           <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">{languageName} Script</h3>
           <button
             onClick={handleCopyScript}
-            className={`rounded-md px-3 py-1 text-xs font-medium transition-colors ${
+            style={{
+              padding: copied ? "0.25rem 1rem" : "0.25rem 0.75rem",
+              animation: copied ? "copyExpand 0.3s ease-out forwards" : "none",
+              transition: "all 0.2s",
+            }}
+            className={`rounded-md text-xs font-medium ${
               copied
                 ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50"
                 : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
@@ -262,11 +270,14 @@ interface InstallInstructionsDisplayProps {
 function InstallInstructionsDisplay({ instructions }: InstallInstructionsDisplayProps) {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
-  const handleCopy = (text: string, index: number) => {
-    navigator.clipboard.writeText(text);
-    setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 1000);
-  };
+  const handleCopy = useCallback((text: string, index: number) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedIndex(index);
+      setTimeout(() => setCopiedIndex(null), 1000);
+    }).catch(err => {
+      console.error('Failed to copy:', err);
+    });
+  }, []);
 
   return (
     <div className="space-y-2 text-sm">
@@ -308,7 +319,12 @@ function InstallInstructionsDisplay({ instructions }: InstallInstructionsDisplay
                 <div className="relative">
                   <button
                     onClick={() => handleCopy(codeText, index)}
-                    className={`absolute right-2 top-2 rounded-md px-2 py-1 text-xs font-medium transition-colors ${
+                    style={{
+                      padding: copiedIndex === index ? "0.25rem 0.75rem" : "0.25rem 0.5rem",
+                      animation: copiedIndex === index ? "copyExpand 0.3s ease-out forwards" : "none",
+                      transition: "all 0.2s",
+                    }}
+                    className={`absolute right-2 top-2 rounded-md text-xs font-medium ${
                       copiedIndex === index
                         ? "bg-zinc-600 text-zinc-100 dark:bg-zinc-500 dark:text-zinc-100"
                         : "bg-zinc-700 text-zinc-200 hover:bg-zinc-600 dark:bg-zinc-600 dark:hover:bg-zinc-500"

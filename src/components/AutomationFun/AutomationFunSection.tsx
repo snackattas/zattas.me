@@ -308,6 +308,8 @@ export function AutomationFunSection() {
   const [activeTool, setActiveTool] = useState("playwright");
   const [activeLang, setActiveLang] = useState("python");
   const [detected, setDetected] = useState<string | null>(null);
+  const [copiedMain, setCopiedMain] = useState(false);
+  const [copiedCmd, setCopiedCmd] = useState<number | null>(null);
 
   useEffect(() => {
     // Bot detection
@@ -346,7 +348,17 @@ export function AutomationFunSection() {
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(scriptData);
+    navigator.clipboard.writeText(scriptData).then(() => {
+      setCopiedMain(true);
+      setTimeout(() => setCopiedMain(false), 1000);
+    });
+  };
+
+  const handleCmdCopy = (text: string, index: number) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedCmd(index);
+      setTimeout(() => setCopiedCmd(null), 1000);
+    });
   };
 
   return (
@@ -401,6 +413,7 @@ export function AutomationFunSection() {
           const lines = (instructions[activeTool]?.[currentLang] || "").split("\n");
           const elements = [];
           let i = 0;
+          let cmdIndex = 0;
 
           while (i < lines.length) {
             const line = lines[i];
@@ -429,9 +442,11 @@ export function AutomationFunSection() {
               );
               const normalizedCmds = cmdLines.map((l) => l.slice(minIndent));
               const allText = normalizedCmds.join("\n");
+              const currentCmdIndex = cmdIndex;
+              cmdIndex++;
 
               elements.push(
-                <div key={`cmd-${i}`} className={styles["instrCmd"]}>
+                <div key={`cmd-${currentCmdIndex}`} className={styles["instrCmd"]}>
                   <div className={styles["instrCmdLines"]}>
                     {normalizedCmds.map((cmd, idx) => (
                       <code key={idx}>{cmd}</code>
@@ -439,9 +454,12 @@ export function AutomationFunSection() {
                   </div>
                   <button
                     className={styles["instrCmdCopy"]}
-                    onClick={() => navigator.clipboard.writeText(allText)}
+                    onClick={() => handleCmdCopy(allText, currentCmdIndex)}
+                    style={{
+                      animation: copiedCmd === currentCmdIndex ? "copyExpand 0.3s ease-out forwards" : "none",
+                    }}
                   >
-                    copy
+                    {copiedCmd === currentCmdIndex ? "Copied!" : "copy"}
                   </button>
                 </div>
               );
@@ -463,8 +481,14 @@ export function AutomationFunSection() {
       <div className={styles["autoCodeWrap"]}>
         <div className={styles["autoCodeHeader"]}>
           <div className={styles["autoCodeLabel"]}>{filename}</div>
-          <button className={styles["autoCopy"]} onClick={handleCopy}>
-            copy
+          <button
+            className={styles["autoCopy"]}
+            onClick={handleCopy}
+            style={{
+              animation: copiedMain ? "copyExpand 0.3s ease-out forwards" : "none",
+            }}
+          >
+            {copiedMain ? "Copied!" : "copy"}
           </button>
         </div>
         <SyntaxHighlighter

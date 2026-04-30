@@ -26,7 +26,10 @@ function formatDate(
 }
 
 function parseDateString(dateStr: string): Date {
-  const [year, month, day] = dateStr.split('-').map(Number);
+  const parts = dateStr.split('-');
+  const year = parseInt(parts[0] || '0', 10);
+  const month = parseInt(parts[1] || '1', 10);
+  const day = parseInt(parts[2] || '1', 10);
   return new Date(year, month - 1, day);
 }
 
