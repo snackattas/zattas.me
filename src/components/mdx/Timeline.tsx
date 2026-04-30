@@ -1,4 +1,8 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 
 export function Timeline({ children }: { children: ReactNode }) {
@@ -72,7 +76,7 @@ export function TimelineItemGroup({ title, children }: { title: string; children
   );
 }
 
-export function TimelineItem({
+function TimelineItemContent({
   title,
   subtitle,
   startDate,
@@ -99,11 +103,19 @@ export function TimelineItem({
   imageAlt?: string;
   children?: ReactNode;
 }) {
+  const [showPreview, setShowPreview] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const dateRange = formatDateRange(startDate, endDate, isCurrent, createdDate, monthDisplay, yearDisplay, showCreated);
 
   return (
     <div
       className="tl-item"
+      onMouseEnter={() => setShowPreview(true)}
+      onMouseLeave={() => setShowPreview(false)}
       style={{
         padding: "24px 0",
         borderTop: "2px solid var(--border)",
@@ -174,31 +186,36 @@ export function TimelineItem({
         </div>
       ) : null}
 
-      {imageSrc ? (
-        <div
-          className="tl-preview"
-          style={{
-            display: "none",
-            position: "fixed",
-            right: "32px",
-            top: "80px",
-            width: "280px",
-            zIndex: 200,
-            pointerEvents: "none",
-            border: "2px solid var(--border)",
-            boxShadow: "6px 6px 0 var(--fg)",
-            background: "var(--bg)",
-          }}
-        >
-          <Image
-            src={imageSrc}
-            alt={imageAlt ?? ""}
-            width={280}
-            height={180}
-            style={{ width: "100%", height: "auto", display: "block" }}
-          />
-        </div>
-      ) : null}
+      {imageSrc && mounted
+        ? createPortal(
+            <div
+              className="tl-preview"
+              style={{
+                display: showPreview ? "block" : "none",
+                position: "fixed",
+                right: "max(20px, 5vw)",
+                top: "80px",
+                width: "280px",
+                zIndex: 200,
+                pointerEvents: "none",
+                border: "2px solid var(--border)",
+                boxShadow: "6px 6px 0 var(--fg)",
+                background: "var(--bg)",
+              }}
+            >
+              <Image
+                src={imageSrc}
+                alt={imageAlt ?? ""}
+                width={280}
+                height={180}
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
+            </div>,
+            document.body
+          )
+        : null}
     </div>
   );
 }
+
+export const TimelineItem = TimelineItemContent;
