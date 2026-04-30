@@ -82,29 +82,41 @@ body {
 }
 
 /* Konami easter egg */
+@keyframes konamiFlash {
+  0%,  100% { filter: none; }
+  20%       { filter: hue-rotate(100deg) saturate(2); }
+  40%       { filter: hue-rotate(200deg) saturate(2); }
+  60%       { filter: hue-rotate(60deg)  saturate(2); }
+  80%       { filter: hue-rotate(280deg) saturate(2); }
+}
+
 #konami-toast {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--surface);
-  border: 2px solid var(--border);
-  padding: 16px 20px;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--fg);
+  color: var(--bg);
   font-family: var(--font-space-mono);
-  font-size: 0.85rem;
-  color: var(--fg);
-  z-index: 10000;
+  font-size: 0.8rem;
+  padding: 14px 24px;
+  z-index: 99999;
+  border: 2px solid var(--accent);
+  box-shadow: 4px 4px 0 var(--accent);
+  text-align: center;
+  max-width: 400px;
   opacity: 0;
-  pointer-events: none;
   transition: opacity 0.3s;
+  pointer-events: none;
 }
 
 #konami-toast.show {
   opacity: 1;
 }
 
+html.konami-active,
 body.konami-active {
-  filter: hue-rotate(25deg);
-  transition: filter 0.4s;
+  animation: konamiFlash 7s ease-in-out 1;
 }
 
 /* Tilt card 3D transforms */

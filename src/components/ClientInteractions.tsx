@@ -13,7 +13,7 @@ export function ClientInteractions() {
 
     const onMouseMove = (e: MouseEvent) => {
       mx = e.clientX; my = e.clientY;
-      dot.style.transform = `translate(${mx}px,${my}px)`;
+      dot.style.transform = `translate(calc(${mx}px - 4px), calc(${my}px - 4px))`;
     };
     document.addEventListener("mousemove", onMouseMove);
 
@@ -21,7 +21,7 @@ export function ClientInteractions() {
     const animCursor = () => {
       rx += (mx - rx) * 0.14;
       ry += (my - ry) * 0.14;
-      ring.style.transform = `translate(${rx}px,${ry}px)`;
+      ring.style.transform = `translate(calc(${rx}px - 14px), calc(${ry}px - 14px))`;
       rafId = requestAnimationFrame(animCursor);
     };
     animCursor();
@@ -58,7 +58,7 @@ export function ClientInteractions() {
       const r = this.getBoundingClientRect();
       const x = (me.clientX - r.left) / r.width - 0.5;
       const y = (me.clientY - r.top) / r.height - 0.5;
-      this.style.transform = `perspective(700px) rotateY(${x * 7}deg) rotateX(${-y * 7}deg) translateZ(6px)`;
+      this.style.transform = `perspective(700px) rotateY(${x * 12}deg) rotateX(${-y * 12}deg) translateZ(6px)`;
       this.style.zIndex = "2";
     };
     const onTiltLeave = function (this: HTMLElement) {
@@ -78,14 +78,14 @@ export function ClientInteractions() {
         kIdx++;
         if (kIdx === KONAMI.length) {
           kIdx = 0;
-          document.body.classList.add("konami-active");
+          document.documentElement.classList.add("konami-active");
           const toast = document.getElementById("konami-toast");
           if (toast) {
             toast.classList.add("show");
             setTimeout(() => {
               toast.classList.remove("show");
-              document.body.classList.remove("konami-active");
-            }, 20000);
+              document.documentElement.classList.remove("konami-active");
+            }, 7000);
           }
         }
       } else {

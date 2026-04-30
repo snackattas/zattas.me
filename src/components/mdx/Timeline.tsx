@@ -25,6 +25,11 @@ function formatDate(
   return date.toLocaleDateString("en-US", { year: "numeric" });
 }
 
+function parseDateString(dateStr: string): Date {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
 function formatDateRange(
   startDate: string,
   endDate?: string,
@@ -35,12 +40,12 @@ function formatDateRange(
   showCreated: boolean = true
 ): string | null {
   if (createdDate) {
-    const date = new Date(createdDate);
+    const date = parseDateString(createdDate);
     const formattedDate = formatDate(date, monthDisplay, yearDisplay);
     return showCreated ? `Created ${formattedDate}` : formattedDate;
   }
 
-  const start = new Date(startDate);
+  const start = parseDateString(startDate);
   const startFormatted = formatDate(start, monthDisplay, yearDisplay);
 
   if (isCurrent) {
@@ -48,7 +53,7 @@ function formatDateRange(
   }
 
   if (endDate) {
-    const end = new Date(endDate);
+    const end = parseDateString(endDate);
     const endFormatted = formatDate(end, monthDisplay, yearDisplay);
     return `${startFormatted} - ${endFormatted}`;
   }
