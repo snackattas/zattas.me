@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { AutomationDetector, type AutomationDetection } from "./AutomationDetector";
@@ -336,18 +336,19 @@ export function AutomationFunSection() {
   const [haiku, setHaiku] = useState<any>(null);
   const [copiedMain, setCopiedMain] = useState(false);
   const [copiedCmd, setCopiedCmd] = useState<number | null>(null);
+  const hasScrolledRef = useRef(false);
 
   const handleDetected = useCallback((detection: AutomationDetection) => {
-    // Only set haiku on first detection (when haiku is null)
     setDetection(detection);
     setHaiku(prev => prev || getRandomHaiku());
     setActiveTool((detection.tool as any) || "playwright");
 
-    // Auto-scroll to section
-    document.getElementById("automation-fun")?.scrollIntoView({ block: "start" });
+    // Auto-scroll to section only on first detection
+    if (!hasScrolledRef.current) {
+      hasScrolledRef.current = true;
+      document.getElementById("automation-fun")?.scrollIntoView({ block: "start" });
 
-    // Disco effect for 7 seconds (only on first detection)
-    if (!document.body.classList.contains("disco-active")) {
+      // Disco effect for 7 seconds
       document.body.classList.add("disco-active");
       setTimeout(() => document.body.classList.remove("disco-active"), 7000);
     }
