@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { AutomationDetector, type AutomationDetection } from "./AutomationDetector";
+import { getRandomHaiku } from "@/data/haikus";
 import styles from "./automation.module.css";
 
 // All scripts per tool/language
@@ -17,12 +19,12 @@ import getpass, os
 with sync_playwright() as p:
     browser = p.firefox.launch(headless=False)
     context = browser.new_context()
+    context.add_cookies([
+        {"name": "automation_user", "value": getpass.getuser(), "url": "https://zattas.me"},
+        {"name": "automation_language", "value": "python", "url": "https://zattas.me"}
+    ])
     page = context.new_page()
     try:
-        context.add_cookies([
-            {"name": "automation_user", "value": getpass.getuser(), "url": "https://zattas.me"},
-            {"name": "automation_language", "value": "python", "url": "https://zattas.me"}
-        ])
         page.goto("https://zattas.me")
         page.set_viewport_size({"width": 1920, "height": 1080})
         input("Press Enter to close browser...")
@@ -40,11 +42,11 @@ public class PlaywrightFun {
             Browser browser = playwright.firefox().launch(
                 new BrowserType.LaunchOptions().setHeadless(false));
             BrowserContext context = browser.newContext();
-            Page page = context.newPage();
-            page.navigate("https://zattas.me");
             context.addCookies(java.util.Arrays.asList(
                 new Cookie("automation_user", System.getProperty("user.name")).setUrl("https://zattas.me"),
                 new Cookie("automation_language", "java").setUrl("https://zattas.me")));
+            Page page = context.newPage();
+            page.navigate("https://zattas.me");
             page.setViewportSize(1920, 1080);
             System.out.println("Press Enter to close...");
             System.in.read();
@@ -61,12 +63,12 @@ const os = require('os');
 (async () => {
   const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext();
-  const page = await context.newPage();
-  await page.goto('https://zattas.me');
   await context.addCookies([
     { name: 'automation_user', value: os.userInfo().username, url: 'https://zattas.me' },
     { name: 'automation_language', value: 'javascript', url: 'https://zattas.me' }
   ]);
+  const page = await context.newPage();
+  await page.goto('https://zattas.me');
   await page.setViewportSize({ width: 1920, height: 1080 });
   await page.pause();
   await browser.close();
@@ -79,12 +81,12 @@ require 'playwright'
 Playwright.create(playwright_cli_executable_path: './node_modules/.bin/playwright') do |playwright|
   browser = playwright.firefox.launch(headless: false)
   context = browser.new_context
-  page = context.new_page
-  page.goto('https://zattas.me')
   context.add_cookies([
     { name: 'automation_user', value: \`whoami\`.chomp, url: 'https://zattas.me' },
     { name: 'automation_language', value: 'ruby', url: 'https://zattas.me' }
   ])
+  page = context.new_page
+  page.goto('https://zattas.me')
   page.set_viewport_size(width: 1920, height: 1080)
   puts 'Press Enter to close...'
   gets
@@ -101,8 +103,8 @@ import getpass, os
 driver = webdriver.Firefox()
 try:
     driver.get("https://zattas.me")
-    driver.add_cookie({"name": "automation_user", "value": getpass.getuser()})
-    driver.add_cookie({"name": "automation_language", "value": "python"})
+    driver.add_cookie({"name": "automation_user", "value": getpass.getuser(), "domain": "zattas.me"})
+    driver.add_cookie({"name": "automation_language", "value": "python", "domain": "zattas.me"})
     driver.maximize_window()
     input("Press Enter to close browser...")
 finally:
@@ -119,8 +121,8 @@ public class SeleniumFun {
     public static void main(String[] args) throws Exception {
         WebDriver driver = new FirefoxDriver();
         driver.get("https://zattas.me");
-        driver.manage().addCookie(new Cookie("automation_user", System.getProperty("user.name")));
-        driver.manage().addCookie(new Cookie("automation_language", "java"));
+        driver.manage().addCookie(new Cookie.Builder("automation_user", System.getProperty("user.name")).domain("zattas.me").build());
+        driver.manage().addCookie(new Cookie.Builder("automation_language", "java").domain("zattas.me").build());
         driver.manage().window().maximize();
         System.out.println("Press Enter to close...");
         System.in.read();
@@ -137,8 +139,8 @@ const os = require('os');
   const driver = await new Builder().forBrowser('firefox').build();
   try {
     await driver.get('https://zattas.me');
-    await driver.manage().addCookie({ name: 'automation_user', value: os.userInfo().username });
-    await driver.manage().addCookie({ name: 'automation_language', value: 'javascript' });
+    await driver.manage().addCookie({ name: 'automation_user', value: os.userInfo().username, domain: 'zattas.me' });
+    await driver.manage().addCookie({ name: 'automation_language', value: 'javascript', domain: 'zattas.me' });
     await driver.manage().window().maximize();
     const readline = require('readline').createInterface({ input: process.stdin, output: process.stdout });
     await new Promise(r => readline.question('Press Enter to close...', () => { readline.close(); r(); }));
@@ -153,8 +155,8 @@ require 'selenium-webdriver'
 
 driver = Selenium::WebDriver.for :firefox
 driver.navigate.to 'https://zattas.me'
-driver.manage.add_cookie(name: 'automation_user', value: \`whoami\`.chomp)
-driver.manage.add_cookie(name: 'automation_language', value: 'ruby')
+driver.manage.add_cookie(name: 'automation_user', value: \`whoami\`.chomp, domain: 'zattas.me')
+driver.manage.add_cookie(name: 'automation_language', value: 'ruby', domain: 'zattas.me')
 driver.manage.window.maximize
 puts 'Press Enter to close...'
 gets
@@ -175,19 +177,38 @@ describe('Automation Fun', () => {
 });`,
   },
   vibium: {
-    javascript: `// File: vibium_fun.spec.js
-// Language: JavaScript (Vibium)
-// Vibium is built on Cypress, so the syntax is similar
+    javascript: `#!/usr/bin/env node
+// File: vibium_fun.js
+// Language: JavaScript (Vibium CLI)
 
-describe('Automation Fun', () => {
-  it('should trigger the fun experience', () => {
-    cy.visit('https://zattas.me');
-    cy.setCookie('automation_user', Cypress.env('USER') || 'vibium-user');
-    cy.setCookie('automation_language', 'javascript');
-    cy.viewport(1920, 1080);
-    cy.pause(); // Press Resume in Vibium UI to continue
-  });
-});`,
+const { execSync } = require('child_process');
+const os = require('os');
+
+const username = os.userInfo().username;
+const url = \`https://zattas.me?automation_user=\${username}&automation_language=javascript\`;
+
+try {
+  console.log('Stopping any existing Vibium session...');
+  try {
+    execSync('vibium stop', { stdio: 'ignore' });
+  } catch {
+    // Ignore if no session is running
+  }
+
+  console.log('Starting Vibium browser session...');
+  execSync('vibium start', { stdio: 'inherit' });
+
+  console.log(\`Navigating to \${url}...\`);
+  execSync(\`vibium go \${url}\`, { stdio: 'inherit' });
+
+  console.log('Check the browser for your haiku!');
+  console.log('Press Ctrl+C to close the browser when done.');
+
+  setInterval(() => {}, 1000);
+} catch (error) {
+  console.error('Error running Vibium:', error.message);
+  process.exit(1);
+}`,
   },
 };
 
@@ -281,12 +302,16 @@ const instructions: Record<string, Record<string, string>> = {
    npx cypress run --spec cypress_fun.cy.js`,
   },
   vibium: {
-    javascript: `1. Open Vibium and create a new spec file:
-   touch vibium_fun.spec.js
+    javascript: `1. Install Vibium globally:
+   npm install -g vibium
+   vibium install
 
-2. Save the script below to vibium_fun.spec.js
+2. Create and save the script below to vibium_fun.js:
+   touch vibium_fun.js
 
-3. Run it through the Vibium UI`,
+3. Make it executable and run:
+   chmod +x vibium_fun.js
+   node vibium_fun.js`,
   },
 };
 
@@ -294,7 +319,7 @@ const haikus: Record<string, string> = {
   playwright: "async shadows crawl—\npage.goto whispers low,\nawait the reveal",
   selenium: "webdriver.navigate,\nold bones clicking through the DOM—\nfind element: self",
   cypress: "cy.visit begins,\nthe spec file stares back at you:\nflaky or real bug?",
-  vibium: "new challenger waits\nbeyond the familiar—\ntest the untested",
+  vibium: "browser and agent\nmove as one—WebDriver BiDi\nsemantics emerge",
 };
 
 const availableLangs: Record<string, string[]> = {
@@ -307,29 +332,24 @@ const availableLangs: Record<string, string[]> = {
 export function AutomationFunSection() {
   const [activeTool, setActiveTool] = useState("playwright");
   const [activeLang, setActiveLang] = useState("python");
-  const [detected, setDetected] = useState<string | null>(null);
+  const [detection, setDetection] = useState<AutomationDetection | null>(null);
+  const [haiku, setHaiku] = useState<any>(null);
   const [copiedMain, setCopiedMain] = useState(false);
   const [copiedCmd, setCopiedCmd] = useState<number | null>(null);
 
-  useEffect(() => {
-    // Bot detection
-    function detectTool(): string | null {
-      if ((window as any).Cypress) return "cypress";
-      if (navigator.webdriver) {
-        if ((window as any).__playwright || (window as any).__pw_manual) return "playwright";
-        return "selenium";
-      }
-      return null;
-    }
+  const handleDetected = useCallback((detection: AutomationDetection) => {
+    // Only set haiku on first detection (when haiku is null)
+    setDetection(detection);
+    setHaiku(prev => prev || getRandomHaiku());
+    setActiveTool((detection.tool as any) || "playwright");
 
-    const detectedTool = detectTool();
-    if (detectedTool) {
-      setDetected(detectedTool);
-      setActiveTool(detectedTool);
-      const langs = availableLangs[detectedTool] || [];
-      if (langs.length > 0 && !langs.includes("python") && langs[0]) {
-        setActiveLang(langs[0]);
-      }
+    // Auto-scroll to section
+    document.getElementById("automation-fun")?.scrollIntoView({ block: "start" });
+
+    // Disco effect for 7 seconds (only on first detection)
+    if (!document.body.classList.contains("disco-active")) {
+      document.body.classList.add("disco-active");
+      setTimeout(() => document.body.classList.remove("disco-active"), 7000);
     }
   }, []);
 
@@ -362,51 +382,115 @@ export function AutomationFunSection() {
   };
 
   return (
-    <div className={styles["autoContainer"]}>
-      <p className={styles["autoDesc"]}>
-        Run this page through an automation tool — it detects which one you're using and serves a custom haiku. Pick your tool and language below to get a script to run.
-      </p>
+    <section id="automation-fun">
+      <AutomationDetector onDetected={handleDetected} />
 
-      <div className={styles["autoStatus"]} data-detected={detected ? "true" : "false"}>
-        <div className={styles["autoStatusIcon"]}>
-          {detected ? "🤖" : "👤"}
-        </div>
-        <div>
-          <div className={styles["autoStatusLabel"]}>
-            {detected ? `${detected.charAt(0).toUpperCase() + detected.slice(1)} detected` : "Human detected"}
+      <div className={styles["autoContainer"]}>
+        {detection && haiku ? (
+          // Bot detected state
+          <div className={styles["autoDetectedPanel"]}>
+            <div className={styles["autoDetectedStatus"]}>
+              <span>
+                {detection.tool?.charAt(0).toUpperCase()}{detection.tool?.slice(1)} detected
+              </span>
+            </div>
+            <img
+              src={`/images/automation/${detection.tool}-logo.png`}
+              alt={detection.tool}
+              className={styles["autoToolLogo"]}
+              onError={(e) => {
+                const emojiMap: Record<string, string> = {
+                  selenium: "🌐",
+                  playwright: "🎭",
+                  cypress: "🌲",
+                  vibium: "⚡",
+                };
+                (e.currentTarget as any).style.display = "none";
+                const emoji = document.createElement("div");
+                emoji.textContent = emojiMap[detection.tool || ""] || "🤖";
+                emoji.style.fontSize = "88px";
+                emoji.style.lineHeight = "1";
+                e.currentTarget.parentNode?.insertBefore(emoji, e.currentTarget);
+              }}
+            />
+            <p className={styles["autoGreeting"]}>
+              Welcome, automation script runner <strong>{detection.username}</strong>, running{" "}
+              <strong>{detection.tool?.charAt(0).toUpperCase()}{detection.tool?.slice(1)}</strong>
+              {detection.language && (
+                <> with <strong>{detection.language.charAt(0).toUpperCase()}{detection.language.slice(1)}</strong></>
+              )}
+              !
+            </p>
+            <div className={styles["autoHaikuBlock"]}>
+              <div className={styles["autoHaikuLabel"]}>Your haiku</div>
+              <div className={styles["autoHaikuPoem"]}>{haiku.text}</div>
+              <div className={styles["autoHaikuAuthor"]}>
+                — {haiku.author}{" "}
+                <a
+                  href="https://github.com/penumbra1/haiku/blob/master/db.json"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  haiku source
+                </a>
+              </div>
+            </div>
           </div>
-          <div className={styles["autoStatusSub"]}>
-            {detected ? "You've been found. Here's your haiku." : "No automation tool found. Run a script below and reload."}
-          </div>
+        ) : (
+          // Human state
+          <>
+            <p className={styles["autoDesc"]}>
+              Run this page through an automation tool — it detects which one you're using and serves a custom haiku. Pick your tool and language below to get a script to run.
+            </p>
+
+            <div className={styles["autoStatus"]} data-detected="false">
+              <div className={styles["autoStatusIcon"]}>
+                👤
+              </div>
+              <div>
+                <div className={styles["autoStatusLabel"]}>
+                  Human detected
+                </div>
+                <div className={styles["autoStatusSub"]}>
+                  No automation tool found. Run a script below and reload.
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {detection && (
+          <p className={styles["autoDesc"]}>
+            Want to run a different script? Pick your tool and language below.
+          </p>
+        )}
+
+        <div className={styles["autoToolTabs"]}>
+          {["playwright", "selenium", "cypress", "vibium"].map((tool) => (
+            <button
+              key={tool}
+              className={`${styles["autoTab"]} ${activeTool === tool ? styles["active"] : ""}`}
+              onClick={() => handleToolClick(tool)}
+              data-tool={tool}
+            >
+              {tool.charAt(0).toUpperCase() + tool.slice(1)}
+            </button>
+          ))}
         </div>
-      </div>
 
-      <div className={styles["autoToolTabs"]}>
-        {["playwright", "selenium", "cypress", "vibium"].map((tool) => (
-          <button
-            key={tool}
-            className={`${styles["autoTab"]} ${activeTool === tool ? styles["active"] : ""}`}
-            onClick={() => handleToolClick(tool)}
-            data-tool={tool}
-          >
-            {tool.charAt(0).toUpperCase() + tool.slice(1)}
-          </button>
-        ))}
-      </div>
-
-      <div className={styles["autoLangTabs"]}>
-        {["python", "java", "javascript", "ruby"].map((lang) => (
-          <button
-            key={lang}
-            className={`${styles["autoLang"]} ${currentLang === lang ? styles["active"] : ""}`}
-            onClick={() => setActiveLang(lang)}
-            disabled={!langs.includes(lang)}
-            data-lang={lang}
-          >
-            {lang.charAt(0).toUpperCase() + lang.slice(1)}
-          </button>
-        ))}
-      </div>
+        <div className={styles["autoLangTabs"]}>
+          {["python", "java", "javascript", "ruby"].map((lang) => (
+            <button
+              key={lang}
+              className={`${styles["autoLang"]} ${currentLang === lang ? styles["active"] : ""}`}
+              onClick={() => setActiveLang(lang)}
+              disabled={!langs.includes(lang)}
+              data-lang={lang}
+            >
+              {lang.charAt(0).toUpperCase() + lang.slice(1)}
+            </button>
+          ))}
+        </div>
 
       <div className={styles["autoInstructions"]}>
         {(() => {
@@ -514,14 +598,7 @@ export function AutomationFunSection() {
         </SyntaxHighlighter>
       </div>
 
-      {detected && (
-        <div className={styles["autoHaiku"]}>
-          <div className={styles["haikuLabel"]}>Your haiku</div>
-          <div className={styles["haikuText"]}>
-            {haikus[detected]}
-          </div>
-        </div>
-      )}
-    </div>
+      </div>
+    </section>
   );
 }

@@ -290,3 +290,100 @@
   font-style: italic;
   white-space: pre-line;
 }
+
+/* Bot detected panel */
+.autoDetectedPanel {
+  background: var(--fg);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.autoDetectedStatus {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-space-mono);
+  font-size: 0.68rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.autoDetectedStatus::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.autoToolLogo {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  animation: bounce 0.9s ease-in-out infinite alternate;
+}
+
+.autoGreeting {
+  font-family: var(--font-space-mono);
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.65);
+  text-align: center;
+  line-height: 1.7;
+}
+
+.autoGreeting strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.autoHaikuBlock {
+  border: 2px solid var(--accent);
+  padding: 28px 32px;
+  width: 100%;
+  max-width: 520px;
+  text-align: center;
+}
+
+.autoHaikuLabel {
+  font-family: var(--font-space-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.autoHaikuPoem {
+  font-family: var(--font-space-mono);
+  font-size: 0.92rem;
+  font-style: italic;
+  line-height: 2;
+  color: #faf8f4;
+  white-space: pre-line;
+  margin-bottom: 14px;
+}
+
+.autoHaikuAuthor {
+  font-family: var(--font-space-mono);
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.autoHaikuAuthor a {
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: underline;
+}
+
+.autoHaikuAuthor a:hover {
+  color: rgba(255, 255, 255, 0.7);
+}

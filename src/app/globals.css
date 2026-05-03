@@ -119,6 +119,22 @@ body.konami-active {
   animation: konamiFlash 7s ease-in-out 1;
 }
 
+/* Disco effect for bot detection */
+@keyframes discoFlash {
+  0%   { filter: hue-rotate(0deg)   saturate(2.5) brightness(1.1); }
+  14%  { filter: hue-rotate(52deg)  saturate(2.5) brightness(1.1); }
+  28%  { filter: hue-rotate(104deg) saturate(2.5) brightness(1.1); }
+  42%  { filter: hue-rotate(156deg) saturate(2.5) brightness(1.1); }
+  57%  { filter: hue-rotate(208deg) saturate(2.5) brightness(1.1); }
+  71%  { filter: hue-rotate(260deg) saturate(2.5) brightness(1.1); }
+  85%  { filter: hue-rotate(312deg) saturate(2.5) brightness(1.1); }
+  100% { filter: hue-rotate(360deg) saturate(2.5) brightness(1.1); }
+}
+
+body.disco-active {
+  animation: discoFlash 0.8s linear infinite;
+}
+
 /* Tilt card 3D transforms */
 .tilt-card {
   transition: transform 0.3s ease-out;
@@ -254,6 +270,112 @@ body.konami-active {
 
 .copy-button-copied {
   animation: copyExpand 0.3s ease-out forwards;
+}
+
+/* Automation detected panel */
+@keyframes pulse {
+  0%, 100% { opacity: 1;   transform: scale(1);   }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-14px); }
+}
+
+.auto-detected-panel {
+  background: var(--fg);
+  border-bottom: 2px solid rgba(255,255,255,0.08);
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.auto-detected-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-space-mono);
+  font-size: 0.68rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.auto-detected-status::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.auto-tool-logo {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  animation: bounce 0.9s ease-in-out infinite alternate;
+}
+
+.auto-greeting {
+  font-family: var(--font-space-mono);
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.65);
+  text-align: center;
+  line-height: 1.7;
+}
+
+.auto-greeting strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.auto-haiku-block {
+  border: 2px solid var(--accent);
+  padding: 28px 32px;
+  width: 100%;
+  max-width: 520px;
+  text-align: center;
+}
+
+.auto-haiku-label {
+  font-family: var(--font-space-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.auto-haiku-poem {
+  font-family: var(--font-space-mono);
+  font-size: 0.92rem;
+  font-style: italic;
+  line-height: 2;
+  color: #faf8f4;
+  white-space: pre-line;
+  margin-bottom: 14px;
+}
+
+.auto-haiku-author {
+  font-family: var(--font-space-mono);
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.4);
+}
+
+.auto-haiku-author a {
+  color: rgba(255,255,255,0.4);
+  text-decoration: underline;
+}
+
+.auto-haiku-author a:hover {
+  color: rgba(255,255,255,0.7);
 }
 
 /* Reset Tailwind defaults to work with new theme */

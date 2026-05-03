@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getCookie } from "@/utils/cookies";
 
 export type AutomationTool = "selenium" | "playwright" | "cypress" | "vibium" | null;
@@ -21,44 +21,9 @@ interface AutomationDetectorProps {
  */
 export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
   const [hasDetected, setHasDetected] = useState(false);
+  const detectionRef = useRef<AutomationDetection | null>(null);
 
   useEffect(() => {
-    // Try server-side detection first
-    const checkServerSideDetection = async () => {
-      if (hasDetected) return;
-
-      try {
-        const response = await fetch('/api/detect-automation');
-        const data = await response.json();
-        
-        if (data.detected && data.tool) {
-          // Server detected automation via headers
-          const username = getCookie("automation_user");
-          if (!username) return; // Still need username cookie
-          
-          const language = getCookie("automation_language");
-          
-          setHasDetected(true);
-          const detection: AutomationDetection = {
-            detected: true,
-            tool: data.tool,
-            username,
-          };
-          
-          if (language) {
-            detection.language = language;
-          }
-          
-          onDetected(detection);
-          return true;
-        }
-      } catch (error) {
-        console.warn('[AutomationDetector] Server-side detection failed:', error);
-      }
-      
-      return false;
-    };
-
     const checkClientSideAutomation = () => {
       // Only run once
       if (hasDetected) return;
@@ -69,34 +34,65 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
 
       // Check for tool cookie (preferred method)
       let tool = getCookie("automation_tool") as AutomationTool;
-      
+
       // Fallback to browser-based detection if no cookie
       if (!tool) {
         tool = detectAutomationTool();
       }
-      
+
       if (!tool) return;
 
       // Check for language cookie (optional)
       const language = getCookie("automation_language");
 
-      // Detected! Trigger callback
+      // Detected! Fire callback immediately
       setHasDetected(true);
       const detection: AutomationDetection = {
         detected: true,
         tool,
         username,
       };
-      
+
       if (language) {
         detection.language = language;
       }
-      
+
+      detectionRef.current = detection;
       onDetected(detection);
     };
 
-    // Try server-side detection once on mount
-    checkServerSideDetection();
+    // Spawn async process to upgrade Selenium to Vibium if clock appears
+    const upgradeVibiumProcess = () => {
+      if (!hasDetected) return;
+
+      // Only upgrade if currently detected as Selenium
+      if (detectionRef.current?.tool !== "selenium") return;
+
+      let checkCount = 0;
+      const maxChecks = 50; // 5 seconds at 100ms intervals
+      let hasUpgraded = false;
+
+      const checkInterval = setInterval(() => {
+        if (!hasUpgraded && (window as any).__vibiumClock) {
+          clearInterval(checkInterval);
+          hasUpgraded = true;
+
+          // Upgrade detection to Vibium (only call once)
+          const upgraded: AutomationDetection = {
+            ...detectionRef.current!,
+            tool: "vibium",
+          };
+          detectionRef.current = upgraded;
+          onDetected(upgraded);
+          return;
+        }
+
+        checkCount++;
+        if (checkCount >= maxChecks) {
+          clearInterval(checkInterval);
+        }
+      }, 100);
+    };
 
     // Listen for resize event (triggered when automation maximizes window)
     window.addEventListener("resize", checkClientSideAutomation);
@@ -107,9 +103,13 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
     // Initial client-side check
     checkClientSideAutomation();
 
+    // Spawn upgrade process after detection fires
+    const upgradeTimer = setTimeout(upgradeVibiumProcess, 100);
+
     return () => {
       window.removeEventListener("resize", checkClientSideAutomation);
       clearInterval(interval);
+      clearTimeout(upgradeTimer);
     };
   }, [hasDetected, onDetected]);
 
@@ -122,17 +122,43 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
  * Note: Playwright detection is handled server-side via API
  */
 function detectAutomationTool(): AutomationTool {
+  if (typeof window === "undefined" || typeof navigator === "undefined") {
+    return null;
+  }
+
+  // Check for Vibium specific globals FIRST (more specific than Selenium)
+  // Vibium injects __vibiumClock when page_clock_install is called
+  if ((window as any).__vibiumClock) {
+    return "vibium";
+  }
+
+  // Check for Selenium (injects cdc_ prefixed variables)
+  // Modern Selenium injects window.cdc_* variables for Chrome DevTools Protocol communication
+  for (const key in window) {
+    if (key.startsWith('cdc_')) {
+      return "selenium";
+    }
+  }
+
+  // Check for navigator.webdriver (older Selenium versions or without evasion)
+  if (navigator.webdriver === true) {
+    return "selenium";
+  }
+
   // Check for Cypress/Vibium (both use window.Cypress)
-  if (typeof window !== "undefined" && "Cypress" in window) {
-    // Try to differentiate between Cypress and Vibium
-    // For now, we'll default to Cypress since Vibium is built on it
-    // Could add more specific detection logic if needed
+  if ("Cypress" in window) {
+    // Differentiate Vibium from Cypress
+    const userAgent = navigator.userAgent;
+    if (userAgent.includes('Vibium') || userAgent.includes('Chrome for Testing')) {
+      return "vibium";
+    }
     return "cypress";
   }
 
-  // Check for Selenium (sets navigator.webdriver)
-  if (typeof navigator !== "undefined" && navigator.webdriver === true) {
-    return "selenium";
+  // Check for Playwright specific globals
+  // Playwright sets these on pages it controls
+  if ((window as any).__playwright || (window as any).__pw_manual) {
+    return "playwright";
   }
 
   return null;
