@@ -8,15 +8,22 @@ export function Headshot({
   alt: string;
 }) {
   return (
-    <div className="mx-auto h-40 w-40 overflow-hidden rounded-full border border-zinc-200/70 bg-white shadow-sm dark:border-zinc-800/70 dark:bg-zinc-950">
-      <div className="relative h-full w-full">
+    <div style={{
+      margin: "0 auto",
+      height: "160px",
+      width: "160px",
+      overflow: "hidden",
+      border: "2px solid var(--border)",
+      background: "var(--bg)",
+    }}>
+      <div style={{ position: "relative", height: "100%", width: "100%" }}>
         <Image
           src={src}
           alt={alt}
           fill
           sizes="160px"
           priority
-          className="object-cover"
+          style={{ objectFit: "cover" }}
         />
       </div>
     </div>

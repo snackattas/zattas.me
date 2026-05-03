@@ -1,7 +1,10 @@
-import { CollapsingHeader } from "@/components/CollapsingHeader";
-import { Section } from "@/components/Section";
-import { Footer } from "@/components/Footer";
 import { sections } from "@/lib/sections";
+import { Hero } from "@/components/Hero";
+import { SkillsMarquee } from "@/components/SkillsMarquee";
+import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
+import { Section } from "@/components/Section";
+import { ClientInteractions } from "@/components/ClientInteractions";
 
 export default function Home() {
   const navSections = sections.map(({ indexLabel, navLabel, anchor }) => ({
@@ -11,16 +14,29 @@ export default function Home() {
   }));
 
   return (
-    <div className="min-h-screen bg-white text-zinc-950 dark:bg-black dark:text-zinc-50">
-      <CollapsingHeader sections={navSections} />
-      <main className="mx-auto w-full max-w-3xl py-10">
-        {sections.map((s) => (
-          <Section key={s.anchor} id={s.anchor}>
-            <s.Content />
+    <>
+      {/* Sticky nav */}
+      <Nav sections={navSections} />
+
+      {/* Full-viewport hero */}
+      <Hero />
+
+      {/* Scrolling skills strip */}
+      <SkillsMarquee />
+
+      {/* Content sections */}
+      <main style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        {sections.map(({ anchor, indexLabel, Content }) => (
+          <Section key={anchor} anchor={anchor} indexLabel={indexLabel}>
+            <Content />
           </Section>
         ))}
       </main>
+
       <Footer />
-    </div>
+
+      {/* All client-side interactions: cursor, tilt, scroll reveal, Konami */}
+      <ClientInteractions />
+    </>
   );
 }

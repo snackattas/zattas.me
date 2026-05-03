@@ -1,8 +1,12 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 
 export function Timeline({ children }: { children: ReactNode }) {
-  return <div className="mt-6 space-y-10">{children}</div>;
+  return <div style={{ marginTop: "24px" }}>{children}</div>;
 }
 
 function formatDate(
@@ -11,17 +15,22 @@ function formatDate(
   yearDisplay: boolean
 ): string {
   if (yearDisplay) {
-    // yearDisplay: "2022" style
     return date.toLocaleDateString("en-US", { year: "numeric" });
   }
   if (monthDisplay) {
-    // monthDisplay: "Jan '22" style
     const month = date.toLocaleDateString("en-US", { month: "short" });
     const year = date.toLocaleDateString("en-US", { year: "2-digit" });
     return `${month} '${year}`;
   }
-  // Fallback to year if neither is set
   return date.toLocaleDateString("en-US", { year: "numeric" });
+}
+
+function parseDateString(dateStr: string): Date {
+  const parts = dateStr.split('-');
+  const year = parseInt(parts[0] || '0', 10);
+  const month = parseInt(parts[1] || '1', 10);
+  const day = parseInt(parts[2] || '1', 10);
+  return new Date(year, month - 1, day);
 }
 
 function formatDateRange(
@@ -33,14 +42,13 @@ function formatDateRange(
   yearDisplay: boolean = false,
   showCreated: boolean = true
 ): string | null {
-
   if (createdDate) {
-    const date = new Date(createdDate);
+    const date = parseDateString(createdDate);
     const formattedDate = formatDate(date, monthDisplay, yearDisplay);
     return showCreated ? `Created ${formattedDate}` : formattedDate;
   }
 
-  const start = new Date(startDate);
+  const start = parseDateString(startDate);
   const startFormatted = formatDate(start, monthDisplay, yearDisplay);
 
   if (isCurrent) {
@@ -48,7 +56,7 @@ function formatDateRange(
   }
 
   if (endDate) {
-    const end = new Date(endDate);
+    const end = parseDateString(endDate);
     const endFormatted = formatDate(end, monthDisplay, yearDisplay);
     return `${startFormatted} - ${endFormatted}`;
   }
@@ -56,7 +64,27 @@ function formatDateRange(
   return startFormatted;
 }
 
-export function TimelineItem({
+export function TimelineItemGroup({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <div style={{ marginTop: "16px", marginBottom: "4px" }}>
+      <div
+        style={{
+          fontFamily: "var(--font-space-mono)",
+          fontSize: "0.65rem",
+          fontWeight: 700,
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          color: "var(--accent)",
+        }}
+      >
+        {title}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function TimelineItemContent({
   title,
   subtitle,
   startDate,
@@ -83,42 +111,127 @@ export function TimelineItem({
   imageAlt?: string;
   children?: ReactNode;
 }) {
+  const [showPreview, setShowPreview] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const dateRange = formatDateRange(startDate, endDate, isCurrent, createdDate, monthDisplay, yearDisplay, showCreated);
 
   return (
-    <div className="group relative">
-      <div className="transition-transform duration-150 will-change-transform motion-safe:hover:-translate-y-1 motion-safe:hover:scale-[1.03] motion-safe:hover:drop-shadow-lg">
-        <div className="space-y-2">
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <h3 className="m-0 text-lg font-semibold leading-7">{title}</h3>
-            {dateRange ? (
-              <span className="text-sm text-zinc-500 dark:text-zinc-400">{dateRange}</span>
-            ) : null}
-          </div>
-          {subtitle ? (
-            <p className="m-0 text-sm text-zinc-600 dark:text-zinc-300">{subtitle}</p>
-          ) : null}
-          {children ? (
-            <div className="prose prose-zinc dark:prose-invert [&_li]:rounded-md [&_li]:px-2 [&_li]:py-1 [&_li]:transition-colors [&_li:hover]:bg-zinc-200/70 dark:[&_li:hover]:bg-white/15">
-              {children}
-            </div>
-          ) : null}
+    <div
+      className="tl-item"
+      onMouseEnter={() => setShowPreview(true)}
+      onMouseLeave={() => setShowPreview(false)}
+      style={{
+        padding: "24px 0",
+        borderTop: "2px solid var(--border)",
+        display: "grid",
+        gridTemplateColumns: "1fr",
+        gap: "12px",
+      }}
+    >
+      <style>{`
+        @media (min-width: 900px) {
+          .tl-item {
+            grid-template-columns: 180px 1fr !important;
+            gap: 0 40px !important;
+          }
+          .tl-left { grid-column: 1; }
+          .tl-body { grid-column: 2; }
+        }
+      `}</style>
+
+      <div className="tl-left" style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+        <div
+          className="tl-date"
+          style={{
+            fontFamily: "var(--font-space-mono)",
+            fontSize: "0.72rem",
+            color: "var(--muted)",
+            letterSpacing: "0.04em",
+          }}
+        >
+          {dateRange}
         </div>
+        <div
+          className="tl-company"
+          style={{
+            fontFamily: "var(--font-syne)",
+            fontWeight: 700,
+            fontSize: "1rem",
+          }}
+        >
+          <style>{`
+            .tl-company a {
+              color: var(--fg) !important;
+              text-decoration: none !important;
+              transition: color 0.12s;
+            }
+            .tl-company a:hover {
+              color: var(--accent) !important;
+            }
+          `}</style>
+          {title}
+        </div>
+        {subtitle ? (
+          <div
+            className="tl-role"
+            style={{
+              fontFamily: "var(--font-space-mono)",
+              fontSize: "0.72rem",
+              color: "var(--muted)",
+            }}
+          >
+            {subtitle}
+          </div>
+        ) : null}
       </div>
 
-      {imageSrc ? (
-        <div className="pointer-events-none fixed right-6 top-24 z-50 hidden w-96 opacity-0 transition-opacity duration-150 group-hover:opacity-100 xl:block">
-          <div className="overflow-hidden rounded-xl border border-zinc-200/70 bg-white/70 shadow-lg backdrop-blur dark:border-zinc-800/70 dark:bg-black/40">
-            <Image
-              src={imageSrc}
-              alt={imageAlt ?? ""}
-              width={960}
-              height={540}
-              className="h-auto w-full"
-            />
-          </div>
+      {children ? (
+        <div
+          className="tl-body"
+          style={{
+            fontSize: "0.85rem",
+            lineHeight: 1.7,
+            color: "var(--muted)",
+          }}
+        >
+          {children}
         </div>
       ) : null}
+
+      {imageSrc && mounted
+        ? createPortal(
+            <div
+              className="tl-preview"
+              style={{
+                display: showPreview ? "block" : "none",
+                position: "fixed",
+                right: "max(20px, 5vw)",
+                top: "80px",
+                width: "280px",
+                zIndex: 200,
+                pointerEvents: "none",
+                border: "2px solid var(--border)",
+                boxShadow: "6px 6px 0 var(--fg)",
+                background: "var(--bg)",
+              }}
+            >
+              <Image
+                src={imageSrc}
+                alt={imageAlt ?? ""}
+                width={280}
+                height={180}
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
+            </div>,
+            document.body
+          )
+        : null}
     </div>
   );
 }
+
+export const TimelineItem = TimelineItemContent;

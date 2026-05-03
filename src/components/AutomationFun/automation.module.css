@@ -1,0 +1,389 @@
+/* Outer container */
+.autoContainer {
+  border: 2px solid var(--border);
+  padding: 32px;
+  background: var(--surface);
+  position: relative;
+  margin-top: 80px;
+}
+
+/* Intro paragraph */
+.autoDesc {
+  font-size: 0.875rem;
+  line-height: 1.75;
+  color: var(--muted);
+  margin-bottom: 24px;
+  max-width: 600px;
+}
+
+/* Status indicator */
+.autoStatus {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  margin-bottom: 28px;
+  transition: border-color 0.12s;
+}
+
+.autoStatus[data-detected="true"] {
+  border-color: var(--accent);
+}
+
+.autoStatusIcon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.autoStatusLabel {
+  font-family: var(--font-syne);
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+  transition: color 0.12s;
+}
+
+.autoStatus[data-detected="true"] .autoStatusLabel {
+  color: var(--accent);
+}
+
+.autoStatusSub {
+  font-family: var(--font-space-mono);
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+/* Tool tabs */
+.autoToolTabs {
+  display: flex;
+  flex-wrap: wrap;
+  border: 2px solid var(--border);
+  width: fit-content;
+  margin-bottom: 0;
+}
+
+/* Language tabs */
+.autoLangTabs {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 2px;
+  margin-left: 24px;
+  border: 2px solid var(--border);
+  border-bottom: none;
+  width: fit-content;
+  margin-bottom: 0;
+}
+
+/* Shared tab button styles */
+.autoTab,
+.autoLang {
+  font-family: var(--font-space-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  border-right: 2px solid var(--border);
+  cursor: pointer;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: background 0.12s, color 0.12s;
+}
+
+.autoTab:last-child,
+.autoLang:last-child {
+  border-right: none;
+}
+
+.autoTab.active,
+.autoTab:hover {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.autoLang {
+  font-size: 0.65rem;
+  padding: 6px 14px;
+  background: var(--surface);
+}
+
+.autoLang.active {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.autoLang:hover:not(.active) {
+  background: #e8e4dc;
+  color: var(--fg);
+}
+
+.autoLang:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Instructions panel */
+.autoInstructions {
+  border: 2px solid var(--border);
+  border-bottom: none;
+  background: var(--bg);
+  padding: 32px 18px 16px 18px;
+  font-family: var(--font-space-mono);
+  font-size: 0.72rem;
+  line-height: 2;
+  color: var(--muted);
+}
+
+.autoInstructions:empty {
+  display: none;
+}
+
+.instrStep {
+  color: var(--fg);
+  padding: 12px 0;
+  line-height: 1.6;
+}
+
+.instrBlank {
+  height: 8px;
+}
+
+.instrCmd {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  background: #1a1815;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 10px 6px 12px;
+  margin: 3px 0;
+  border-radius: 2px;
+}
+
+.instrCmdLines {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.instrCmd code {
+  font-family: var(--font-space-mono) !important;
+  font-size: 0.7rem !important;
+  color: #e8e4dc !important;
+  display: block !important;
+  white-space: pre !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+.instrCmdCopy {
+  font-family: var(--font-space-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.12s;
+}
+
+.instrCmdCopy:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* Code block wrapper */
+.autoCodeWrap {
+  border: 2px solid var(--border);
+  background: #1a1815;
+  margin-bottom: 20px;
+}
+
+.autoCodeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px 8px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #1a1815;
+}
+
+.autoCodeLabel {
+  font-family: var(--font-space-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.3);
+  flex: 1;
+  min-width: 0;
+  margin-right: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.autoCopy {
+  font-family: var(--font-space-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  transition: all 0.12s;
+}
+
+.autoCopy:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* Syntax highlighter overrides */
+:global(.autoCode pre[class*="language-"]),
+:global(.autoCode code[class*="language-"]) {
+  background: transparent !important;
+  font-family: var(--font-space-mono) !important;
+  font-size: 0.72rem !important;
+  line-height: 1.7 !important;
+}
+
+:global(.autoCode .token.comment) {
+  color: #7a7872 !important;
+}
+
+/* Haiku panel */
+.autoHaiku {
+  border: 2px solid var(--accent);
+  padding: 24px 28px;
+  background: var(--bg);
+}
+
+.haikuLabel {
+  font-family: var(--font-space-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.haikuText {
+  font-family: var(--font-space-mono);
+  font-size: 0.9rem;
+  line-height: 2;
+  color: var(--fg);
+  font-style: italic;
+  white-space: pre-line;
+}
+
+/* Bot detected panel */
+.autoDetectedPanel {
+  background: var(--fg);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.autoDetectedStatus {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-space-mono);
+  font-size: 0.68rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.autoDetectedStatus::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.autoToolLogo {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  animation: bounce 0.9s ease-in-out infinite alternate;
+}
+
+.autoGreeting {
+  font-family: var(--font-space-mono);
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.65);
+  text-align: center;
+  line-height: 1.7;
+}
+
+.autoGreeting strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.autoHaikuBlock {
+  border: 2px solid var(--accent);
+  padding: 28px 32px;
+  width: 100%;
+  max-width: 520px;
+  text-align: center;
+}
+
+.autoHaikuLabel {
+  font-family: var(--font-space-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.autoHaikuPoem {
+  font-family: var(--font-space-mono);
+  font-size: 0.92rem;
+  font-style: italic;
+  line-height: 2;
+  color: #faf8f4;
+  white-space: pre-line;
+  margin-bottom: 14px;
+}
+
+.autoHaikuAuthor {
+  font-family: var(--font-space-mono);
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.autoHaikuAuthor a {
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: underline;
+}
+
+.autoHaikuAuthor a:hover {
+  color: rgba(255, 255, 255, 0.7);
+}

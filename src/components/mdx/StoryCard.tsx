@@ -3,10 +3,12 @@
 import { type ReactNode, useState } from "react";
 
 export function StoryCard({
+  num,
   title,
   hook,
   children,
 }: {
+  num?: string;
   title: string;
   hook: string;
   children: ReactNode;
@@ -14,56 +16,71 @@ export function StoryCard({
   const [clickedState, setClickedState] = useState<boolean | null>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  // If clicked, use clicked state; otherwise use hover state
   const shouldShow = clickedState !== null ? clickedState : isHovered;
 
   const handleClick = () => {
-    // Toggle the current visible state and make it sticky
     setClickedState(!shouldShow);
   };
 
   return (
-    <div 
-      className="group relative overflow-hidden rounded-xl border border-zinc-200/70 bg-white/50 shadow-sm transition-all hover:shadow-md dark:border-zinc-800/70 dark:bg-zinc-900/50"
+    <div
+      className="story-card tilt-card"
+      style={{
+        border: "2px solid var(--border)",
+        margin: "-1px 0 0 -1px",
+        padding: "24px 22px",
+        background: "var(--bg)",
+        transition: "all 0.12s",
+        cursor: "default",
+        position: "relative",
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <button
         type="button"
         onClick={handleClick}
-        className="w-full px-5 py-4 text-left transition-colors hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30"
+        style={{
+          width: "100%",
+          padding: 0,
+          textAlign: "left",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+        }}
         aria-expanded={shouldShow}
       >
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <h3 className="m-0 text-lg font-semibold leading-7 text-zinc-900 dark:text-zinc-50">
-              {title}
-            </h3>
-            <p className="mt-3 mb-0 text-sm italic text-zinc-600 dark:text-zinc-400">
-              &ldquo;{hook}&rdquo;
-            </p>
+        {num && (
+          <div
+            style={{
+              fontFamily: "var(--font-space-mono)",
+              fontSize: "0.68rem",
+              color: "var(--accent)",
+              letterSpacing: "0.08em",
+              marginBottom: "8px",
+            }}
+          >
+            {num}
           </div>
-          <div className="flex-shrink-0 pt-1">
-            <span
-              className={`inline-block text-zinc-500 transition-transform duration-200 dark:text-zinc-400 ${
-                shouldShow ? "rotate-180" : ""
-              }`}
-            >
-              ▾
-            </span>
-          </div>
-        </div>
+        )}
+        <h3 style={{ margin: "0 0 8px 0", fontSize: "1rem", fontWeight: 800, letterSpacing: "-0.02em", color: "var(--fg)", fontFamily: "var(--font-syne)", lineHeight: 1.2 }}>
+          {title}
+        </h3>
+        <p style={{ margin: 0, fontSize: "0.72rem", fontStyle: "italic", color: "var(--muted)", fontFamily: "var(--font-space-mono)", lineHeight: 1.5 }}>
+          &ldquo;{hook}&rdquo;
+        </p>
       </button>
 
-      <div 
-        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          shouldShow ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
-        }`}
+      <div
+        style={{
+          overflow: "hidden",
+          transition: "all 0.3s ease-in-out",
+          maxHeight: shouldShow ? "1000px" : "0",
+          opacity: shouldShow ? 1 : 0,
+        }}
       >
-        <div className="border-t border-zinc-200/70 px-6 pb-5 pt-4 dark:border-zinc-800/70">
-          <div className="prose prose-zinc dark:prose-invert prose-sm [&_p]:mb-4">
-            {children}
-          </div>
+        <div style={{ marginTop: "16px", fontSize: "0.82rem", lineHeight: 1.7, color: "var(--muted)" }}>
+          {children}
         </div>
       </div>
     </div>

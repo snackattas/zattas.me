@@ -1,13 +1,13 @@
 import type { MDXComponents } from "mdx/types";
 import type { ComponentProps } from "react";
 
-import { Timeline, TimelineItem } from "@/components/mdx/Timeline";
+import { Timeline, TimelineItem, TimelineItemGroup } from "@/components/mdx/Timeline";
 import { ProjectCard } from "@/components/mdx/ProjectCard";
 import { Disclosure } from "@/components/mdx/Disclosure";
 import { Headshot } from "@/components/mdx/Headshot";
 import { DetailPill, Pill, PillGrid } from "@/components/mdx/Pills";
 import { StoryCard } from "@/components/mdx/StoryCard";
-import { AutomationFunButton } from "@/components/AutomationFun";
+import { AutomationFunSection } from "@/components/AutomationFun/AutomationFunSection";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -26,15 +26,20 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           href={href}
           target={nextTarget}
           rel={nextRel}
-          className={
-            `font-medium underline underline-offset-4 decoration-zinc-400/70 hover:decoration-zinc-800 dark:decoration-zinc-500/70 dark:hover:decoration-zinc-100 transition-colors ${className ?? ""}`.trim()
-          }
+          style={{
+            color: "var(--accent)",
+            textDecoration: "underline",
+            transition: "opacity 0.12s",
+            cursor: "pointer",
+          }}
+          className={className}
           {...props}
         />
       );
     },
     Timeline,
     TimelineItem,
+    TimelineItemGroup,
     ProjectCard,
     Disclosure,
     Headshot,
@@ -42,7 +47,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     PillGrid,
     DetailPill,
     StoryCard,
-    AutomationFunButton,
+    AutomationFunSection,
     ...components,
   };
 }
