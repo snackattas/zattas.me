@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { AutomationDetector, type AutomationDetection } from "./AutomationDetector";
@@ -458,13 +458,6 @@ const instructions: Record<string, Record<string, string>> = {
   },
 };
 
-const haikus: Record<string, string> = {
-  playwright: "async shadows crawl—\npage.goto whispers low,\nawait the reveal",
-  selenium: "webdriver.navigate,\nold bones clicking through the DOM—\nfind element: self",
-  cypress: "cy.visit begins,\nthe spec file stares back at you:\nflaky or real bug?",
-  vibium: "browser and agent\nmove as one—WebDriver BiDi\nsemantics emerge",
-};
-
 const availableLangs: Record<string, string[]> = {
   playwright: ["python", "java", "javascript", "ruby"],
   selenium: ["python", "java", "javascript", "ruby"],
@@ -483,7 +476,7 @@ export function AutomationFunSection() {
 
   const handleDetected = useCallback((detection: AutomationDetection) => {
     setDetection(detection);
-    setHaiku(prev => prev || getRandomHaiku());
+    setHaiku((prev: any) => prev || getRandomHaiku());
     setActiveTool((detection.tool as any) || "playwright");
 
     // Auto-scroll to section only on first detection
@@ -491,9 +484,9 @@ export function AutomationFunSection() {
       hasScrolledRef.current = true;
       document.getElementById("automation-fun")?.scrollIntoView({ block: "start" });
 
-      // Disco effect for 7 seconds
+      // Disco effect for 5 minutes
       document.body.classList.add("disco-active");
-      setTimeout(() => document.body.classList.remove("disco-active"), 7000);
+      setTimeout(() => document.body.classList.remove("disco-active"), 300000);
     }
   }, []);
 
@@ -540,7 +533,7 @@ export function AutomationFunSection() {
             </div>
             <img
               src={`/images/automation/${detection.tool}-logo.png`}
-              alt={detection.tool}
+              alt={detection.tool || "automation tool"}
               className={styles["autoToolLogo"]}
               onError={(e) => {
                 const emojiMap: Record<string, string> = {

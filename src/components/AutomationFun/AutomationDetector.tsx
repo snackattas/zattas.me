@@ -142,7 +142,7 @@ async function detectAutomationTool(): Promise<AutomationTool> {
     const { load } = await import("@fingerprintjs/botd");
     const botd = await load();
     const result = await botd.detect();
-    console.log('[BotD] Result:', { bot: result.bot, botKind: result.botKind });
+    console.log('[BotD] Result:', { bot: result.bot, botKind: result.bot ? (result as any).botKind : undefined });
 
     if (result.bot) {
       // BotD confirms WebDriver automation, but can't distinguish tool
