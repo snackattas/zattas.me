@@ -60,19 +60,40 @@ public class PlaywrightFun {
 const { chromium } = require('playwright');
 const os = require('os');
 
+let browser;
+
 (async () => {
-  const browser = await chromium.launch({ headless: false });
-  const context = await browser.newContext();
-  await context.addCookies([
-    { name: 'automation_user', value: os.userInfo().username, url: 'https://zattas.me' },
-    { name: 'automation_language', value: 'javascript', url: 'https://zattas.me' }
-  ]);
-  const page = await context.newPage();
-  await page.goto('https://zattas.me');
-  await page.setViewportSize({ width: 1920, height: 1080 });
-  await page.pause();
-  await browser.close();
-})();`,
+  try {
+    browser = await chromium.launch({ headless: false });
+    const context = await browser.newContext();
+    await context.addCookies([
+      { name: 'automation_user', value: os.userInfo().username, url: 'https://zattas.me' },
+      { name: 'automation_language', value: 'javascript', url: 'https://zattas.me' }
+    ]);
+    const page = await context.newPage();
+    await page.goto('https://zattas.me');
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    console.log('Browser open. Press Ctrl+C to close.');
+    await new Promise(r => setTimeout(r, 300000)); // Keep open for 5 minutes
+    await browser.close();
+  } catch (error) {
+    console.error('Error:', error.message);
+    process.exit(1);
+  }
+})();
+
+let sigintHandled = false;
+process.on('SIGINT', async () => {
+  if (sigintHandled) return;
+  sigintHandled = true;
+  console.log('\\nClosing browser...');
+  try {
+    await browser?.close();
+  } catch (error) {
+    console.error('Error closing browser:', error.message);
+  }
+  process.exit(0);
+});`,
     ruby: `# File: playwright_fun.rb
 # Language: Ruby
 
@@ -98,15 +119,16 @@ end`,
 # Language: Python
 
 from selenium import webdriver
-import getpass, os
+import getpass, os, time
 
-driver = webdriver.Firefox()
+driver = webdriver.Chrome()
 try:
     driver.get("https://zattas.me")
-    driver.add_cookie({"name": "automation_user", "value": getpass.getuser(), "domain": "zattas.me"})
-    driver.add_cookie({"name": "automation_language", "value": "python", "domain": "zattas.me"})
+    driver.add_cookie({"name": "automation_user", "value": getpass.getuser()})
+    driver.add_cookie({"name": "automation_language", "value": "python"})
     driver.maximize_window()
-    input("Press Enter to close browser...")
+    print("Browser open. Press Ctrl+C to close.")
+    time.sleep(300)  # Keep open for 5 minutes
 finally:
     driver.quit()
     os._exit(0)`,
@@ -115,17 +137,17 @@ finally:
 
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 public class SeleniumFun {
     public static void main(String[] args) throws Exception {
-        WebDriver driver = new FirefoxDriver();
+        WebDriver driver = new ChromeDriver();
         driver.get("https://zattas.me");
-        driver.manage().addCookie(new Cookie.Builder("automation_user", System.getProperty("user.name")).domain("zattas.me").build());
-        driver.manage().addCookie(new Cookie.Builder("automation_language", "java").domain("zattas.me").build());
+        driver.manage().addCookie(new Cookie.Builder("automation_user", System.getProperty("user.name")).build());
+        driver.manage().addCookie(new Cookie.Builder("automation_language", "java").build());
         driver.manage().window().maximize();
-        System.out.println("Press Enter to close...");
-        System.in.read();
+        System.out.println("Browser open. Press Ctrl+C to close.");
+        Thread.sleep(300000);  // Keep open for 5 minutes
         driver.quit();
     }
 }`,
@@ -136,30 +158,38 @@ const { Builder } = require('selenium-webdriver');
 const os = require('os');
 
 (async function() {
-  const driver = await new Builder().forBrowser('firefox').build();
+  const driver = await new Builder().forBrowser('chrome').build();
   try {
     await driver.get('https://zattas.me');
-    await driver.manage().addCookie({ name: 'automation_user', value: os.userInfo().username, domain: 'zattas.me' });
-    await driver.manage().addCookie({ name: 'automation_language', value: 'javascript', domain: 'zattas.me' });
+    await driver.manage().addCookie({ name: 'automation_user', value: os.userInfo().username });
+    await driver.manage().addCookie({ name: 'automation_language', value: 'javascript' });
     await driver.manage().window().maximize();
-    const readline = require('readline').createInterface({ input: process.stdin, output: process.stdout });
-    await new Promise(r => readline.question('Press Enter to close...', () => { readline.close(); r(); }));
+    console.log('Browser open. Press Ctrl+C to close.');
+    await new Promise(r => setTimeout(r, 300000)); // Keep open for 5 minutes
   } finally {
     await driver.quit();
   }
-})();`,
+})();
+
+let sigintHandled = false;
+process.on('SIGINT', () => {
+  if (sigintHandled) return;
+  sigintHandled = true;
+  console.log('\\nClosing...');
+  process.exit(0);
+});`,
     ruby: `# File: selenium_fun.rb
 # Language: Ruby
 
 require 'selenium-webdriver'
 
-driver = Selenium::WebDriver.for :firefox
+driver = Selenium::WebDriver.for :chrome
 driver.navigate.to 'https://zattas.me'
-driver.manage.add_cookie(name: 'automation_user', value: \`whoami\`.chomp, domain: 'zattas.me')
-driver.manage.add_cookie(name: 'automation_language', value: 'ruby', domain: 'zattas.me')
+driver.manage.add_cookie(name: 'automation_user', value: \`whoami\`.chomp)
+driver.manage.add_cookie(name: 'automation_language', value: 'ruby')
 driver.manage.window.maximize
-puts 'Press Enter to close...'
-gets
+puts 'Browser open. Press Ctrl+C to close.'
+sleep(300)  # Keep open for 5 minutes
 driver.quit`,
   },
   cypress: {
@@ -172,7 +202,7 @@ describe('Automation Fun', () => {
     cy.setCookie('automation_user', Cypress.env('USER') || 'cypress-user');
     cy.setCookie('automation_language', 'javascript');
     cy.viewport(1920, 1080);
-    cy.pause(); // Press Resume in Cypress UI to continue
+    cy.wait(300000); // Keep browser open for 5 minutes
   });
 });`,
   },
@@ -181,34 +211,135 @@ describe('Automation Fun', () => {
 // File: vibium_fun.js
 // Language: JavaScript (Vibium CLI)
 
-const { execSync } = require('child_process');
+const { spawn, execSync } = require('child_process');
 const os = require('os');
+const readline = require('readline');
 
 const username = os.userInfo().username;
-const url = \`https://zattas.me?automation_user=\${username}&automation_language=javascript\`;
+const url = \`https://zattas.me\`;
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// Kill any existing vibium processes
+console.log('Cleaning up existing Vibium processes...');
 try {
-  console.log('Stopping any existing Vibium session...');
+  execSync('killall vibium', { stdio: 'ignore' });
+  execSync('killall chromedriver', { stdio: 'ignore' });
+} catch {
+  // No existing processes
+}
+
+// Start vibium mcp server
+console.log('Starting Vibium MCP server...');
+const mcp = spawn('vibium', ['mcp']);
+
+// Vibium is a stdin/stdout MCP server. We need to:
+// 1. Send JSON-RPC requests to stdin
+// 2. Read JSON-RPC responses from stdout
+// This readline interface parses the line-delimited JSON responses.
+let requestId = 1;
+const pendingRequests = new Map();
+
+const rl = readline.createInterface({
+  input: mcp.stdout
+});
+
+// Handle responses from Vibium. The MCP server sends one JSON line per response.
+// We match responses to requests using the request ID.
+rl.on('line', (line) => {
   try {
-    execSync('vibium stop', { stdio: 'ignore' });
-  } catch {
-    // Ignore if no session is running
+    const response = JSON.parse(line);
+    const { id, result, error } = response;
+
+    if (pendingRequests.has(id)) {
+      const { resolve, reject } = pendingRequests.get(id);
+      pendingRequests.delete(id);
+
+      if (error) {
+        reject(new Error(error.message || JSON.stringify(error)));
+      } else {
+        resolve(result);
+      }
+    }
+  } catch (e) {
+    // Ignore parse errors
   }
+});
 
-  console.log('Starting Vibium browser session...');
-  execSync('vibium start', { stdio: 'inherit' });
+// sendRequest wraps the JSON-RPC protocol. It:
+// 1. Creates a unique request ID
+// 2. Sends a JSON-RPC request to vibium's stdin
+// 3. Returns a promise that resolves when the response arrives
+function sendRequest(toolName, args = {}) {
+  return new Promise((resolve, reject) => {
+    const id = requestId++;
+    const request = {
+      jsonrpc: '2.0',
+      id,
+      method: 'tools/call',
+      params: { name: toolName, arguments: args }
+    };
+    pendingRequests.set(id, { resolve, reject });
+    mcp.stdin.write(JSON.stringify(request) + '\\n');
+  });
+}
 
-  console.log(\`Navigating to \${url}...\`);
-  execSync(\`vibium go \${url}\`, { stdio: 'inherit' });
+mcp.stderr.on('data', (data) => {
+  console.error('MCP error:', data.toString());
+});
 
-  console.log('Check the browser for your haiku!');
-  console.log('Press Ctrl+C to close the browser when done.');
+(async () => {
+  try {
+    await delay(1000);
+    console.log('Starting browser session...');
+    await sendRequest('browser_start', { headless: false });
 
-  setInterval(() => {}, 1000);
-} catch (error) {
-  console.error('Error running Vibium:', error.message);
-  process.exit(1);
-}`,
+    await delay(1000);
+    console.log('Navigating to zattas.me...');
+    await sendRequest('browser_navigate', { url });
+
+    await delay(2000);
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(\`Installing page clock (timezone: \${timezone})...\`);
+    await sendRequest('page_clock_install', { timezone });
+
+    await delay(500);
+    console.log('Setting cookies...');
+    await sendRequest('browser_set_cookie', {
+      name: 'automation_user',
+      value: username,
+      domain: 'zattas.me',
+      path: '/'
+    });
+
+    await sendRequest('browser_set_cookie', {
+      name: 'automation_language',
+      value: 'javascript',
+      domain: 'zattas.me',
+      path: '/'
+    });
+
+    await delay(1000);
+    console.log('\\n✅ Done! Check the browser for your haiku.');
+    console.log('Press Ctrl+C to exit.');
+  } catch (error) {
+    console.error('❌ Error:', error.message);
+    process.exit(1);
+  }
+})();
+
+let sigintHandled = false;
+process.on('SIGINT', () => {
+  if (sigintHandled) return;
+  sigintHandled = true;
+  console.log('\\nClosing...');
+  try {
+    execSync('killall "Google Chrome for Testing"', { stdio: 'ignore' });
+  } catch {
+    // Already closed
+  }
+  mcp.kill();
+  process.exit(0);
+});`,
   },
 };
 
@@ -235,9 +366,9 @@ const instructions: Record<string, Record<string, string>> = {
 
 3. Compile and run:
    javac PlaywrightFun.java && java PlaywrightFun`,
-    javascript: `1. Install Playwright and create file:
-   npm install playwright
-   npx playwright install
+    javascript: `1. Install Playwright globally and create file:
+   npm install -g playwright
+   playwright install
    touch playwright_fun.js
 
 2. Save the script below to playwright_fun.js
@@ -246,7 +377,7 @@ const instructions: Record<string, Record<string, string>> = {
    node playwright_fun.js`,
     ruby: `1. Install Playwright and create file:
    gem install playwright-ruby-client
-   npx playwright install
+   playwright install
    touch playwright_fun.rb
 
 2. Save the script below to playwright_fun.rb
@@ -274,8 +405,8 @@ const instructions: Record<string, Record<string, string>> = {
 
 3. Compile and run:
    javac SeleniumFun.java && java SeleniumFun`,
-    javascript: `1. Install Selenium WebDriver and create file:
-   npm install selenium-webdriver
+    javascript: `1. Install Selenium WebDriver globally and create file:
+   npm install -g selenium-webdriver
    touch selenium_fun.js
 
 2. Save the script below to selenium_fun.js
@@ -292,14 +423,26 @@ const instructions: Record<string, Record<string, string>> = {
    ruby selenium_fun.rb`,
   },
   cypress: {
-    javascript: `1. Install Cypress and create file:
-   npm install cypress
+    javascript: `1. Install Cypress globally:
+   npm install -g cypress
+
+2. Create cypress.config.js in your project root:
+   cat > cypress.config.js << 'EOF'
+   const { defineConfig } = require('cypress');
+   module.exports = defineConfig({
+     e2e: {
+       baseUrl: 'https://zattas.me',
+       supportFile: false,
+       specPattern: '*.cy.js',
+     },
+   });
+   EOF
+
+3. Create and save the script below to cypress_fun.cy.js:
    touch cypress_fun.cy.js
 
-2. Save the script below to cypress_fun.cy.js
-
-3. Run the test:
-   npx cypress run --spec cypress_fun.cy.js`,
+4. Run the test:
+   cypress run --headed`,
   },
   vibium: {
     javascript: `1. Install Vibium globally:
@@ -585,7 +728,7 @@ export function AutomationFunSection() {
             fontSize: "0.72rem",
             lineHeight: "1.7",
             margin: 0,
-            maxHeight: "280px",
+            maxHeight: "450px",
             overflow: "auto",
           }}
           codeTagProps={{

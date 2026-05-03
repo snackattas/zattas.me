@@ -24,7 +24,7 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
   const detectionRef = useRef<AutomationDetection | null>(null);
 
   useEffect(() => {
-    const checkClientSideAutomation = () => {
+    const checkClientSideAutomation = async () => {
       // Only run once
       if (hasDetected) return;
 
@@ -37,7 +37,7 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
 
       // Fallback to browser-based detection if no cookie
       if (!tool) {
-        tool = detectAutomationTool();
+        tool = await detectAutomationTool();
       }
 
       if (!tool) return;
@@ -95,10 +95,10 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
     };
 
     // Listen for resize event (triggered when automation maximizes window)
-    window.addEventListener("resize", checkClientSideAutomation);
+    window.addEventListener("resize", () => checkClientSideAutomation());
 
     // Backup: Poll every 500ms for Cypress/Vibium (they don't always trigger resize)
-    const interval = setInterval(checkClientSideAutomation, 500);
+    const interval = setInterval(() => checkClientSideAutomation(), 500);
 
     // Initial client-side check
     checkClientSideAutomation();
@@ -118,47 +118,45 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
 }
 
 /**
- * Detect which automation tool is being used (client-side fallback)
- * Note: Playwright detection is handled server-side via API
+ * Detect which automation tool is being used (client-side)
  */
-function detectAutomationTool(): AutomationTool {
+async function detectAutomationTool(): Promise<AutomationTool> {
   if (typeof window === "undefined" || typeof navigator === "undefined") {
     return null;
   }
 
-  // Check for Vibium specific globals FIRST (more specific than Selenium)
+  // Check for Vibium specific globals FIRST (most specific)
   // Vibium injects __vibiumClock when page_clock_install is called
   if ((window as any).__vibiumClock) {
     return "vibium";
   }
 
-  // Check for Selenium (injects cdc_ prefixed variables)
-  // Modern Selenium injects window.cdc_* variables for Chrome DevTools Protocol communication
-  for (const key in window) {
-    if (key.startsWith('cdc_')) {
-      return "selenium";
-    }
-  }
-
-  // Check for navigator.webdriver (older Selenium versions or without evasion)
-  if (navigator.webdriver === true) {
-    return "selenium";
-  }
-
-  // Check for Cypress/Vibium (both use window.Cypress)
+  // Check for Cypress BEFORE Selenium (uses window.Cypress)
   if ("Cypress" in window) {
-    // Differentiate Vibium from Cypress
-    const userAgent = navigator.userAgent;
-    if (userAgent.includes('Vibium') || userAgent.includes('Chrome for Testing')) {
-      return "vibium";
-    }
     return "cypress";
   }
 
-  // Check for Playwright specific globals
-  // Playwright sets these on pages it controls
-  if ((window as any).__playwright || (window as any).__pw_manual) {
-    return "playwright";
+  // Use BotD to detect WebDriver (both Selenium and Playwright use it)
+  // But can't reliably distinguish between them with BotD alone
+  try {
+    const { load } = await import("@fingerprintjs/botd");
+    const botd = await load();
+    const result = await botd.detect();
+    console.log('[BotD] Result:', { bot: result.bot, botKind: result.botKind });
+
+    if (result.bot) {
+      // BotD confirms WebDriver automation, but can't distinguish tool
+      // Fall through to native detection methods below
+      console.log('[BotD] WebDriver detected');
+      for (const key in window) {
+        if (key.startsWith('cdc_')) {
+          return "selenium";
+        }
+      }
+      return "playwright";
+    }
+  } catch (e) {
+    console.error('[BotD] Detection failed:', e);
   }
 
   return null;

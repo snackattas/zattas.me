@@ -8,6 +8,7 @@ const withMDX = createMDX({
 const nextConfig: NextConfig = {
   reactCompiler: true,
   pageExtensions: ["ts", "tsx", "mdx"],
+  transpilePackages: ["@fingerprintjs/botd"],
 };
 
 export default withMDX(nextConfig);
