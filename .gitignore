@@ -9,8 +9,13 @@
 # production
 /build
 
+# next.js
+/out
+next-env.d.ts
+
 # misc
 .DS_Store
+**/.DS_Store
 .env
 npm-debug.log
 .vercel
