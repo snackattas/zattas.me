@@ -193,7 +193,7 @@ function TimelineItemContent({
         <div
           className="tl-body"
           style={{
-            fontSize: "0.85rem",
+            fontSize: "1rem",
             lineHeight: 1.7,
             color: "var(--muted)",
           }}
