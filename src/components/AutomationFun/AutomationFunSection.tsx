@@ -31,29 +31,6 @@ with sync_playwright() as p:
     finally:
         browser.close()
         os._exit(0)`,
-    java: `// File: PlaywrightFun.java
-// Language: Java
-
-import com.microsoft.playwright.*;
-
-public class PlaywrightFun {
-    public static void main(String[] args) throws Exception {
-        try (Playwright playwright = Playwright.create()) {
-            Browser browser = playwright.firefox().launch(
-                new BrowserType.LaunchOptions().setHeadless(false));
-            BrowserContext context = browser.newContext();
-            context.addCookies(java.util.Arrays.asList(
-                new Cookie("automation_user", System.getProperty("user.name")).setUrl("https://zattas.me"),
-                new Cookie("automation_language", "java").setUrl("https://zattas.me")));
-            Page page = context.newPage();
-            page.navigate("https://zattas.me");
-            page.setViewportSize(1920, 1080);
-            System.out.println("Press Enter to close...");
-            System.in.read();
-            browser.close();
-        }
-    }
-}`,
     javascript: `// File: playwright_fun.js
 // Language: JavaScript (Node.js)
 
@@ -207,137 +184,113 @@ describe('Automation Fun', () => {
 });`,
   },
   vibium: {
+    python: `# File: vibium_fun.py
+# Language: Python
+
+import getpass
+import time
+from datetime import datetime
+
+from vibium import browser
+
+try:
+    # Start browser in headed mode with single page
+    browser_instance = browser.start(headless=False)
+    page = browser_instance.page()
+
+    # Navigate to site first
+    page.go('https://zattas.me')
+
+    # Set cookies on the page
+    page.context.set_cookies([
+        {'name': 'automation_user', 'value': getpass.getuser(), 'domain': 'zattas.me', 'path': '/'},
+        {'name': 'automation_language', 'value': 'python', 'domain': 'zattas.me', 'path': '/'}
+    ])
+
+    # Install page clock with IANA timezone
+    page.clock.install(timezone='America/Chicago')
+
+    print('\\n✅ Done! Check the browser for your haiku.')
+    print('Press Ctrl+C to exit.')
+
+    time.sleep(300)  # Keep open for 5 minutes
+except KeyboardInterrupt:
+    print('\\nClosing...')
+finally:
+    browser_instance.stop()`,
+    java: `// File: VibiumFun.java
+// Language: Java
+
+import com.vibium.browser.Browser;
+import java.util.TimeZone;
+
+public class VibiumFun {
+    public static void main(String[] args) throws Exception {
+        try (Browser browser = new Browser()) {
+            var page = browser.navigate("https://zattas.me");
+
+            // Set cookies
+            browser.setCookie("automation_user", System.getProperty("user.name"),
+                "zattas.me", "/");
+            browser.setCookie("automation_language", "java",
+                "zattas.me", "/");
+
+            // Install page clock
+            String timezone = TimeZone.getDefault().getID();
+            browser.installPageClock(timezone);
+
+            System.out.println("\\n✅ Done! Check the browser for your haiku.");
+            System.out.println("Press Ctrl+C to exit.");
+
+            Thread.sleep(300000);  // Keep open for 5 minutes
+        } catch (InterruptedException e) {
+            System.out.println("\\nClosing...");
+            Thread.currentThread().interrupt();
+        }
+    }
+}`,
     javascript: `#!/usr/bin/env node
 // File: vibium_fun.js
-// Language: JavaScript (Vibium CLI)
+// Language: JavaScript
 
-const { spawn, execSync } = require('child_process');
+const { browser } = require('vibium/sync');
 const os = require('os');
-const readline = require('readline');
 
 const username = os.userInfo().username;
-const url = \`https://zattas.me\`;
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Kill any existing vibium processes
-console.log('Cleaning up existing Vibium processes...');
 try {
-  execSync('killall vibium', { stdio: 'ignore' });
-  execSync('killall chromedriver', { stdio: 'ignore' });
-} catch {
-  // No existing processes
+  // Start browser in headed mode
+  const browser_instance = browser.start({ headless: false });
+  const page = browser_instance.page();
+
+  // Set cookies before navigation
+  page.context.setCookies([
+    { name: 'automation_user', value: username, domain: 'zattas.me', path: '/' },
+    { name: 'automation_language', value: 'javascript', domain: 'zattas.me', path: '/' }
+  ]);
+
+  // Navigate to site
+  page.go('https://zattas.me');
+
+  // Install page clock with IANA timezone
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  page.clock.install({ timezone: timezone });
+
+  console.log('\\n✅ Done! Check the browser for your haiku.');
+  console.log('Press Ctrl+C to exit.');
+
+  // Keep open
+  setTimeout(() => {
+    browser_instance.stop();
+    process.exit(0);
+  }, 300000); // 5 minutes
+} catch (error) {
+  console.error('❌ Error:', error.message);
+  process.exit(1);
 }
 
-// Start vibium mcp server
-console.log('Starting Vibium MCP server...');
-const mcp = spawn('vibium', ['mcp']);
-
-// Vibium is a stdin/stdout MCP server. We need to:
-// 1. Send JSON-RPC requests to stdin
-// 2. Read JSON-RPC responses from stdout
-// This readline interface parses the line-delimited JSON responses.
-let requestId = 1;
-const pendingRequests = new Map();
-
-const rl = readline.createInterface({
-  input: mcp.stdout
-});
-
-// Handle responses from Vibium. The MCP server sends one JSON line per response.
-// We match responses to requests using the request ID.
-rl.on('line', (line) => {
-  try {
-    const response = JSON.parse(line);
-    const { id, result, error } = response;
-
-    if (pendingRequests.has(id)) {
-      const { resolve, reject } = pendingRequests.get(id);
-      pendingRequests.delete(id);
-
-      if (error) {
-        reject(new Error(error.message || JSON.stringify(error)));
-      } else {
-        resolve(result);
-      }
-    }
-  } catch (e) {
-    // Ignore parse errors
-  }
-});
-
-// sendRequest wraps the JSON-RPC protocol. It:
-// 1. Creates a unique request ID
-// 2. Sends a JSON-RPC request to vibium's stdin
-// 3. Returns a promise that resolves when the response arrives
-function sendRequest(toolName, args = {}) {
-  return new Promise((resolve, reject) => {
-    const id = requestId++;
-    const request = {
-      jsonrpc: '2.0',
-      id,
-      method: 'tools/call',
-      params: { name: toolName, arguments: args }
-    };
-    pendingRequests.set(id, { resolve, reject });
-    mcp.stdin.write(JSON.stringify(request) + '\\n');
-  });
-}
-
-mcp.stderr.on('data', (data) => {
-  console.error('MCP error:', data.toString());
-});
-
-(async () => {
-  try {
-    await delay(1000);
-    console.log('Starting browser session...');
-    await sendRequest('browser_start', { headless: false });
-
-    await delay(1000);
-    console.log('Navigating to zattas.me...');
-    await sendRequest('browser_navigate', { url });
-
-    await delay(2000);
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log(\`Installing page clock (timezone: \${timezone})...\`);
-    await sendRequest('page_clock_install', { timezone });
-
-    await delay(500);
-    console.log('Setting cookies...');
-    await sendRequest('browser_set_cookie', {
-      name: 'automation_user',
-      value: username,
-      domain: 'zattas.me',
-      path: '/'
-    });
-
-    await sendRequest('browser_set_cookie', {
-      name: 'automation_language',
-      value: 'javascript',
-      domain: 'zattas.me',
-      path: '/'
-    });
-
-    await delay(1000);
-    console.log('\\n✅ Done! Check the browser for your haiku.');
-    console.log('Press Ctrl+C to exit.');
-  } catch (error) {
-    console.error('❌ Error:', error.message);
-    process.exit(1);
-  }
-})();
-
-let sigintHandled = false;
 process.on('SIGINT', () => {
-  if (sigintHandled) return;
-  sigintHandled = true;
   console.log('\\nClosing...');
-  try {
-    execSync('killall "Google Chrome for Testing"', { stdio: 'ignore' });
-  } catch {
-    // Already closed
-  }
-  mcp.kill();
   process.exit(0);
 });`,
   },
@@ -423,10 +376,11 @@ const instructions: Record<string, Record<string, string>> = {
    ruby selenium_fun.rb`,
   },
   cypress: {
-    javascript: `1. Install Cypress globally:
+    javascript: `1. Install Cypress globally and create files:
    npm install -g cypress
+   touch cypress.config.js cypress_fun.cy.js
 
-2. Create cypress.config.js in your project root:
+2. Save cypress.config.js content:
    cat > cypress.config.js << 'EOF'
    const { defineConfig } = require('cypress');
    module.exports = defineConfig({
@@ -438,22 +392,37 @@ const instructions: Record<string, Record<string, string>> = {
    });
    EOF
 
-3. Create and save the script below to cypress_fun.cy.js:
-   touch cypress_fun.cy.js
-
-4. Run the test:
+3. Save the script below to cypress_fun.cy.js and run:
    cypress run --headed`,
   },
   vibium: {
-    javascript: `1. Install Vibium globally:
-   npm install -g vibium
+    python: `1. Install Vibium and create file:
+   pip install vibium
+   touch vibium_fun.py
+
+2. Save the script below to vibium_fun.py
+
+3. Run the script:
+   python vibium_fun.py`,
+    java: `1. Add to pom.xml or build.gradle:
+   <dependency>
+       <groupId>com.vibium</groupId>
+       <artifactId>vibium</artifactId>
+       <version>26.3.18</version>
+   </dependency>
+
+2. Save the script below to VibiumFun.java
+
+3. Compile and run:
+   javac VibiumFun.java && java VibiumFun`,
+    javascript: `1. Install Vibium globally (version 26.3.9):
+   npm install -g vibium@26.3.9
    vibium install
 
 2. Create and save the script below to vibium_fun.js:
    touch vibium_fun.js
 
-3. Make it executable and run:
-   chmod +x vibium_fun.js
+3. Run the script:
    node vibium_fun.js`,
   },
 };
@@ -462,7 +431,7 @@ const availableLangs: Record<string, string[]> = {
   playwright: ["python", "java", "javascript", "ruby"],
   selenium: ["python", "java", "javascript", "ruby"],
   cypress: ["javascript"],
-  vibium: ["javascript"],
+  vibium: ["python", "java", "javascript"],
 };
 
 export function AutomationFunSection() {
