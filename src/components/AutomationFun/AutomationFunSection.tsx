@@ -207,6 +207,71 @@ describe('Automation Fun', () => {
 });`,
   },
   vibium: {
+    python: `# File: vibium_fun.py
+# Language: Python
+
+import getpass
+import time
+from datetime import datetime
+
+from vibium import browser
+
+try:
+    # Start browser in headed mode with single page
+    browser_instance = browser.start(headless=False)
+    page = browser_instance.page()
+
+    # Navigate to site first
+    page.go('https://zattas.me')
+
+    # Set cookies on the page
+    page.context.set_cookies([
+        {'name': 'automation_user', 'value': getpass.getuser(), 'domain': 'zattas.me', 'path': '/'},
+        {'name': 'automation_language', 'value': 'python', 'domain': 'zattas.me', 'path': '/'}
+    ])
+
+    # Install page clock with IANA timezone
+    page.clock.install(timezone='America/Chicago')
+
+    print('\\n✅ Done! Check the browser for your haiku.')
+    print('Press Ctrl+C to exit.')
+
+    time.sleep(300)  # Keep open for 5 minutes
+except KeyboardInterrupt:
+    print('\\nClosing...')
+finally:
+    browser_instance.stop()`,
+    java: `// File: VibiumFun.java
+// Language: Java
+
+import com.vibium.browser.Browser;
+import java.util.TimeZone;
+
+public class VibiumFun {
+    public static void main(String[] args) throws Exception {
+        try (Browser browser = new Browser()) {
+            var page = browser.navigate("https://zattas.me");
+
+            // Set cookies
+            browser.setCookie("automation_user", System.getProperty("user.name"),
+                "zattas.me", "/");
+            browser.setCookie("automation_language", "java",
+                "zattas.me", "/");
+
+            // Install page clock
+            String timezone = TimeZone.getDefault().getID();
+            browser.installPageClock(timezone);
+
+            System.out.println("\\n✅ Done! Check the browser for your haiku.");
+            System.out.println("Press Ctrl+C to exit.");
+
+            Thread.sleep(300000);  // Keep open for 5 minutes
+        } catch (InterruptedException e) {
+            System.out.println("\\nClosing...");
+            Thread.currentThread().interrupt();
+        }
+    }
+}`,
     javascript: `#!/usr/bin/env node
 // File: vibium_fun.js
 // Language: JavaScript (Vibium CLI)
@@ -445,6 +510,25 @@ const instructions: Record<string, Record<string, string>> = {
    cypress run --headed`,
   },
   vibium: {
+    python: `1. Install Vibium and create file:
+   pip install vibium
+   touch vibium_fun.py
+
+2. Save the script below to vibium_fun.py
+
+3. Run the script:
+   python vibium_fun.py`,
+    java: `1. Add to pom.xml or build.gradle:
+   <dependency>
+       <groupId>com.vibium</groupId>
+       <artifactId>vibium</artifactId>
+       <version>26.3.18</version>
+   </dependency>
+
+2. Save the script below to VibiumFun.java
+
+3. Compile and run:
+   javac VibiumFun.java && java VibiumFun`,
     javascript: `1. Install Vibium globally:
    npm install -g vibium
    vibium install
@@ -462,7 +546,7 @@ const availableLangs: Record<string, string[]> = {
   playwright: ["python", "java", "javascript", "ruby"],
   selenium: ["python", "java", "javascript", "ruby"],
   cypress: ["javascript"],
-  vibium: ["javascript"],
+  vibium: ["python", "java", "javascript"],
 };
 
 export function AutomationFunSection() {
