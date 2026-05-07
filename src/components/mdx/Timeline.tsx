@@ -141,6 +141,11 @@ function TimelineItemContent({
           .tl-left { grid-column: 1; }
           .tl-body { grid-column: 2; }
         }
+        @media (max-width: 899px) {
+          .tl-preview {
+            display: none !important;
+          }
+        }
       `}</style>
 
       <div className="tl-left" style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
