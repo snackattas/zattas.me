@@ -174,6 +174,7 @@ export function Hero() {
                   background: "transparent",
                   textDecoration: "none",
                   transition: "background 0.12s, border-color 0.12s",
+                  color: "#ffffff",
                 }}
               >
                 <Image
@@ -181,7 +182,6 @@ export function Hero() {
                   alt=""
                   width={16}
                   height={16}
-                  style={{ filter: "invert(1) brightness(10)" }}
                 />
               </a>
             ))}
