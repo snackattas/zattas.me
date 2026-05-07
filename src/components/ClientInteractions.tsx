@@ -7,28 +7,41 @@ export function ClientInteractions() {
     // ── Custom cursor ──────────────────────────────────────────────────────
     const dot = document.getElementById("cursor-dot");
     const ring = document.getElementById("cursor-ring");
-    if (!dot || !ring) return;
+    const isTouchDevice = !window.matchMedia("(hover: hover)").matches;
+
+    if (dot && ring) {
+      if (isTouchDevice) {
+        dot.style.display = "none";
+        ring.style.display = "none";
+      }
+    }
 
     let mx = 0, my = 0, rx = 0, ry = 0;
 
     const onMouseMove = (e: MouseEvent) => {
-      mx = e.clientX; my = e.clientY;
-      dot.style.transform = `translate(calc(${mx}px - 4px), calc(${my}px - 4px))`;
+      if (dot && !isTouchDevice) {
+        mx = e.clientX; my = e.clientY;
+        dot.style.transform = `translate(calc(${mx}px - 4px), calc(${my}px - 4px))`;
+      }
     };
     document.addEventListener("mousemove", onMouseMove);
 
     let rafId: number;
     const animCursor = () => {
-      rx += (mx - rx) * 0.14;
-      ry += (my - ry) * 0.14;
-      ring.style.transform = `translate(calc(${rx}px - 14px), calc(${ry}px - 14px))`;
+      if (ring && !isTouchDevice) {
+        rx += (mx - rx) * 0.14;
+        ry += (my - ry) * 0.14;
+        ring.style.transform = `translate(calc(${rx}px - 14px), calc(${ry}px - 14px))`;
+      }
       rafId = requestAnimationFrame(animCursor);
     };
-    animCursor();
+    if (!isTouchDevice && ring) {
+      animCursor();
+    }
 
     const hoverTargets = document.querySelectorAll("a, button, .tilt-card, .social-link");
-    const addHover = () => ring.classList.add("hovered");
-    const rmvHover = () => ring.classList.remove("hovered");
+    const addHover = () => ring && ring.classList.add("hovered");
+    const rmvHover = () => ring && ring.classList.remove("hovered");
     hoverTargets.forEach(el => {
       el.addEventListener("mouseenter", addHover);
       el.addEventListener("mouseleave", rmvHover);

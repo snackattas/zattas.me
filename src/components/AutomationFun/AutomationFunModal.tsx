@@ -33,6 +33,18 @@ export function AutomationFunModal({ isOpen, onClose, initialDetection }: Automa
   const [haiku, setHaiku] = useState<Haiku | null>(null);
   const hasInitializedRef = useRef(false);
 
+  // Load Prism language definitions on client side
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        require('prismjs/components/prism-java');
+        require('prismjs/components/prism-ruby');
+      } catch (e) {
+        // Languages may already be loaded
+      }
+    }
+  }, []);
+
   // When initialDetection changes (automation detected), set haiku and animate
   useEffect(() => {
     if (initialDetection && !hasInitializedRef.current) {

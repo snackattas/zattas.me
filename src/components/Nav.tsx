@@ -23,6 +23,7 @@ export function Nav({ sections }: { sections: NavSection[] }) {
           display: "flex",
           alignItems: "center",
         }}
+        className="nav-container"
       >
         {/* Site name */}
         <Link
@@ -94,6 +95,29 @@ export function Nav({ sections }: { sections: NavSection[] }) {
           ))}
         </ul>
       </div>
+
+      <style>{`
+        @media (max-width: 767px) {
+          .nav-container {
+            height: auto !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            padding: var(--gutter) !important;
+          }
+
+          nav a {
+            padding: 6px 8px !important;
+            font-size: 0.65rem !important;
+            gap: 4px !important;
+            border: none !important;
+          }
+
+          nav a:hover {
+            border: none !important;
+            background-color: rgba(255,255,255,0.05) !important;
+          }
+        }
+      `}</style>
     </nav>
   );
 }
