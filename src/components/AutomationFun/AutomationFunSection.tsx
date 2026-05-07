@@ -730,7 +730,7 @@ export function AutomationFunSection() {
           customStyle={{
             background: "transparent",
             padding: "16px 20px",
-            fontSize: "0.72rem",
+            fontSize: "clamp(0.6rem, 1.8vw, 0.72rem)",
             lineHeight: "1.7",
             margin: 0,
             maxHeight: "450px",

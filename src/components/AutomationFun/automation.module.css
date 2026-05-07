@@ -62,6 +62,9 @@
   border: 2px solid var(--border);
   width: fit-content;
   margin-bottom: 0;
+  overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Language tabs */
@@ -74,6 +77,23 @@
   border-bottom: none;
   width: fit-content;
   margin-bottom: 0;
+  overflow-x: auto;
+  max-width: calc(100% - 24px);
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+  .autoToolTabs {
+    flex-wrap: nowrap;
+    margin-left: 0;
+  }
+
+  .autoLangTabs {
+    flex-wrap: nowrap;
+    margin-left: 0;
+    margin-top: 2px;
+    max-width: 100%;
+  }
 }
 
 /* Shared tab button styles */
@@ -161,6 +181,15 @@
   padding: 6px 10px 6px 12px;
   margin: 3px 0;
   border-radius: 2px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+  .instrCmd {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 }
 
 .instrCmdLines {
@@ -179,6 +208,12 @@
   line-height: 1.5 !important;
   margin: 0 !important;
   background: transparent !important;
+}
+
+@media (max-width: 640px) {
+  .instrCmd code {
+    font-size: 0.6rem !important;
+  }
 }
 
 .instrCmdCopy {
