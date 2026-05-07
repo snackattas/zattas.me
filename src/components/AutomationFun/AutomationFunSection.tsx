@@ -280,8 +280,7 @@ public class VibiumFun {
         }
     }
 }`,
-    javascript: `#!/usr/bin/env node
-// File: vibium_fun.js
+    javascript: `// File: vibium_fun.js
 // Language: JavaScript
 
 const { browser } = require('vibium/sync');
