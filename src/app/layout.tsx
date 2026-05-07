@@ -19,7 +19,11 @@ export const metadata: Metadata = {
   title: "Zach Attas",
   description:
     "Staff Platform Engineer specializing in test infrastructure, quality engineering, and developer experience",
-  icons: { icon: "/icons/favicon.png" },
+  icons: {
+    icon: "/icons/favicon.png",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
