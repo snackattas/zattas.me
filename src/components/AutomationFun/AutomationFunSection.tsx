@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { AutomationDetector, type AutomationDetection } from "./AutomationDetector";
@@ -31,6 +31,37 @@ with sync_playwright() as p:
     finally:
         browser.close()
         os._exit(0)`,
+    java: `// File: PlaywrightFun.java
+// Language: Java
+
+import com.microsoft.playwright.*;
+
+public class PlaywrightFun {
+    public static void main(String[] args) {
+        try (Playwright playwright = Playwright.create()) {
+            Browser browser = playwright.firefox().launch(
+                new BrowserType.LaunchOptions().setHeadless(false)
+            );
+            BrowserContext context = browser.newContext();
+            Page page = context.newPage();
+
+            page.navigate("https://zattas.me");
+            context.addCookies(java.util.Arrays.asList(
+                new Cookie("automation_user", System.getProperty("user.name"))
+                    .setUrl("https://zattas.me"),
+                new Cookie("automation_language", "java")
+                    .setUrl("https://zattas.me")
+            ));
+            page.setViewportSize(1920, 1080);
+
+            System.out.println("Press Enter to close browser...");
+            System.in.read();
+            browser.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}`,
     javascript: `// File: playwright_fun.js
 // Language: JavaScript (Node.js)
 
@@ -442,6 +473,18 @@ export function AutomationFunSection() {
   const [copiedMain, setCopiedMain] = useState(false);
   const [copiedCmd, setCopiedCmd] = useState<number | null>(null);
   const hasScrolledRef = useRef(false);
+
+  // Load Prism language definitions on client side
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        require('prismjs/components/prism-java');
+        require('prismjs/components/prism-ruby');
+      } catch (e) {
+        // Languages may already be loaded
+      }
+    }
+  }, []);
 
   const handleDetected = useCallback((detection: AutomationDetection) => {
     setDetection(detection);
