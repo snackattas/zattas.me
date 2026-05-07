@@ -19,64 +19,76 @@ export function Nav({ sections }: { sections: NavSection[] }) {
           maxWidth: "1200px",
           margin: "0 auto",
           padding: "0 var(--gutter)",
-          height: "52px",
           display: "flex",
-          alignItems: "center",
+          flexDirection: "column",
+          gap: "0",
         }}
       >
-        {/* Site name */}
-        <Link
-          href="#hero"
+        {/* Top row: Site name */}
+        <div
           style={{
-            fontFamily: "var(--font-syne)",
-            fontWeight: 800,
-            fontSize: "0.95rem",
-            letterSpacing: "-0.02em",
-            textDecoration: "none",
-            color: "var(--fg)",
-            marginRight: "24px",
-            flexShrink: 0,
+            display: "flex",
+            alignItems: "center",
+            height: "52px",
+            paddingRight: "0",
           }}
         >
-          ZACH ATTAS
-        </Link>
+          <Link
+            href="#hero"
+            style={{
+              fontFamily: "var(--font-syne)",
+              fontWeight: 800,
+              fontSize: "0.95rem",
+              letterSpacing: "-0.02em",
+              textDecoration: "none",
+              color: "var(--fg)",
+              flexShrink: 0,
+            }}
+          >
+            ZACH ATTAS
+          </Link>
+        </div>
 
-        {/* Nav links */}
+        {/* Bottom row: Nav links - flows horizontally, wraps on mobile */}
         <ul
           style={{
             display: "flex",
             flexWrap: "wrap",
-            gap: "2px",
+            gap: "0",
             listStyle: "none",
-            padding: 0,
-            margin: 0,
+            padding: "0",
+            margin: "0",
           }}
         >
           {sections.map((s) => (
-            <li key={s.anchor}>
+            <li
+              key={s.anchor}
+              style={{}}
+            >
               <Link
                 href={`#${s.anchor}`}
                 style={{
-                  display: "inline-flex",
+                  display: "flex",
+                  flexDirection: "row",
                   alignItems: "center",
-                  gap: "5px",
-                  padding: "4px 10px",
+                  gap: "4px",
+                  padding: "6px 8px",
                   fontFamily: "var(--font-space-mono)",
-                  fontSize: "0.72rem",
+                  fontSize: "0.65rem",
                   color: "var(--muted)",
                   textDecoration: "none",
-                  border: "1px solid transparent",
-                  transition: "color 0.12s, border-color 0.12s",
+                  border: "none",
+                  transition: "color 0.12s, background-color 0.12s",
                 }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLElement;
                   el.style.color = "var(--fg)";
-                  el.style.borderColor = "var(--border)";
+                  el.style.backgroundColor = "rgba(255,255,255,0.05)";
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget as HTMLElement;
                   el.style.color = "var(--muted)";
-                  el.style.borderColor = "transparent";
+                  el.style.backgroundColor = "transparent";
                 }}
               >
                 <span
@@ -84,16 +96,61 @@ export function Nav({ sections }: { sections: NavSection[] }) {
                     color: "var(--accent)",
                     fontWeight: 700,
                     fontVariantNumeric: "tabular-nums",
+                    flexShrink: 0,
                   }}
                 >
                   {s.indexLabel}
-                </span>{" "}
-                {s.navLabel}
+                </span>
+                <span>{s.navLabel}</span>
               </Link>
             </li>
           ))}
         </ul>
       </div>
+
+      <style>{`
+        @media (min-width: 768px) {
+          nav > div {
+            flex-direction: row;
+            align-items: center;
+            gap: 0;
+          }
+
+          nav > div > div:first-child {
+            height: 52px;
+            display: flex;
+            align-items: center;
+            margin-right: auto;
+          }
+
+          nav ul {
+            border-top: none !important;
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            gap: 2px !important;
+            margin-left: 0;
+          }
+
+          nav li {
+            border: none !important;
+          }
+
+          nav a {
+            flex-direction: row !important;
+            gap: 5px !important;
+            align-items: center !important;
+            padding: 4px 10px !important;
+            border: 1px solid transparent !important;
+            background-color: transparent !important;
+            font-size: 0.72rem !important;
+          }
+
+          nav a:hover {
+            border-color: var(--border) !important;
+            color: var(--fg) !important;
+          }
+        }
+      `}</style>
     </nav>
   );
 }
