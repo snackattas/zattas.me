@@ -24,6 +24,28 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   manifest: "/manifest.json",
+  openGraph: {
+    title: "Zach Attas - Staff Platform Engineer",
+    description:
+      "Building core infrastructure, internal tooling, and sustainable test systems",
+    url: "https://zattas.me",
+    type: "website",
+    images: [
+      {
+        url: "https://zattas.me/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Zach Attas",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Zach Attas - Staff Platform Engineer",
+    description:
+      "Building core infrastructure, internal tooling, and sustainable test systems",
+    images: ["https://zattas.me/og-image.png"],
+  },
 };
 
 export default function RootLayout({
