@@ -232,6 +232,9 @@ body.disco-active {
   border-radius: 2px;
   font-family: var(--font-space-mono);
   font-size: 0.9em;
+  white-space: nowrap;
+  overflow-x: auto;
+  display: inline-block;
 }
 
 .reveal pre {
