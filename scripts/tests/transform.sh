@@ -20,10 +20,8 @@ fi
 mkdir -p "$(dirname "$OUTPUT_SCRIPT")"
 cp "$INPUT_SCRIPT" "$OUTPUT_SCRIPT"
 
-# Step 1: Replace production domain with test domain everywhere
+# Step 1: Replace production domain with test domain
 sed -i '' "s|https://zattas.me|$TARGET_URL|g" "$OUTPUT_SCRIPT"
-sed -i '' "s|domain: 'zattas.me'|domain: 'localhost'|g" "$OUTPUT_SCRIPT"
-sed -i '' "s|domain: \"zattas.me\"|domain: \"localhost\"|g" "$OUTPUT_SCRIPT"
 sed -i '' "s|zattas\.me|localhost|g" "$OUTPUT_SCRIPT"
 
 # Step 2: Replace line matching "keep open" (case-insensitive) with assertion
