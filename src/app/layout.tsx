@@ -16,36 +16,49 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Zach Attas",
+  title: "Zach Attas - Staff Platform Engineer",
   description:
-    "Staff Platform Engineer specializing in test infrastructure, quality engineering, and developer experience",
+    "Staff Platform Engineer at Capsule building core infrastructure, internal tooling, and sustainable test systems. SDET background, self-taught engineer from Chicago.",
   icons: {
     icon: "/icons/favicon.png",
     apple: "/apple-touch-icon.png",
   },
   manifest: "/manifest.json",
+  metadataBase: new URL("https://zattas.me"),
   openGraph: {
     title: "Zach Attas - Staff Platform Engineer",
     description:
-      "Building core infrastructure, internal tooling, and sustainable test systems",
+      "Building core infrastructure, internal tooling, and sustainable test systems at Capsule",
     url: "https://zattas.me",
     type: "website",
+    siteName: "Zach Attas",
     images: [
       {
         url: "https://zattas.me/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Zach Attas",
+        alt: "Zach Attas - Staff Platform Engineer",
+        type: "image/png",
       },
     ],
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
     title: "Zach Attas - Staff Platform Engineer",
     description:
-      "Building core infrastructure, internal tooling, and sustainable test systems",
+      "Building core infrastructure, internal tooling, and sustainable test systems at Capsule",
     images: ["https://zattas.me/og-image.png"],
+    creator: "@snackattas",
   },
+  keywords: [
+    "Platform Engineer",
+    "SDET",
+    "Test Infrastructure",
+    "Quality Engineering",
+    "Chicago",
+    "Developer Experience",
+  ],
 };
 
 export default function RootLayout({
