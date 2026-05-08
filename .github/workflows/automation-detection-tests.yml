@@ -21,13 +21,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [javascript]
+        language: [javascript, python, java]
         tool: [selenium, playwright]
         browser: [chrome]
+        exclude:
+          # Python doesn't have Vibium binding yet
+          - language: python
+            tool: vibium
+          # Java doesn't have Playwright support yet
+          - language: java
+            tool: playwright
         include:
-          # Additional combinations to test as we expand coverage
+          # Additional combinations to test
           - language: javascript
             tool: vibium
+            browser: chrome
+          - language: javascript
+            tool: cypress
             browser: chrome
 
     steps:
@@ -45,7 +55,7 @@ jobs:
         run: npm run build
 
       - name: Build Docker image
-        run: docker build -t test-automation-js ./docker/javascript
+        run: docker build -t test-automation-${{ matrix.language }} ./docker/${{ matrix.language }}
 
       - name: Start dev server
         run: |
@@ -62,11 +72,9 @@ jobs:
             -e TARGET_URL=http://host.docker.internal:3000 \
             -e EXPECTED_TOOL=${{ matrix.tool }} \
             -e DETECTION_TIMEOUT_MS=10000 \
-            -e GALLERY_SCRIPT_PATH=/app/scripts/gallery/selenium.js \
-            -v /Users/zacharyattas/code/zattas.me:/app \
             --network host \
-            test-automation-js \
-            node /app/scripts/tests/assertion-harness/javascript.js
+            test-automation-${{ matrix.language }} \
+            bash -c '/app/docker/${{ matrix.language }}/entrypoint.sh'
 
       - name: Upload test results
         if: always()
