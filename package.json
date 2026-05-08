@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "npm run docker:dev",
-    "build": "npm run build:next",
+    "build": "npm run generate:gallery && npm run build:next",
     "start": "npm run start:next",
     "lint": "npm run lint:docker",
     "test": "npm run test:docker",
     "dev:next": "next dev",
+    "generate:gallery": "node scripts/generate-gallery-data.js",
     "build:next": "next build",
     "start:next": "next start",
     "lint:next": "eslint",

@@ -24,3 +24,6 @@ npm-debug.log
 # Automation detection test artifacts
 /scripts/tests/temp/
 test-results/
+
+# Generated gallery scripts
+/src/data/generatedGalleryScripts.ts
