@@ -181,7 +181,7 @@ export function Hero() {
                   alt=""
                   width={16}
                   height={16}
-                  style={{ filter: "brightness(2.5) invert(1)" }}
+                  style={{ filter: "brightness(0) invert(1)" }}
                 />
               </a>
             ))}
