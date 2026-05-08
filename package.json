@@ -8,7 +8,7 @@
     "start": "npm run start:next",
     "lint": "npm run lint:docker",
     "test": "npm run test:docker",
-    "dev:next": "next dev",
+    "dev:next": "npm run generate:gallery && next dev",
     "generate:gallery": "node scripts/generate-gallery-data.js",
     "build:next": "next build",
     "start:next": "next start",
