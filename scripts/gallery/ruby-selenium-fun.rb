@@ -3,14 +3,11 @@
 
 require 'selenium-webdriver'
 
-driver = Selenium::WebDriver.for :firefox
+driver = Selenium::WebDriver.for :chrome
 driver.navigate.to 'https://zattas.me'
-
-username = `whoami`.chomp
-driver.manage.add_cookie(name: 'automation_user', value: username)
+driver.manage.add_cookie(name: 'automation_user', value: `whoami`.chomp)
 driver.manage.add_cookie(name: 'automation_language', value: 'ruby')
 driver.manage.window.maximize
-
-puts 'Press Enter to close browser...'
-gets
+puts 'Browser open. Press Ctrl+C to close.'
+sleep(300)  # Keep open for 5 minutes
 driver.quit

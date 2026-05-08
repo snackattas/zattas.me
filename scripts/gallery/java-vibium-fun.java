@@ -1,32 +1,31 @@
 // File: VibiumFun.java
 // Language: Java
-// Vibium is built on Playwright, so the syntax is similar
 
-import com.microsoft.playwright.*;
+import com.vibium.browser.Browser;
+import java.util.TimeZone;
 
-public class JavaVibiumFun {
-    public static void main(String[] args) {
-        try (Playwright playwright = Playwright.create()) {
-            Browser browser = playwright.firefox().launch(
-                new BrowserType.LaunchOptions().setHeadless(false)
-            );
-            BrowserContext context = browser.newContext();
-            Page page = context.newPage();
+public class VibiumFun {
+    public static void main(String[] args) throws Exception {
+        try (Browser browser = new Browser()) {
+            var page = browser.navigate("https://zattas.me");
 
-            page.navigate("https://zattas.me");
-            context.addCookies(java.util.Arrays.asList(
-                new Cookie("automation_user", System.getProperty("user.name"))
-                    .setUrl("https://zattas.me"),
-                new Cookie("automation_language", "java")
-                    .setUrl("https://zattas.me")
-            ));
-            page.setViewportSize(1920, 1080);
+            // Set cookies
+            browser.setCookie("automation_user", System.getProperty("user.name"),
+                "zattas.me", "/");
+            browser.setCookie("automation_language", "java",
+                "zattas.me", "/");
 
-            System.out.println("Press Enter to close browser...");
-            System.in.read();
-            browser.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+            // Install page clock
+            String timezone = TimeZone.getDefault().getID();
+            browser.installPageClock(timezone);
+
+            System.out.println("\n✅ Done! Check the browser for your haiku.");
+            System.out.println("Press Ctrl+C to exit.");
+
+            Thread.sleep(300000);  // Keep open for 5 minutes
+        } catch (InterruptedException e) {
+            System.out.println("\nClosing...");
+            Thread.currentThread().interrupt();
         }
     }
 }

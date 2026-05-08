@@ -2,20 +2,16 @@
 # Language: Python
 
 from selenium import webdriver
-import getpass
-import os
+import getpass, os, time
 
-driver = webdriver.Firefox()
-
+driver = webdriver.Chrome()
 try:
     driver.get("https://zattas.me")
     driver.add_cookie({"name": "automation_user", "value": getpass.getuser()})
     driver.add_cookie({"name": "automation_language", "value": "python"})
     driver.maximize_window()
-    input("Press Enter to close browser...")
+    print("Browser open. Press Ctrl+C to close.")
+    time.sleep(300)  # Keep open for 5 minutes
 finally:
-    try:
-        driver.quit()
-    except:
-        pass
+    driver.quit()
     os._exit(0)

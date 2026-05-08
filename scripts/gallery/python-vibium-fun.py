@@ -1,37 +1,34 @@
 # File: vibium_fun.py
 # Language: Python
-# Vibium is built on Playwright, so the syntax is similar
 
-from playwright.sync_api import sync_playwright
 import getpass
-import os
+import time
+from datetime import datetime
 
-with sync_playwright() as p:
-    browser = p.firefox.launch(headless=False)
-    context = browser.new_context()
-    page = context.new_page()
+from vibium import browser
 
-    try:
-        # Set cookies before first navigation
-        context.add_cookies([
-            {
-                "name": "automation_user",
-                "value": getpass.getuser(),
-                "url": "https://zattas.me"
-            },
-            {
-                "name": "automation_language",
-                "value": "python",
-                "url": "https://zattas.me"
-            }
-        ])
+try:
+    # Start browser in headed mode with single page
+    browser_instance = browser.start(headless=False)
+    page = browser_instance.page()
 
-        page.goto("https://zattas.me")
-        page.set_viewport_size({"width": 1920, "height": 1080})
-        input("Press Enter to close browser...")
-    finally:
-        try:
-            browser.close()
-        except:
-            pass
-        os._exit(0)
+    # Navigate to site first
+    page.go('https://zattas.me')
+
+    # Set cookies on the page
+    page.context.set_cookies([
+        {'name': 'automation_user', 'value': getpass.getuser(), 'domain': 'zattas.me', 'path': '/'},
+        {'name': 'automation_language', 'value': 'python', 'domain': 'zattas.me', 'path': '/'}
+    ])
+
+    # Install page clock with IANA timezone
+    page.clock.install(timezone='America/Chicago')
+
+    print('\n✅ Done! Check the browser for your haiku.')
+    print('Press Ctrl+C to exit.')
+
+    time.sleep(300)  # Keep open for 5 minutes
+except KeyboardInterrupt:
+    print('\nClosing...')
+finally:
+    browser_instance.stop()

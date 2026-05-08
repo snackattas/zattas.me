@@ -3,7 +3,7 @@
 
 import com.microsoft.playwright.*;
 
-public class JavaPlaywrightFun {
+public class PlaywrightFun {
     public static void main(String[] args) {
         try (Playwright playwright = Playwright.create()) {
             Browser browser = playwright.firefox().launch(
