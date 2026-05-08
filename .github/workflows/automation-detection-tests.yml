@@ -22,20 +22,16 @@ jobs:
       fail-fast: false
       matrix:
         language: [javascript, python, java]
-        tool: [selenium, playwright]
+        tool: [selenium, playwright, vibium]
         browser: [chrome]
         exclude:
-          # Python doesn't have Vibium binding yet
+          # Cypress only supports JavaScript
           - language: python
-            tool: vibium
-          # Java doesn't have Playwright support yet
+            tool: cypress
           - language: java
-            tool: playwright
+            tool: cypress
         include:
-          # Additional combinations to test
-          - language: javascript
-            tool: vibium
-            browser: chrome
+          # JavaScript-only tools
           - language: javascript
             tool: cypress
             browser: chrome

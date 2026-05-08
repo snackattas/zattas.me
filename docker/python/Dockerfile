@@ -12,7 +12,8 @@ WORKDIR /app
 # Install Python test dependencies
 RUN pip install --no-cache-dir \
     selenium \
-    playwright
+    playwright \
+    vibium
 
 # Install Playwright browsers (chromium)
 RUN python -m playwright install chromium

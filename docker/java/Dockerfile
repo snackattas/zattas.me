@@ -24,4 +24,7 @@ RUN chmod +x /app/entrypoint.sh
 # Pre-download Maven dependencies (optional, speeds up builds)
 RUN mvn dependency:resolve 2>/dev/null || true
 
+# Install Playwright browsers
+RUN mvn exec:java -Dexec.mainClass="com.microsoft.playwright.CLI" -Dexec.args="install chromium" 2>/dev/null || true
+
 ENTRYPOINT ["/app/entrypoint.sh"]

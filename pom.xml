@@ -30,5 +30,10 @@
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.microsoft.playwright</groupId>
+            <artifactId>playwright</artifactId>
+            <version>1.40.0</version>
+        </dependency>
     </dependencies>
 </project>
