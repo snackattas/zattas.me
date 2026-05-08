@@ -13,7 +13,6 @@ Playwright.create(playwright_cli_executable_path: './node_modules/.bin/playwrigh
   page = context.new_page
   page.goto('https://zattas.me')
   page.set_viewport_size(width: 1920, height: 1080)
-  puts 'Press Enter to close...'
-  gets
+  sleep(300)  # Keep open for 5 minutes
   browser.close
 end

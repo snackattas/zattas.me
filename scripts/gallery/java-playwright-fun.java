@@ -21,8 +21,7 @@ public class PlaywrightFun {
             ));
             page.setViewportSize(1920, 1080);
 
-            System.out.println("Press Enter to close browser...");
-            System.in.read();
+            Thread.sleep(300000);  // Keep open for 5 minutes
             browser.close();
         } catch (Exception e) {
             e.printStackTrace();
