@@ -58,6 +58,19 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
       }
 
       detectionRef.current = detection;
+
+      // Set detection state for testing harnesses
+      (window as any).__automationDetected = {
+        tool,
+        timestamp: Date.now(),
+        userAgent: navigator.userAgent,
+        language,
+        username,
+      };
+
+      // Set cookie for HTTP-based verification
+      document.cookie = `automation_detected=${tool}; path=/; max-age=3600`;
+
       onDetected(detection);
     };
 
@@ -83,6 +96,19 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
             tool: "vibium",
           };
           detectionRef.current = upgraded;
+
+          // Update detection state for testing harnesses
+          (window as any).__automationDetected = {
+            tool: "vibium",
+            timestamp: Date.now(),
+            userAgent: navigator.userAgent,
+            language: detectionRef.current.language,
+            username: detectionRef.current.username,
+          };
+
+          // Update cookie
+          document.cookie = `automation_detected=vibium; path=/; max-age=3600`;
+
           onDetected(upgraded);
           return;
         }
