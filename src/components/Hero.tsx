@@ -29,7 +29,7 @@ export function Hero() {
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="auto"
         poster="/images/coding-screenshot.jpg"
         style={{
           position: "absolute",
