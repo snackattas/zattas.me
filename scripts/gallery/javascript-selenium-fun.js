@@ -17,11 +17,3 @@ const os = require('os');
     await driver.quit();
   }
 })();
-
-let sigintHandled = false;
-process.on('SIGINT', () => {
-  if (sigintHandled) return;
-  sigintHandled = true;
-  console.log('\nClosing...');
-  process.exit(0);
-});

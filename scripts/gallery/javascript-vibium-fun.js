@@ -6,10 +6,11 @@ const os = require('os');
 
 (async () => {
   const username = os.userInfo().username;
+  let browser_instance;
 
   try {
     // Start browser in headed mode
-    const browser_instance = browser.start({ headless: false });
+    browser_instance = browser.start({ headless: false });
     const page = browser_instance.page();
 
     // Set cookies before navigation
@@ -30,14 +31,11 @@ const os = require('os');
 
     // Keep open for 5 minutes
     await new Promise(resolve => setTimeout(resolve, 300000));
-    browser_instance.stop();
   } catch (error) {
-    console.error('❌ Error:', error.message);
-    process.exit(1);
+    if (error.code !== 'ERR_MODULE_NOT_FOUND') {
+      console.error('❌ Error:', error.message);
+    }
+  } finally {
+    if (browser_instance) browser_instance.stop();
   }
 })();
-
-process.on('SIGINT', () => {
-  console.log('\nClosing...');
-  process.exit(0);
-});
