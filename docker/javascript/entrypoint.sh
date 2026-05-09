@@ -14,7 +14,11 @@ if [ -z "$GALLERY_SCRIPT_PATH" ] || [ -z "$EXPECTED_TOOL" ]; then
 fi
 
 # Transform and run script
-TEMP_SCRIPT="/tmp/test-$(date +%s).js"
+if [ "$EXPECTED_TOOL" = "cypress" ]; then
+  TEMP_SCRIPT="/tmp/test-$(date +%s).cy.js"
+else
+  TEMP_SCRIPT="/tmp/test-$(date +%s).js"
+fi
 /app/scripts/tests/transform.sh "$GALLERY_SCRIPT_PATH" "$TEMP_SCRIPT" "$EXPECTED_TOOL" "$TARGET_URL"
 
 echo "[TEST] Running transformed script: $GALLERY_SCRIPT_PATH"
