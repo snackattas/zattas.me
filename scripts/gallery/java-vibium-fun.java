@@ -5,34 +5,29 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import com.vibium.Vibium;
 import com.vibium.Browser;
 import com.vibium.BrowserContext;
 import com.vibium.Page;
 import com.vibium.types.SetCookieParam;
 import com.vibium.types.Cookie;
+import com.vibium.types.StartOptions;
 
 public class VibiumFun {
     public static void main(String[] args) throws Exception {
-        Browser browser = new Browser();
+        Browser browser = Vibium.start();
         try {
             Page page = browser.newPage();
             BrowserContext context = page.context();
 
             page.navigate("https://zattas.me");
 
-            SetCookieParam userCookie = new SetCookieParam();
-            userCookie.name = "automation_user";
-            userCookie.value = System.getProperty("user.name");
-            userCookie.domain = "zattas.me";
-            userCookie.path = "/";
-
-            SetCookieParam langCookie = new SetCookieParam();
-            langCookie.name = "automation_language";
-            langCookie.value = "java";
-            langCookie.domain = "zattas.me";
-            langCookie.path = "/";
-
-            context.setCookies(Arrays.asList(userCookie, langCookie));
+            context.setCookies(Arrays.asList(
+                new SetCookieParam("automation_user", System.getProperty("user.name"))
+                    .domain("zattas.me").path("/"),
+                new SetCookieParam("automation_language", "java")
+                    .domain("zattas.me").path("/")
+            ));
 
             String timezone = java.util.TimeZone.getDefault().getID();
             page.clock().setTimezone(timezone);

@@ -3,8 +3,8 @@
 
 require 'playwright'
 
-Playwright.create do |playwright|
-  browser = playwright.firefox.launch(headless: false)
+Playwright.create(playwright_cli_executable_path: 'playwright') do |playwright|
+  browser = playwright.chromium.launch(headless: false)
   begin
     context = browser.new_context
     page = context.new_page

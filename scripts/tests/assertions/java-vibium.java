@@ -3,8 +3,8 @@ Thread.sleep(2000);
 List<Cookie> cookies = context.cookies(new String[]{});
 System.out.println("Cookies: " + cookies);
 String detectedTool = cookies.stream()
-  .filter(c -> c.name.equals("automation_detected"))
-  .map(c -> c.value)
+  .filter(c -> c.name().equals("automation_detected"))
+  .map(c -> c.value())
   .findFirst()
   .orElse(null);
 if ("{{EXPECTED_TOOL}}".equals(detectedTool)) {

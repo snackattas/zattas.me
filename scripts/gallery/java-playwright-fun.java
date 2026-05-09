@@ -9,7 +9,7 @@ import com.microsoft.playwright.options.Cookie;
 public class PlaywrightFun {
     public static void main(String[] args) throws Exception {
         try (Playwright playwright = Playwright.create()) {
-            Browser browser = playwright.firefox().launch(
+            Browser browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions().setHeadless(false)
             );
             try {

@@ -47,6 +47,6 @@
     "husky": "^9.1.7",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vibium": "^26.3.9"
+    "vibium": "26.3.9"
   }
 }

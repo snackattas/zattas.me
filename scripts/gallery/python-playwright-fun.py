@@ -5,7 +5,7 @@ from playwright.sync_api import sync_playwright
 import getpass, time
 
 with sync_playwright() as p:
-    browser = p.firefox.launch(headless=False)
+    browser = p.chromium.launch(headless=False)
     try:
         context = browser.new_context()
         page = context.new_page()
