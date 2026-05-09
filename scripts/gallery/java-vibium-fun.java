@@ -17,10 +17,10 @@ public class VibiumFun {
     public static void main(String[] args) throws Exception {
         Browser browser = Vibium.start();
         try {
-            Page page = browser.newPage();
+            Page page = browser.page();
             BrowserContext context = page.context();
 
-            page.navigate("https://zattas.me");
+            page.go("https://zattas.me");
 
             context.setCookies(Arrays.asList(
                 new SetCookieParam("automation_user", System.getProperty("user.name"))
