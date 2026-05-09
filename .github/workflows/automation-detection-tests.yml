@@ -49,16 +49,34 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+
       - name: Install dependencies
         run: npm ci
 
-      - name: Build Next.js app
+      - name: Build Next.js source code
         run: npm run build
 
-      - name: Build Docker image
-        run: docker build --target ${{ matrix.language }} -t test-automation-${{ matrix.language }} -f ./docker/Dockerfile .
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Start dev server
+      - name: Build Test Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          target: ${{ matrix.language }}
+          tags: test-image-language-${{ matrix.language }}
+          load: true
+          cache-from: type=gha,scope=${{ matrix.language }}
+          cache-to: type=gha,scope=${{ matrix.language }},mode=max
+
+      - name: Start source code server
         run: |
           npm run dev:next > /tmp/dev-server.log 2>&1 &
           # Wait for server to be ready (up to 60 seconds)
@@ -72,16 +90,6 @@ jobs:
         env:
           NODE_ENV: test
 
-      - name: Determine script file extension
-        id: script-ext
-        run: |
-          case "${{ matrix.language }}" in
-            javascript) echo "ext=js" >> $GITHUB_OUTPUT ;;
-            python) echo "ext=py" >> $GITHUB_OUTPUT ;;
-            java) echo "ext=java" >> $GITHUB_OUTPUT ;;
-            ruby) echo "ext=rb" >> $GITHUB_OUTPUT ;;
-          esac
-
       - name: Run automation detection test
         timeout-minutes: 1
         run: |
@@ -90,10 +98,11 @@ jobs:
             --shm-size=2gb \
             --cap-add SYS_ADMIN \
             -e TARGET_URL=http://localhost:3000 \
-            -e GALLERY_SCRIPT_PATH=/app/scripts/gallery/${{ matrix.language }}-${{ matrix.tool }}-fun.${{ steps.script-ext.outputs.ext }} \
-            -e EXPECTED_TOOL=${{ matrix.tool }} \
+            -e GALLERY_SCRIPT_DIR=/app/scripts/gallery \
+            -e EXPECTED_AUTOMATION_TOOL=${{ matrix.tool }} \
+            -e LANGUAGE=${{ matrix.language }} \
             --network host \
-            test-automation-${{ matrix.language }} \
+            test-image-language-${{ matrix.language }} \
             bash -o pipefail -c '/app/entrypoint.sh 2>&1 | tee /tmp/test-output.log && grep -q "AUTOMATION_DETECTED_VERIFIED" /tmp/test-output.log'
 
       - name: Show dev server logs on failure

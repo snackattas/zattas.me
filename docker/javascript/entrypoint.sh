@@ -5,21 +5,24 @@ set -e
 
 # Environment variables
 TARGET_URL=${TARGET_URL:-http://localhost:3000}
-GALLERY_SCRIPT_PATH=${GALLERY_SCRIPT_PATH:-}
-EXPECTED_TOOL=${EXPECTED_TOOL:-}
+GALLERY_SCRIPT_DIR=${GALLERY_SCRIPT_DIR:-}
+EXPECTED_AUTOMATION_TOOL=${EXPECTED_AUTOMATION_TOOL:-}
+LANGUAGE=${LANGUAGE:-}
 
-if [ -z "$GALLERY_SCRIPT_PATH" ] || [ -z "$EXPECTED_TOOL" ]; then
-  echo "Error: GALLERY_SCRIPT_PATH and EXPECTED_TOOL must be set"
+if [ -z "$GALLERY_SCRIPT_DIR" ] || [ -z "$EXPECTED_AUTOMATION_TOOL" ] || [ -z "$LANGUAGE" ]; then
+  echo "Error: GALLERY_SCRIPT_DIR, EXPECTED_AUTOMATION_TOOL, and LANGUAGE must be set"
   exit 1
 fi
 
+GALLERY_SCRIPT_PATH="${GALLERY_SCRIPT_DIR}/${LANGUAGE}-${EXPECTED_AUTOMATION_TOOL}-fun.js"
+
 # Transform and run script
-if [ "$EXPECTED_TOOL" = "cypress" ]; then
+if [ "$EXPECTED_AUTOMATION_TOOL" = "cypress" ]; then
   TEMP_SCRIPT="/tmp/test-$(date +%s).cy.js"
 else
   TEMP_SCRIPT="/tmp/test-$(date +%s).js"
 fi
-/app/scripts/tests/transform.sh "$GALLERY_SCRIPT_PATH" "$TEMP_SCRIPT" "$EXPECTED_TOOL" "$TARGET_URL"
+/app/scripts/tests/transform.sh "$GALLERY_SCRIPT_PATH" "$TEMP_SCRIPT" "$EXPECTED_AUTOMATION_TOOL" "$TARGET_URL"
 
 echo "[TEST] Running transformed script: $GALLERY_SCRIPT_PATH"
 
@@ -27,7 +30,7 @@ echo "[TEST] Running transformed script: $GALLERY_SCRIPT_PATH"
 cp /app/docker/javascript/cypress.config.js /tmp/cypress.config.js
 
 # Determine how to run based on tool
-if [ "$EXPECTED_TOOL" = "cypress" ]; then
+if [ "$EXPECTED_AUTOMATION_TOOL" = "cypress" ]; then
   cd /tmp
   CHROMIUM_PATH=$(find /home/seluser/playwright-browsers -name "chrome" -type f | head -1)
   /app/node_modules/.bin/cypress run --headless --browser "$CHROMIUM_PATH" 2>&1

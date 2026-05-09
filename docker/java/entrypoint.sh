@@ -5,17 +5,20 @@ set -e
 
 # Environment variables
 TARGET_URL=${TARGET_URL:-http://localhost:3000}
-GALLERY_SCRIPT_PATH=${GALLERY_SCRIPT_PATH:-}
-EXPECTED_TOOL=${EXPECTED_TOOL:-}
+GALLERY_SCRIPT_DIR=${GALLERY_SCRIPT_DIR:-}
+EXPECTED_AUTOMATION_TOOL=${EXPECTED_AUTOMATION_TOOL:-}
+LANGUAGE=${LANGUAGE:-}
 
-if [ -z "$GALLERY_SCRIPT_PATH" ] || [ -z "$EXPECTED_TOOL" ]; then
-  echo "Error: GALLERY_SCRIPT_PATH and EXPECTED_TOOL must be set"
+if [ -z "$GALLERY_SCRIPT_DIR" ] || [ -z "$EXPECTED_AUTOMATION_TOOL" ] || [ -z "$LANGUAGE" ]; then
+  echo "Error: GALLERY_SCRIPT_DIR, EXPECTED_AUTOMATION_TOOL, and LANGUAGE must be set"
   exit 1
 fi
 
+GALLERY_SCRIPT_PATH="${GALLERY_SCRIPT_DIR}/${LANGUAGE}-${EXPECTED_AUTOMATION_TOOL}-fun.java"
+
 # Transform and run script
 TEMP_SCRIPT="/tmp/test-$(date +%s).java"
-/app/scripts/tests/transform.sh "$GALLERY_SCRIPT_PATH" "$TEMP_SCRIPT" "$EXPECTED_TOOL" "$TARGET_URL"
+/app/scripts/tests/transform.sh "$GALLERY_SCRIPT_PATH" "$TEMP_SCRIPT" "$EXPECTED_AUTOMATION_TOOL" "$TARGET_URL"
 
 echo "[TEST] Running transformed script: $GALLERY_SCRIPT_PATH"
 
