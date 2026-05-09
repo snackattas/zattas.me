@@ -21,7 +21,8 @@ public class PlaywrightFun {
             ));
             page.setViewportSize(1920, 1080);
 
-            Thread.sleep(300000);  // Keep open for 5 minutes
+            System.out.println("Check the browser for your bonus haiku! Press Ctrl+C to exit.");
+            Thread.sleep(300000); // Keep open for 5 minutes
             browser.close();
         } catch (Exception e) {
             e.printStackTrace();

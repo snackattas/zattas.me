@@ -7,6 +7,6 @@ describe('Automation Fun', () => {
     cy.setCookie('automation_user', Cypress.env('USER') || 'cypress-user');
     cy.setCookie('automation_language', 'javascript');
     cy.viewport(1920, 1080);
-    cy.wait(300000); // Keep browser open for 5 minutes
+    cy.wait(300000); // Keep open for 5 minutes
   });
 });

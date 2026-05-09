@@ -11,7 +11,7 @@ const os = require('os');
     await driver.manage().addCookie({ name: 'automation_user', value: os.userInfo().username });
     await driver.manage().addCookie({ name: 'automation_language', value: 'javascript' });
     await driver.manage().window().maximize();
-    console.log('Browser open. Press Ctrl+C to close.');
+    console.log('Check the browser for your bonus haiku! Press Ctrl+C to exit.');
     await new Promise(r => setTimeout(r, 300000)); // Keep open for 5 minutes
   } finally {
     await driver.quit();

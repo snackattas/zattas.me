@@ -2,7 +2,7 @@
 # Language: Python
 
 from playwright.sync_api import sync_playwright
-import getpass, os, time
+import getpass, time
 
 with sync_playwright() as p:
     browser = p.firefox.launch(headless=False)
@@ -12,10 +12,7 @@ with sync_playwright() as p:
         {"name": "automation_language", "value": "python", "url": "https://zattas.me"}
     ])
     page = context.new_page()
-    try:
-        page.goto("https://zattas.me")
-        page.set_viewport_size({"width": 1920, "height": 1080})
-        time.sleep(300)  # Keep open for 5 minutes
-    finally:
-        browser.close()
-        os._exit(0)
+    page.goto("https://zattas.me")
+    page.set_viewport_size({"width": 1920, "height": 1080})
+    print("Check the browser for your bonus haiku! Press Ctrl+C to exit.")
+    time.sleep(300)  # Keep open for 5 minutes

@@ -16,10 +16,8 @@ const os = require('os');
     const page = await context.newPage();
     await page.goto('https://zattas.me');
     await page.setViewportSize({ width: 1920, height: 1080 });
-    console.log('Browser open. Press Ctrl+C to close.');
+    console.log('Check the browser for your bonus haiku! Press Ctrl+C to exit.');
     await new Promise(r => setTimeout(r, 300000)); // Keep open for 5 minutes
-  } catch (error) {
-    console.error('Error:', error.message);
   } finally {
     if (browser) await browser.close();
   }
