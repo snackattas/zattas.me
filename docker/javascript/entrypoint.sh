@@ -18,8 +18,19 @@ TEMP_SCRIPT="/tmp/test-$(date +%s).js"
 /app/scripts/tests/transform.sh "$GALLERY_SCRIPT_PATH" "$TEMP_SCRIPT" "$EXPECTED_TOOL" "$TARGET_URL"
 
 echo "[TEST] Running transformed script: $GALLERY_SCRIPT_PATH"
-node "$TEMP_SCRIPT"
-EXIT_CODE=$?
 
-rm -f "$TEMP_SCRIPT"
+# Copy Cypress config to /tmp (ignored by other tools)
+cp /app/docker/javascript/cypress.config.js /tmp/cypress.config.js
+
+# Determine how to run based on tool
+if [ "$EXPECTED_TOOL" = "cypress" ]; then
+  cd /tmp
+  npx cypress run --headless --browser chrome 2>&1
+  EXIT_CODE=$?
+else
+  node "$TEMP_SCRIPT"
+  EXIT_CODE=$?
+fi
+
+rm -f "$TEMP_SCRIPT" /tmp/cypress.config.js
 exit $EXIT_CODE

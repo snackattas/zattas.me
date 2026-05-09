@@ -19,12 +19,19 @@ TEMP_SCRIPT="/tmp/test-$(date +%s).java"
 
 echo "[TEST] Running transformed script: $GALLERY_SCRIPT_PATH"
 
-# For Java, we need to compile first
+# Extract class name from script
 JAVA_CLASS=$(grep 'public class' "$TEMP_SCRIPT" | sed 's/.*public class \([^ {]*\).*/\1/' | head -1)
-cd /tmp
-javac "$TEMP_SCRIPT"
-java -cp /tmp "$JAVA_CLASS"
+
+# Create temporary Maven project
+TEMP_DIR="/tmp/java_test_$$"
+mkdir -p "$TEMP_DIR/src/main/java"
+mv "$TEMP_SCRIPT" "$TEMP_DIR/src/main/java/${JAVA_CLASS}.java"
+cp /app/docker/java/pom.xml "$TEMP_DIR/pom.xml"
+
+# Compile and run with Maven
+cd "$TEMP_DIR"
+mvn compile exec:java -Dexec.mainClass="$JAVA_CLASS" -q 2>&1
 EXIT_CODE=$?
 
-rm -f "$TEMP_SCRIPT" "/tmp/${JAVA_CLASS}.class"
+rm -rf "$TEMP_DIR"
 exit $EXIT_CODE

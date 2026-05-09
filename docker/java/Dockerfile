@@ -17,6 +17,7 @@ ENV CHROME_BIN=/usr/bin/chromium-browser
 # Copy scripts and test harnesses from the repo
 COPY scripts/ ./scripts/
 COPY docker/java/entrypoint.sh /app/entrypoint.sh
+COPY docker/java/pom.xml /app/docker/java/pom.xml
 COPY pom.xml ./pom.xml
 
 RUN chmod +x /app/entrypoint.sh

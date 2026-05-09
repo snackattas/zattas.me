@@ -14,7 +14,10 @@ RUN npm install \
     selenium-webdriver \
     playwright \
     cypress \
-    vibium
+    vibium@^26.3.9
+
+# Install Playwright browsers
+RUN npx playwright install chromium
 
 # Set up Chrome to run in headless mode by default
 ENV CHROME_BIN=/usr/bin/chromium-browser
@@ -23,6 +26,7 @@ ENV NODE_PATH=/app/node_modules
 # Copy scripts and test harnesses from the repo
 COPY scripts/ ./scripts/
 COPY docker/javascript/entrypoint.sh /app/entrypoint.sh
+COPY docker/javascript/cypress.config.js /app/docker/javascript/cypress.config.js
 
 RUN chmod +x /app/entrypoint.sh
 
