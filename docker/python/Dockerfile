@@ -1,11 +1,11 @@
-FROM python:3.13-alpine
+FROM python:3.13
 
 # Install chromium and chromedriver
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     chromium \
     chromium-chromedriver \
     curl \
-    bash
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
