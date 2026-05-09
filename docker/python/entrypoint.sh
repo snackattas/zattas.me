@@ -18,7 +18,7 @@ TEMP_SCRIPT="/tmp/test-$(date +%s).py"
 /app/scripts/tests/transform.sh "$GALLERY_SCRIPT_PATH" "$TEMP_SCRIPT" "$EXPECTED_TOOL" "$TARGET_URL"
 
 echo "[TEST] Running transformed script: $GALLERY_SCRIPT_PATH"
-python "$TEMP_SCRIPT"
+/root/.local/bin/uv run python "$TEMP_SCRIPT"
 EXIT_CODE=$?
 
 rm -f "$TEMP_SCRIPT"

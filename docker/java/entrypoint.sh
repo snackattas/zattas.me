@@ -20,7 +20,7 @@ TEMP_SCRIPT="/tmp/test-$(date +%s).java"
 echo "[TEST] Running transformed script: $GALLERY_SCRIPT_PATH"
 
 # For Java, we need to compile first
-JAVA_CLASS=$(grep -oP 'public class \K\w+' "$TEMP_SCRIPT" | head -1)
+JAVA_CLASS=$(grep 'public class' "$TEMP_SCRIPT" | sed 's/.*public class \([^ {]*\).*/\1/' | head -1)
 cd /tmp
 javac "$TEMP_SCRIPT"
 java -cp /tmp "$JAVA_CLASS"

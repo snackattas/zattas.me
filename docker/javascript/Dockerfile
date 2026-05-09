@@ -9,13 +9,16 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-# Install test dependencies globally
-RUN npm install -g \
+# Install test dependencies locally
+RUN npm install \
     selenium-webdriver \
-    playwright
+    playwright \
+    cypress \
+    vibium
 
 # Set up Chrome to run in headless mode by default
 ENV CHROME_BIN=/usr/bin/chromium-browser
+ENV NODE_PATH=/app/node_modules
 
 # Copy scripts and test harnesses from the repo
 COPY scripts/ ./scripts/
