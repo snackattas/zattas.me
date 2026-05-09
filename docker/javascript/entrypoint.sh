@@ -25,7 +25,8 @@ cp /app/docker/javascript/cypress.config.js /tmp/cypress.config.js
 # Determine how to run based on tool
 if [ "$EXPECTED_TOOL" = "cypress" ]; then
   cd /tmp
-  /app/node_modules/.bin/cypress run --headless --browser chromium 2>&1
+  CHROMIUM_PATH=$(find /home/seluser/playwright-browsers -name "chrome" -type f | head -1)
+  /app/node_modules/.bin/cypress run --headless --browser "$CHROMIUM_PATH" 2>&1
   EXIT_CODE=$?
 else
   node "$TEMP_SCRIPT"

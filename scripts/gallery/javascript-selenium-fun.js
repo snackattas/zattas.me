@@ -6,7 +6,7 @@ const chrome = require('selenium-webdriver/chrome');
 const os = require('os');
 
 (async function() {
-  const options = new chrome.Options().addArguments('--headless=false');
+  const options = new chrome.Options().addArguments('--headless=false', '--no-sandbox', '--disable-dev-shm-usage');
   const driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
   try {
     await driver.get('https://zattas.me');

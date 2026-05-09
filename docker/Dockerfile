@@ -89,8 +89,8 @@ RUN groupadd -r seluser && useradd -r -g seluser -m seluser
 WORKDIR /app
 COPY scripts/ ./scripts/
 
-RUN gem install selenium-webdriver playwright-ruby-client
-RUN npm install -g playwright
+RUN gem install selenium-webdriver playwright-ruby-client:1.59.1
+RUN npm install -g playwright@1.59.1
 RUN npx playwright install chromium --with-deps
 
 COPY docker/ruby/entrypoint.sh /app/entrypoint.sh
