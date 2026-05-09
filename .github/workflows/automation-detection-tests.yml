@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [javascript, python, java]
+        language: [javascript, python, java, ruby]
         tool: [selenium, playwright, vibium]
         browser: [chrome]
         exclude:
@@ -30,8 +30,12 @@ jobs:
             tool: cypress
           - language: java
             tool: cypress
-          # Vibium doesn't have a Java Maven package
+          - language: ruby
+            tool: cypress
+          # Vibium has no Java Maven package or Ruby gem
           - language: java
+            tool: vibium
+          - language: ruby
             tool: vibium
         include:
           # JavaScript-only tools
@@ -54,7 +58,7 @@ jobs:
         run: npm run build
 
       - name: Build Docker image
-        run: docker build -t test-automation-${{ matrix.language }} -f ./docker/${{ matrix.language }}/Dockerfile .
+        run: docker build --target ${{ matrix.language }} -t test-automation-${{ matrix.language }} -f ./docker/Dockerfile .
 
       - name: Start dev server
         run: |
@@ -77,6 +81,7 @@ jobs:
             javascript) echo "ext=js" >> $GITHUB_OUTPUT ;;
             python) echo "ext=py" >> $GITHUB_OUTPUT ;;
             java) echo "ext=java" >> $GITHUB_OUTPUT ;;
+            ruby) echo "ext=rb" >> $GITHUB_OUTPUT ;;
           esac
 
       - name: Run automation detection test

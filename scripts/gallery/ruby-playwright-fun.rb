@@ -3,7 +3,7 @@
 
 require 'playwright'
 
-Playwright.create(playwright_cli_executable_path: './node_modules/.bin/playwright') do |playwright|
+Playwright.create do |playwright|
   browser = playwright.firefox.launch(headless: false)
   begin
     context = browser.new_context
