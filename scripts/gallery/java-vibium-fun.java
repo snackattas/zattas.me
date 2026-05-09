@@ -1,32 +1,52 @@
 // File: VibiumFun.java
 // Language: Java
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import com.vibium.browser.Browser;
+import com.vibium.Browser;
+import com.vibium.BrowserContext;
+import com.vibium.Page;
+import com.vibium.types.SetCookieParam;
+import com.vibium.types.Cookie;
 
 public class VibiumFun {
     public static void main(String[] args) throws Exception {
-        try (Browser browser = new Browser()) {
-            try {
-                var page = browser.navigate("https://zattas.me");
+        Browser browser = new Browser();
+        try {
+            Page page = browser.newPage();
+            BrowserContext context = page.context();
 
-                browser.setCookie("automation_user", System.getProperty("user.name"),
-                    "zattas.me", "/");
-                browser.setCookie("automation_language", "java",
-                    "zattas.me", "/");
+            page.navigate("https://zattas.me");
 
-                String timezone = java.util.TimeZone.getDefault().getID();
-                browser.installPageClock(timezone);
+            SetCookieParam userCookie = new SetCookieParam();
+            userCookie.name = "automation_user";
+            userCookie.value = System.getProperty("user.name");
+            userCookie.domain = "zattas.me";
+            userCookie.path = "/";
 
-                System.out.println("Check the browser for your bonus haiku! Press Ctrl+C to exit.");
-                Thread.sleep(300000); // Keep open for 5 minutes
-            } catch (InterruptedException e) {
-                // Ctrl+C
-            } catch (Exception e) {
-                System.err.println("Error: " + e.getMessage());
-                e.printStackTrace();
-            }
+            SetCookieParam langCookie = new SetCookieParam();
+            langCookie.name = "automation_language";
+            langCookie.value = "java";
+            langCookie.domain = "zattas.me";
+            langCookie.path = "/";
+
+            context.setCookies(Arrays.asList(userCookie, langCookie));
+
+            String timezone = java.util.TimeZone.getDefault().getID();
+            page.clock().setTimezone(timezone);
+            page.clock().install();
+
+            System.out.println("Check the browser for your bonus haiku! Press Ctrl+C to exit.");
+            Thread.sleep(300000); // Keep open for 5 minutes
+        } catch (InterruptedException e) {
+            // Ctrl+C
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            browser.stop();
         }
     }
 }

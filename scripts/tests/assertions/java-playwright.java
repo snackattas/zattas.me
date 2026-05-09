@@ -1,6 +1,6 @@
 // TEST: Check automation_detected cookie
 Thread.sleep(2000);
-List<BrowserContext.Cookie> cookies = context.cookies();
+List<Cookie> cookies = context.cookies();
 System.out.println("Cookies: " + cookies);
 String detectedTool = cookies.stream()
   .filter(c -> c.name.equals("automation_detected"))

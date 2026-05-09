@@ -42,10 +42,10 @@ jobs:
             browser: chrome
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '24'
 
@@ -94,22 +94,6 @@ jobs:
             test-automation-${{ matrix.language }} \
             bash -o pipefail -c '/app/entrypoint.sh 2>&1 | tee /tmp/test-output.log && grep -q "AUTOMATION_DETECTED_VERIFIED" /tmp/test-output.log'
 
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-${{ matrix.language }}-${{ matrix.tool }}-${{ matrix.browser }}
-          path: test-results/
-          if-no-files-found: ignore
-
       - name: Show dev server logs on failure
         if: failure()
         run: cat /tmp/dev-server.log
-
-  results:
-    runs-on: ubuntu-latest
-    needs: test
-    if: always()
-    steps:
-      - name: Test Summary
-        run: echo "Automation detection tests completed. Check logs for details."

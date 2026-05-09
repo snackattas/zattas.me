@@ -9,16 +9,23 @@ WORKDIR /app
 COPY scripts/ ./scripts/
 
 # ── JavaScript ────────────────────────────────────────────────────────────────
-FROM base AS javascript
+FROM node:lts AS javascript
+
+USER root
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    nodejs npm && rm -rf /var/lib/apt/lists/*
+    bash && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY scripts/ ./scripts/
 
 COPY docker/javascript/package.json ./package.json
 RUN npm install
 
+RUN /app/node_modules/.bin/cypress install
+
 ENV PLAYWRIGHT_BROWSERS_PATH=/app/playwright-browsers
-RUN npx playwright install chromium
+RUN npx playwright install chromium --with-deps
 
 ENV NODE_PATH=/app/node_modules
 COPY docker/javascript/entrypoint.sh /app/entrypoint.sh
@@ -59,13 +66,14 @@ FROM ruby:latest AS ruby
 USER root
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    bash curl && rm -rf /var/lib/apt/lists/*
+    bash curl nodejs npm && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY scripts/ ./scripts/
 
 RUN gem install selenium-webdriver playwright-ruby-client
-RUN playwright install chromium --with-deps
+RUN npm install -g playwright
+RUN npx playwright install chromium --with-deps
 
 COPY docker/ruby/entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
