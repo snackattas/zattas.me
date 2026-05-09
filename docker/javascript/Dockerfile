@@ -10,18 +10,16 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-# Install test dependencies locally
-RUN npm install \
-    selenium-webdriver \
-    playwright \
-    cypress \
-    vibium@^26.3.9
+# Copy package files and install dependencies
+COPY package.json package-lock.json ./
+RUN npm ci
 
 # Set Playwright to install browsers to /app (persisted in image)
 ENV PLAYWRIGHT_BROWSERS_PATH=/app/playwright-browsers
 
 # Install Playwright browsers
-RUN npx playwright install chromium
+RUN npx playwright install chromium && \
+    test -d /app/playwright-browsers && echo "✓ Playwright browsers installed" || echo "⚠ Warning: Playwright browsers may not be installed"
 
 # Set up Chrome to run in headless mode by default
 ENV CHROME_BIN=/usr/bin/chromium-browser

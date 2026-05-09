@@ -13,6 +13,7 @@ ENV PATH="/root/.local/bin:$PATH"
 # Use uv to install test dependencies
 RUN uv pip install --system --break-system-packages \
     selenium \
+    playwright \
     vibium
 
 WORKDIR /app

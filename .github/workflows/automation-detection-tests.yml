@@ -30,6 +30,9 @@ jobs:
             tool: cypress
           - language: java
             tool: cypress
+          # Vibium doesn't have a Java Maven package
+          - language: java
+            tool: vibium
         include:
           # JavaScript-only tools
           - language: javascript
