@@ -27,3 +27,7 @@ test-results/
 
 # Generated gallery scripts
 /src/data/generatedGalleryScripts.ts
+
+/.claude
+/.next
+/.design
