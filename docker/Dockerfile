@@ -60,10 +60,15 @@ RUN vibium install
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # ── Java ──────────────────────────────────────────────────────────────────────
-FROM base AS java
+FROM node:lts AS java
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    default-jdk maven nodejs npm && rm -rf /var/lib/apt/lists/*
+    default-jdk maven && rm -rf /var/lib/apt/lists/*
+
+RUN groupadd -r seluser && useradd -r -g seluser -m seluser
+
+WORKDIR /app
+COPY scripts/ ./scripts/
 
 RUN npm install -g playwright vibium
 RUN npx playwright install-deps chromium
