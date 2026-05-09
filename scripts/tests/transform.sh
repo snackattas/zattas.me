@@ -40,13 +40,23 @@ fi
 # Extract indent from the "keep open" line
 INDENT=$(grep "[Kk]eep.*[Oo]pen" "$OUTPUT_SCRIPT" | sed 's/^\([[:space:]]*\).*/\1/')
 
-# Read assertion file, substitute {{EXPECTED_TOOL}}, and add indent to each line
-ASSERTION=$(cat "$ASSERTION_FILE" | sed "s/{{EXPECTED_TOOL}}/$EXPECTED_TOOL/g" | sed "s/^/$INDENT/")
+# Create a temporary file with the assertion
+TEMP_ASSERTION=$(mktemp)
+cat "$ASSERTION_FILE" | sed "s/{{EXPECTED_TOOL}}/$EXPECTED_TOOL/g" | sed "s/^/$INDENT/" > "$TEMP_ASSERTION"
 
-# Replace "keep open" line with indented assertion (using a temporary placeholder)
-sed -i '' "/[Kk]eep.*[Oo]pen/c\\
-${ASSERTION}
-" "$OUTPUT_SCRIPT"
+# Use awk to replace the keep open line with the assertion content
+awk "
+/[Kk]eep.*[Oo]pen/ {
+  while ((getline line < \"$TEMP_ASSERTION\") > 0) {
+    print line
+  }
+  close(\"$TEMP_ASSERTION\")
+  next
+}
+{ print }
+" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
+
+rm -f "$TEMP_ASSERTION"
 
 echo "✓ Transformed $INPUT_SCRIPT → $OUTPUT_SCRIPT"
 echo "  Expected tool: $EXPECTED_TOOL"
