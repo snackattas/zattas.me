@@ -30,7 +30,7 @@ COPY docker/javascript/package.json ./package.json
 RUN npm install
 
 ENV PLAYWRIGHT_BROWSERS_PATH=/home/seluser/playwright-browsers
-RUN npx playwright install chromium --with-deps
+RUN npx playwright install chromium chromium-headless-shell --with-deps
 
 ENV NODE_PATH=/app/node_modules
 COPY docker/javascript/entrypoint.sh /app/entrypoint.sh
@@ -66,7 +66,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     default-jdk maven nodejs npm && rm -rf /var/lib/apt/lists/*
 
 # Use the Node.js Playwright CLI to install chromium with correct system deps
-RUN npm install -g playwright
+RUN npm install -g playwright vibium
 RUN npx playwright install chromium --with-deps
 
 COPY docker/java/pom.xml /app/docker/java/pom.xml
@@ -76,6 +76,8 @@ COPY docker/java/entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
 USER seluser
+RUN vibium install
+RUN mvn -f /app/docker/java/pom.xml exec:java -Dexec.mainClass="com.microsoft.playwright.CLI" -Dexec.args="install chromium" -q
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # ── Ruby ──────────────────────────────────────────────────────────────────────
@@ -91,7 +93,7 @@ COPY scripts/ ./scripts/
 
 RUN gem install selenium-webdriver playwright-ruby-client:1.59.1
 RUN npm install -g playwright@1.59.1
-RUN npx playwright install chromium --with-deps
+RUN npx playwright install chromium chromium-headless-shell --with-deps
 
 COPY docker/ruby/entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
