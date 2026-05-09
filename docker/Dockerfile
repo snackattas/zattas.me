@@ -63,7 +63,7 @@ ENTRYPOINT ["/app/entrypoint.sh"]
 FROM node:lts AS java
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    openjdk-21-jdk maven && rm -rf /var/lib/apt/lists/*
+    default-jdk maven && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -r seluser && useradd -r -g seluser -m seluser
 
