@@ -94,7 +94,7 @@ jobs:
             -e EXPECTED_TOOL=${{ matrix.tool }} \
             --network host \
             test-automation-${{ matrix.language }} \
-            bash -c '/app/entrypoint.sh 2>&1 | tee /tmp/test-output.log && grep -q "AUTOMATION_DETECTED_VERIFIED" /tmp/test-output.log'
+            bash -o pipefail -c '/app/entrypoint.sh 2>&1 | tee /tmp/test-output.log && grep -q "AUTOMATION_DETECTED_VERIFIED" /tmp/test-output.log'
 
       - name: Upload test results
         if: always()
