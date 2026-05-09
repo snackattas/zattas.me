@@ -12,12 +12,12 @@ const os = require('os');
     browser_instance = browser.start({ headless: false });
     const page = browser_instance.page();
 
+    page.go('https://zattas.me');
+
     page.context.setCookies([
       { name: 'automation_user', value: username, domain: 'zattas.me', path: '/' },
       { name: 'automation_language', value: 'javascript', domain: 'zattas.me', path: '/' }
     ]);
-
-    page.go('https://zattas.me');
 
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     page.clock.install({ timezone: timezone });
