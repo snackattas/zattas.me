@@ -1,44 +1,10 @@
 #!/bin/bash
-# Docker entrypoint for JavaScript automation tests
 
 set -e
 
-# Environment variables
-TARGET_URL=${TARGET_URL:-http://localhost:3000}
-GALLERY_SCRIPT_DIR=${GALLERY_SCRIPT_DIR:-}
-EXPECTED_AUTOMATION_TOOL=${EXPECTED_AUTOMATION_TOOL:-}
-LANGUAGE=${LANGUAGE:-}
+echo "===== PREPARE ====="
+/app/docker/javascript/prepare.sh
 
-if [ -z "$GALLERY_SCRIPT_DIR" ] || [ -z "$EXPECTED_AUTOMATION_TOOL" ] || [ -z "$LANGUAGE" ]; then
-  echo "Error: GALLERY_SCRIPT_DIR, EXPECTED_AUTOMATION_TOOL, and LANGUAGE must be set"
-  exit 1
-fi
-
-GALLERY_SCRIPT_PATH="${GALLERY_SCRIPT_DIR}/${LANGUAGE}-${EXPECTED_AUTOMATION_TOOL}-fun.js"
-
-# Transform and run script
-if [ "$EXPECTED_AUTOMATION_TOOL" = "cypress" ]; then
-  TEMP_SCRIPT="/tmp/test-$(date +%s).cy.js"
-else
-  TEMP_SCRIPT="/tmp/test-$(date +%s).js"
-fi
-/app/scripts/tests/transform.sh "$GALLERY_SCRIPT_PATH" "$TEMP_SCRIPT" "$EXPECTED_AUTOMATION_TOOL" "$TARGET_URL"
-
-echo "[TEST] Running transformed script: $GALLERY_SCRIPT_PATH"
-
-# Copy Cypress config to /tmp (ignored by other tools)
-cp /app/docker/javascript/cypress.config.js /tmp/cypress.config.js
-
-# Determine how to run based on tool
-if [ "$EXPECTED_AUTOMATION_TOOL" = "cypress" ]; then
-  cd /tmp
-  CHROMIUM_PATH=$(find /home/seluser/playwright-browsers -name "chrome" -type f | head -1)
-  /app/node_modules/.bin/cypress run --headless --browser "$CHROMIUM_PATH" 2>&1
-  EXIT_CODE=$?
-else
-  node "$TEMP_SCRIPT"
-  EXIT_CODE=$?
-fi
-
-rm -f "$TEMP_SCRIPT" /tmp/cypress.config.js
-exit $EXIT_CODE
+echo ""
+echo "===== RUN ====="
+/app/docker/javascript/run.sh

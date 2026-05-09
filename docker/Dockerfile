@@ -34,8 +34,10 @@ RUN npx playwright install chromium chromium-headless-shell --with-deps
 
 ENV NODE_PATH=/app/node_modules
 COPY docker/javascript/entrypoint.sh /app/entrypoint.sh
+COPY docker/javascript/prepare.sh /app/docker/javascript/prepare.sh
+COPY docker/javascript/run.sh /app/docker/javascript/run.sh
 COPY docker/javascript/cypress.config.js /app/docker/javascript/cypress.config.js
-RUN chmod +x /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh /app/docker/javascript/prepare.sh /app/docker/javascript/run.sh
 
 USER seluser
 RUN /app/node_modules/.bin/cypress install
@@ -53,7 +55,9 @@ RUN pip3 install --break-system-packages \
 RUN playwright install chromium
 
 COPY docker/python/entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
+COPY docker/python/prepare.sh /app/docker/python/prepare.sh
+COPY docker/python/run.sh /app/docker/python/run.sh
+RUN chmod +x /app/entrypoint.sh /app/docker/python/prepare.sh /app/docker/python/run.sh
 
 USER seluser
 RUN vibium install
@@ -77,7 +81,9 @@ COPY docker/java/pom.xml /app/docker/java/pom.xml
 RUN mvn dependency:resolve -f /app/docker/java/pom.xml || true
 
 COPY docker/java/entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
+COPY docker/java/prepare.sh /app/docker/java/prepare.sh
+COPY docker/java/run.sh /app/docker/java/run.sh
+RUN chmod +x /app/entrypoint.sh /app/docker/java/prepare.sh /app/docker/java/run.sh
 
 USER seluser
 RUN npx playwright install chromium
@@ -100,7 +106,9 @@ RUN npm install -g playwright@1.59.1
 RUN npx playwright install-deps chromium chromium-headless-shell
 
 COPY docker/ruby/entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
+COPY docker/ruby/prepare.sh /app/docker/ruby/prepare.sh
+COPY docker/ruby/run.sh /app/docker/ruby/run.sh
+RUN chmod +x /app/entrypoint.sh /app/docker/ruby/prepare.sh /app/docker/ruby/run.sh
 
 USER seluser
 RUN playwright install chromium chromium-headless-shell
