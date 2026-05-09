@@ -11,6 +11,11 @@ begin
   driver.manage.window.maximize
   puts 'Check the browser for your bonus haiku! Press Ctrl+C to exit.'
   sleep(300) # Keep open for 5 minutes
+rescue Interrupt
+  # Ctrl+C
+rescue Exception => e
+  warn "Error: #{e.message}"
+  warn e.backtrace.join("\n")
 ensure
   driver.quit
 end

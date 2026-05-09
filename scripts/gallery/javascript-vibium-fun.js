@@ -24,6 +24,10 @@ const os = require('os');
 
     console.log('Check the browser for your bonus haiku! Press Ctrl+C to exit.');
     await new Promise(r => setTimeout(r, 300000)); // Keep open for 5 minutes
+  } catch (error) {
+    if (error.code !== 'ERR_SCRIPT_EXECUTION_INTERRUPTED') {
+      console.error('Error:', error);
+    }
   } finally {
     if (browser_instance) browser_instance.stop();
   }

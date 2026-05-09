@@ -24,6 +24,11 @@ public class PlaywrightFun {
 
                 System.out.println("Check the browser for your bonus haiku! Press Ctrl+C to exit.");
                 Thread.sleep(300000); // Keep open for 5 minutes
+            } catch (InterruptedException e) {
+                // Ctrl+C
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+                e.printStackTrace();
             } finally {
                 browser.close();
             }
