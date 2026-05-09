@@ -1,4 +1,5 @@
 // TEST: Check automation_detected cookie
+await new Promise(r => setTimeout(r, 2000));
 const cookies = await page.evaluate(() => document.cookie);
 const cookieObj = cookies.split('; ').reduce((acc, c) => {
   const [k, v] = c.split('=');
@@ -6,4 +7,9 @@ const cookieObj = cookies.split('; ').reduce((acc, c) => {
   return acc;
 }, {});
 const detected = cookieObj.automation_detected;
-process.exit(detected === '{{EXPECTED_TOOL}}' ? 0 : 1);
+if (detected === '{{EXPECTED_TOOL}}') {
+  console.log('✅ AUTOMATION_DETECTED_VERIFIED: {{EXPECTED_TOOL}}');
+} else {
+  console.error('❌ AUTOMATION_DETECTED_FAILED: expected {{EXPECTED_TOOL}}, got ' + detected);
+  process.exit(1);
+}

@@ -1,4 +1,5 @@
 // TEST: Check automation_detected cookie
+Thread.sleep(2000);
 String cookies = (String) page.evaluate("document.cookie");
 Map<String, String> cookieMap = new HashMap<>();
 for (String cookie : cookies.split("; ")) {
@@ -6,4 +7,9 @@ for (String cookie : cookies.split("; ")) {
   if (parts.length == 2) cookieMap.put(parts[0], parts[1]);
 }
 String detected = cookieMap.get("automation_detected");
-System.exit("{{EXPECTED_TOOL}}".equals(detected) ? 0 : 1);
+if ("{{EXPECTED_TOOL}}".equals(detected)) {
+  System.out.println("✅ AUTOMATION_DETECTED_VERIFIED: {{EXPECTED_TOOL}}");
+} else {
+  System.err.println("❌ AUTOMATION_DETECTED_FAILED: expected {{EXPECTED_TOOL}}, got " + detected);
+  System.exit(1);
+}

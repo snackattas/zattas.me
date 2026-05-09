@@ -1,5 +1,10 @@
 // TEST: Check automation_detected cookie
+cy.wait(2000);
 cy.getCookie('automation_detected').then((cookie) => {
   const detected = cookie?.value;
-  process.exit(detected === '{{EXPECTED_TOOL}}' ? 0 : 1);
+  if (detected === '{{EXPECTED_TOOL}}') {
+    cy.log('✅ AUTOMATION_DETECTED_VERIFIED: {{EXPECTED_TOOL}}');
+  } else {
+    throw new Error('AUTOMATION_DETECTED_FAILED: expected {{EXPECTED_TOOL}}, got ' + detected);
+  }
 });
