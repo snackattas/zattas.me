@@ -3,7 +3,9 @@
 
 require 'selenium-webdriver'
 
-driver = Selenium::WebDriver.for :chrome
+options = Selenium::WebDriver::Chrome::Options.new
+options.add_argument('--headless=false')
+driver = Selenium::WebDriver.for :chrome, options: options
 begin
   driver.navigate.to 'https://zattas.me'
   driver.manage.add_cookie(name: 'automation_user', value: `whoami`.chomp)

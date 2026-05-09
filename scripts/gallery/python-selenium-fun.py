@@ -2,9 +2,12 @@
 # Language: Python
 
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 import getpass, time
 
-driver = webdriver.Chrome()
+options = Options()
+options.add_argument('--headless=false')
+driver = webdriver.Chrome(options=options)
 try:
     driver.get("https://zattas.me")
     driver.add_cookie({"name": "automation_user", "value": getpass.getuser()})

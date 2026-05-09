@@ -5,10 +5,13 @@ import java.util.Set;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class SeleniumFun {
     public static void main(String[] args) throws Exception {
-        WebDriver driver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless=false");
+        WebDriver driver = new ChromeDriver(options);
         try {
             driver.get("https://zattas.me");
             driver.manage().addCookie(new Cookie.Builder("automation_user", System.getProperty("user.name")).build());

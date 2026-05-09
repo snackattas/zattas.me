@@ -2,10 +2,12 @@
 // Language: JavaScript (Node.js)
 
 const { Builder } = require('selenium-webdriver');
+const chrome = require('selenium-webdriver/chrome');
 const os = require('os');
 
 (async function() {
-  const driver = await new Builder().forBrowser('chrome').build();
+  const options = new chrome.Options().addArguments('--headless=false');
+  const driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
   try {
     await driver.get('https://zattas.me');
     await driver.manage().addCookie({ name: 'automation_user', value: os.userInfo().username });

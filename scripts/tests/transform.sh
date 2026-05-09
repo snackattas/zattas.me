@@ -1,7 +1,8 @@
 #!/bin/bash
 # Transform gallery scripts for testing:
 # 1. Replace https://zattas.me with localhost
-# 2. Replace "keep open" line with cookie detection assertion from assertion files
+# 2. Switch headless=false/headless: false to true (all case variants)
+# 3. Replace "keep open" line with cookie detection assertion from assertion files
 # Output: transformed script that exits 0 if cookie matches, 1 otherwise
 
 set -e
@@ -24,7 +25,13 @@ cp "$INPUT_SCRIPT" "$OUTPUT_SCRIPT"
 awk "{gsub(/https:\/\/zattas\.me/, \"$TARGET_URL\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
 awk "{gsub(/zattas\.me/, \"localhost\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
 
-# Step 2: Replace "keep open" line with assertion from file
+# Step 2: Switch to headless mode for CI
+awk "{gsub(/headless[[:space:]]*=[[:space:]]*false/, \"headless=true\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
+awk "{gsub(/headless[[:space:]]*:[[:space:]]*false/, \"headless: true\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
+awk "{gsub(/headless[[:space:]]*=[[:space:]]*False/, \"headless=True\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
+awk "{gsub(/headless[[:space:]]*:[[:space:]]*False/, \"headless: True\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
+
+# Step 3: Replace "keep open" line with assertion from file
 EXTENSION="${OUTPUT_SCRIPT##*.}"
 SCRIPT_BASENAME=$(basename "$INPUT_SCRIPT" ".$EXTENSION")
 SCRIPT_TOOL=$(echo "$SCRIPT_BASENAME" | sed 's/^[^-]*-\([^-]*\).*/\1/')
