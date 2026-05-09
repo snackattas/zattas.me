@@ -80,6 +80,7 @@ jobs:
         run: |
           docker run \
             --rm \
+            --shm-size=2gb \
             -e TARGET_URL=http://host.docker.internal:3000 \
             -e GALLERY_SCRIPT_PATH=/app/scripts/gallery/${{ matrix.language }}-${{ matrix.tool }}-fun.${{ steps.script-ext.outputs.ext }} \
             -e EXPECTED_TOOL=${{ matrix.tool }} \

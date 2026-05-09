@@ -1,6 +1,6 @@
 # TEST: Check automation_detected cookie
 time.sleep(2)
-cookies = await browser.contexts()[0].cookies()
+cookies = context.cookies()
 print(f'Cookies: {cookies}')
 detected = next((c['value'] for c in cookies if c['name'] == 'automation_detected'), None)
 if detected == '{{EXPECTED_TOOL}}':

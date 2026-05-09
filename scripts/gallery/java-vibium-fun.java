@@ -1,6 +1,7 @@
 // File: VibiumFun.java
 // Language: Java
 
+import java.util.Set;
 import com.vibium.browser.Browser;
 
 public class VibiumFun {

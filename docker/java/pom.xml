@@ -17,5 +17,15 @@
       <artifactId>selenium-java</artifactId>
       <version>4.15.0</version>
     </dependency>
+    <dependency>
+      <groupId>com.microsoft.playwright</groupId>
+      <artifactId>playwright</artifactId>
+      <version>1.48.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.vibium</groupId>
+      <artifactId>vibium-java</artifactId>
+      <version>26.3.9</version>
+    </dependency>
   </dependencies>
 </project>
