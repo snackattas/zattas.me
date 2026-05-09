@@ -1,7 +1,8 @@
 // File: VibiumFun.java
 // Language: Java
 
-import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
 import com.vibium.browser.Browser;
 
 public class VibiumFun {

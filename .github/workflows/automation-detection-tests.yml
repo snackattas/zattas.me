@@ -32,9 +32,7 @@ jobs:
             tool: cypress
           - language: ruby
             tool: cypress
-          # Vibium has no Java Maven package or Ruby gem
-          - language: java
-            tool: vibium
+          # Vibium has no Ruby gem
           - language: ruby
             tool: vibium
         include:
@@ -89,7 +87,7 @@ jobs:
           docker run \
             --rm \
             --shm-size=2gb \
-            -e TARGET_URL=http://host.docker.internal:3000 \
+            -e TARGET_URL=http://localhost:3000 \
             -e GALLERY_SCRIPT_PATH=/app/scripts/gallery/${{ matrix.language }}-${{ matrix.tool }}-fun.${{ steps.script-ext.outputs.ext }} \
             -e EXPECTED_TOOL=${{ matrix.tool }} \
             --network host \

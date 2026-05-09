@@ -3,7 +3,7 @@ FROM selenium/standalone-chromium:latest AS base
 USER root
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl bash && rm -rf /var/lib/apt/lists/*
+    bash && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY scripts/ ./scripts/
@@ -14,8 +14,8 @@ FROM base AS javascript
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nodejs npm && rm -rf /var/lib/apt/lists/*
 
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY docker/javascript/package.json ./package.json
+RUN npm install
 
 ENV PLAYWRIGHT_BROWSERS_PATH=/app/playwright-browsers
 RUN npx playwright install chromium
@@ -32,10 +32,7 @@ FROM base AS python
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 python3-pip python3-venv && rm -rf /var/lib/apt/lists/*
 
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="/root/.local/bin:$PATH"
-
-RUN uv pip install --system --break-system-packages \
+RUN pip3 install --break-system-packages \
     selenium playwright vibium
 RUN playwright install chromium
 
@@ -57,13 +54,18 @@ RUN chmod +x /app/entrypoint.sh
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # ── Ruby ──────────────────────────────────────────────────────────────────────
-FROM base AS ruby
+FROM ruby:latest AS ruby
+
+USER root
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ruby ruby-dev build-essential && rm -rf /var/lib/apt/lists/*
+    bash curl && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY scripts/ ./scripts/
 
 RUN gem install selenium-webdriver playwright-ruby-client
-RUN playwright install chromium
+RUN playwright install chromium --with-deps
 
 COPY docker/ruby/entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh

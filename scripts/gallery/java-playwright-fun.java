@@ -1,8 +1,10 @@
 // File: PlaywrightFun.java
 // Language: Java
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.Cookie;
 
 public class PlaywrightFun {
     public static void main(String[] args) throws Exception {
@@ -15,7 +17,7 @@ public class PlaywrightFun {
                 Page page = context.newPage();
 
                 page.navigate("https://zattas.me");
-                context.addCookies(java.util.Arrays.asList(
+                context.addCookies(Arrays.asList(
                     new Cookie("automation_user", System.getProperty("user.name"))
                         .setUrl("https://zattas.me"),
                     new Cookie("automation_language", "java")

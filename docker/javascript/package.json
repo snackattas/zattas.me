@@ -1,0 +1,11 @@
+{
+  "name": "javascript-automation-tests",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "cypress": "latest",
+    "playwright": "latest",
+    "selenium-webdriver": "latest",
+    "vibium": "^26.3.9"
+  }
+}
