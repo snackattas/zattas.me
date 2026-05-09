@@ -51,13 +51,19 @@ jobs:
         run: npm run build
 
       - name: Build Docker image
-        run: docker build -t test-automation-${{ matrix.language }} ./docker/${{ matrix.language }}
+        run: docker build -t test-automation-${{ matrix.language }} -f ./docker/${{ matrix.language }}/Dockerfile .
 
       - name: Start dev server
         run: |
           npm run dev > /tmp/dev-server.log 2>&1 &
-          # Wait for server to be ready
-          timeout 30 bash -c 'until curl -f http://localhost:3000 > /dev/null 2>&1; do sleep 1; done'
+          # Wait for server to be ready (up to 60 seconds)
+          for i in {1..60}; do
+            if curl -f http://localhost:3000 > /dev/null 2>&1; then
+              echo "Server is ready"
+              break
+            fi
+            sleep 1
+          done
         env:
           NODE_ENV: test
 
@@ -79,7 +85,7 @@ jobs:
             -e EXPECTED_TOOL=${{ matrix.tool }} \
             --network host \
             test-automation-${{ matrix.language }} \
-            bash -c '/app/docker/${{ matrix.language }}/entrypoint.sh 2>&1 | tee /tmp/test-output.log && grep -q "AUTOMATION_DETECTED_VERIFIED" /tmp/test-output.log'
+            bash -c '/app/entrypoint.sh 2>&1 | tee /tmp/test-output.log && grep -q "AUTOMATION_DETECTED_VERIFIED" /tmp/test-output.log'
 
       - name: Upload test results
         if: always()
