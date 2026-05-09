@@ -93,10 +93,11 @@ COPY scripts/ ./scripts/
 
 RUN gem install selenium-webdriver playwright-ruby-client:1.59.1
 RUN npm install -g playwright@1.59.1
-RUN npx playwright install chromium chromium-headless-shell --with-deps
+RUN npx playwright install-deps chromium chromium-headless-shell
 
 COPY docker/ruby/entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
 USER seluser
+RUN playwright install chromium chromium-headless-shell
 ENTRYPOINT ["/app/entrypoint.sh"]
