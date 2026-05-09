@@ -65,9 +65,8 @@ FROM base AS java
 RUN apt-get update && apt-get install -y --no-install-recommends \
     default-jdk maven nodejs npm && rm -rf /var/lib/apt/lists/*
 
-# Use the Node.js Playwright CLI to install chromium with correct system deps
 RUN npm install -g playwright vibium
-RUN npx playwright install chromium --with-deps
+RUN npx playwright install-deps chromium
 
 COPY docker/java/pom.xml /app/docker/java/pom.xml
 RUN mvn dependency:resolve -f /app/docker/java/pom.xml || true
@@ -76,8 +75,8 @@ COPY docker/java/entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
 USER seluser
+RUN npx playwright install chromium
 RUN vibium install
-RUN mvn -f /app/docker/java/pom.xml exec:java -Dexec.mainClass="com.microsoft.playwright.CLI" -Dexec.args="install chromium" -q
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # ── Ruby ──────────────────────────────────────────────────────────────────────
