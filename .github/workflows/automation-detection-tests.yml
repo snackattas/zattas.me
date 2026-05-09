@@ -61,16 +61,25 @@ jobs:
         env:
           NODE_ENV: test
 
+      - name: Determine script file extension
+        id: script-ext
+        run: |
+          case "${{ matrix.language }}" in
+            javascript) echo "ext=js" >> $GITHUB_OUTPUT ;;
+            python) echo "ext=py" >> $GITHUB_OUTPUT ;;
+            java) echo "ext=java" >> $GITHUB_OUTPUT ;;
+          esac
+
       - name: Run automation detection test
         run: |
           docker run \
             --rm \
             -e TARGET_URL=http://host.docker.internal:3000 \
+            -e GALLERY_SCRIPT_PATH=/app/scripts/gallery/${{ matrix.language }}-${{ matrix.tool }}-fun.${{ steps.script-ext.outputs.ext }} \
             -e EXPECTED_TOOL=${{ matrix.tool }} \
-            -e DETECTION_TIMEOUT_MS=10000 \
             --network host \
             test-automation-${{ matrix.language }} \
-            bash -c '/app/docker/${{ matrix.language }}/entrypoint.sh'
+            bash -c '/app/docker/${{ matrix.language }}/entrypoint.sh 2>&1 | tee /tmp/test-output.log && grep -q "AUTOMATION_DETECTED_VERIFIED" /tmp/test-output.log'
 
       - name: Upload test results
         if: always()
