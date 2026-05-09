@@ -21,8 +21,8 @@ mkdir -p "$(dirname "$OUTPUT_SCRIPT")"
 cp "$INPUT_SCRIPT" "$OUTPUT_SCRIPT"
 
 # Step 1: Replace production domain with test domain
-sed -i '' "s|https://zattas.me|$TARGET_URL|g" "$OUTPUT_SCRIPT"
-sed -i '' "s|zattas\.me|localhost|g" "$OUTPUT_SCRIPT"
+awk "{gsub(/https:\/\/zattas\.me/, \"$TARGET_URL\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
+awk "{gsub(/zattas\.me/, \"localhost\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
 
 # Step 2: Replace "keep open" line with assertion from file
 EXTENSION="${OUTPUT_SCRIPT##*.}"

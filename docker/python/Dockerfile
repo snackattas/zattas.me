@@ -1,9 +1,8 @@
 FROM python:3.13
 
-# Install chromium and chromedriver
+# Install Chromium and dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    chromium \
-    chromium-chromedriver \
+    chromium-browser \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
