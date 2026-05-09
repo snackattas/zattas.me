@@ -1,24 +1,21 @@
-FROM python:3.13
+FROM mcr.microsoft.com/playwright:latest
 
-# Install Chromium and dependencies
+# Install Python and pip (should already have Python from Playwright image)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    chromium-browser \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+# Install uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Install Python test dependencies
-RUN pip install --no-cache-dir \
+ENV PATH="/root/.local/bin:$PATH"
+
+# Use uv to install test dependencies
+RUN uv pip install --system --break-system-packages \
     selenium \
-    playwright \
     vibium
 
-# Install Playwright browsers (chromium)
-RUN python -m playwright install chromium
-
-# Set up Chrome to run in headless mode
-ENV CHROME_BIN=/usr/bin/chromium-browser
+WORKDIR /app
 
 # Copy scripts and test harnesses from the repo
 COPY scripts/ ./scripts/
