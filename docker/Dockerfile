@@ -11,8 +11,6 @@ COPY scripts/ ./scripts/
 # ── JavaScript ────────────────────────────────────────────────────────────────
 FROM node:lts AS javascript
 
-USER root
-
 # Cypress system dependencies for Debian/Linux
 # https://docs.cypress.io/app/get-started/install-cypress#Linux-Prerequisites
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -23,21 +21,25 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxrandr2 libpango-1.0-0 libcairo2 \
     && rm -rf /var/lib/apt/lists/*
 
+RUN groupadd -r seluser && useradd -r -g seluser -m seluser
+
 WORKDIR /app
 COPY scripts/ ./scripts/
 
 COPY docker/javascript/package.json ./package.json
 RUN npm install
 
-RUN /app/node_modules/.bin/cypress install
-
-ENV PLAYWRIGHT_BROWSERS_PATH=/app/playwright-browsers
+ENV PLAYWRIGHT_BROWSERS_PATH=/home/seluser/playwright-browsers
 RUN npx playwright install chromium --with-deps
 
 ENV NODE_PATH=/app/node_modules
 COPY docker/javascript/entrypoint.sh /app/entrypoint.sh
 COPY docker/javascript/cypress.config.js /app/docker/javascript/cypress.config.js
 RUN chmod +x /app/entrypoint.sh
+
+USER seluser
+RUN /app/node_modules/.bin/cypress install
+
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # ── Python ────────────────────────────────────────────────────────────────────
@@ -49,32 +51,40 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip3 install --break-system-packages \
     selenium playwright vibium
 RUN playwright install chromium
-RUN vibium install
 
 COPY docker/python/entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
+
+USER seluser
+RUN vibium install
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # ── Java ──────────────────────────────────────────────────────────────────────
 FROM base AS java
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    default-jdk maven && rm -rf /var/lib/apt/lists/*
+    default-jdk maven nodejs npm && rm -rf /var/lib/apt/lists/*
+
+# Use the Node.js Playwright CLI to install chromium with correct system deps
+RUN npm install -g playwright
+RUN npx playwright install chromium --with-deps
 
 COPY docker/java/pom.xml /app/docker/java/pom.xml
 RUN mvn dependency:resolve -f /app/docker/java/pom.xml || true
 
 COPY docker/java/entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
+
+USER seluser
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # ── Ruby ──────────────────────────────────────────────────────────────────────
 FROM ruby:latest AS ruby
 
-USER root
-
 RUN apt-get update && apt-get install -y --no-install-recommends \
     bash curl nodejs npm && rm -rf /var/lib/apt/lists/*
+
+RUN groupadd -r seluser && useradd -r -g seluser -m seluser
 
 WORKDIR /app
 COPY scripts/ ./scripts/
@@ -85,4 +95,6 @@ RUN npx playwright install chromium --with-deps
 
 COPY docker/ruby/entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
+
+USER seluser
 ENTRYPOINT ["/app/entrypoint.sh"]

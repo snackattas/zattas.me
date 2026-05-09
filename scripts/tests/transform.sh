@@ -30,6 +30,7 @@ awk "{gsub(/headless[[:space:]]*=[[:space:]]*false/, \"headless=true\"); print}"
 awk "{gsub(/headless[[:space:]]*:[[:space:]]*false/, \"headless: true\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
 awk "{gsub(/headless[[:space:]]*=[[:space:]]*False/, \"headless=True\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
 awk "{gsub(/headless[[:space:]]*:[[:space:]]*False/, \"headless: True\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
+awk "{gsub(/setHeadless\(false\)/, \"setHeadless(true)\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
 
 # Step 3: Replace "keep open" line with assertion from file
 EXTENSION="${OUTPUT_SCRIPT##*.}"
