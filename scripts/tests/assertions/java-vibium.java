@@ -6,6 +6,7 @@ for (String cookie : cookies.split("; ")) {
   String[] parts = cookie.split("=");
   if (parts.length == 2) cookieMap.put(parts[0], parts[1]);
 }
+System.out.println("Cookies: " + cookieMap);
 String detected = cookieMap.get("automation_detected");
 if ("{{EXPECTED_TOOL}}".equals(detected)) {
   System.out.println("✅ AUTOMATION_DETECTED_VERIFIED: {{EXPECTED_TOOL}}");

@@ -1,7 +1,8 @@
 # TEST: Check automation_detected cookie
 sleep(2)
-detected = driver.manage.all_cookies.find { |c| c[:name] == 'automation_detected' }&.fetch(:value)
-driver.quit
+cookies = driver.manage.all_cookies
+puts "Cookies: #{cookies}"
+detected = cookies.find { |c| c[:name] == 'automation_detected' }&.fetch(:value)
 if detected == '{{EXPECTED_TOOL}}'
   puts "✅ AUTOMATION_DETECTED_VERIFIED: {{EXPECTED_TOOL}}"
 else

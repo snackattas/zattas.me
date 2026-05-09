@@ -1,8 +1,8 @@
 // TEST: Check automation_detected cookie
 await new Promise(r => setTimeout(r, 2000));
 const cookies = await page.context().cookies();
+console.log('Cookies:', cookies);
 const detected = cookies.find(c => c.name === 'automation_detected')?.value;
-await browser.close();
 if (detected === '{{EXPECTED_TOOL}}') {
   console.log('✅ AUTOMATION_DETECTED_VERIFIED: {{EXPECTED_TOOL}}');
 } else {

@@ -6,6 +6,7 @@ const cookieObj = cookies.split('; ').reduce((acc, c) => {
   acc[k] = v;
   return acc;
 }, {});
+console.log('Cookies:', cookieObj);
 const detected = cookieObj.automation_detected;
 if (detected === '{{EXPECTED_TOOL}}') {
   console.log('✅ AUTOMATION_DETECTED_VERIFIED: {{EXPECTED_TOOL}}');

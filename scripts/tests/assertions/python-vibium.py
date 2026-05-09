@@ -2,6 +2,7 @@
 time.sleep(2)
 cookies_str = page.evaluate('document.cookie')
 cookies = {k: v for k, v in [c.split('=') for c in cookies_str.split('; ')]}
+print(f'Cookies: {cookies}')
 detected = cookies.get('automation_detected')
 if detected == '{{EXPECTED_TOOL}}':
     print('✅ AUTOMATION_DETECTED_VERIFIED: {{EXPECTED_TOOL}}')
