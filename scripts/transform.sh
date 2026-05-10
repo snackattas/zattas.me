@@ -32,10 +32,12 @@ awk "{gsub(/headless[[:space:]]*:[[:space:]]*false/, \"headless: true\"); print}
 awk "{gsub(/headless[[:space:]]*=[[:space:]]*False/, \"headless=True\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
 awk "{gsub(/headless[[:space:]]*:[[:space:]]*False/, \"headless: True\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
 awk "{gsub(/setHeadless\(false\)/, \"setHeadless(true)\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
-# Inject headless arg into java-selenium in place of the "// Headless" comment block (headless is
-# omitted in the gallery script because passing --headless=false on macOS paradoxically causes
-# Chrome to launch invisibly when started by a background Java process)
+# Inject headless arg in place of "# Headless" / "// Headless" sentinel comments.
+# These are used when passing --headless=false would paradoxically cause Chrome to
+# launch invisibly on macOS (background process quirk), so the flag is omitted in
+# the gallery script and injected only for CI.
 awk "/\/\/ Headless/ { match(\$0, /^[[:space:]]*/); print substr(\$0, 1, RLENGTH) \"options.addArguments(\\\"--headless=true\\\");\"; next } { print }" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
+awk "/# Headless/ { match(\$0, /^[[:space:]]*/); print substr(\$0, 1, RLENGTH) \"options.add_argument('--headless=true')\"; next } { print }" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
 
 # Step 3: Replace "keep open" line with assertion from file
 EXTENSION="${OUTPUT_SCRIPT##*.}"

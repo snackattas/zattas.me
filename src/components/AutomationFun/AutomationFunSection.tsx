@@ -121,26 +121,27 @@ const instructions: Record<string, Record<string, string>> = {
 
 3. Compile and run (requires Chrome — if you see errors, update Chrome to the latest version):
    mvn compile exec:java -Dexec.mainClass=SeleniumFun`,
-    javascript: `1. Install Selenium WebDriver globally and create file:
-   npm install -g selenium-webdriver
+    javascript: `1. Install Selenium WebDriver and create file:
+   npm install selenium-webdriver
    touch selenium_fun.js
 
 2. Save the script below to selenium_fun.js
 
 3. Run the script (requires Chrome — if you see errors, update Chrome to the latest version):
    node selenium_fun.js`,
-    ruby: `1. Install Selenium WebDriver and create file:
-   gem install selenium-webdriver
+    ruby: `1. Install Selenium WebDriver and create file (requires Ruby >= 3.0):
+   gem install selenium-webdriver -v 4.33.0
    touch selenium_fun.rb
 
 2. Save the script below to selenium_fun.rb
 
 3. Run the script (requires Chrome — if you see errors, update Chrome to the latest version):
-   ruby selenium_fun.rb`,
+   ruby selenium_fun.rb
+Note: the script pins selenium-webdriver to 4.33.0 via a gem() directive — newer versions have a Ruby 3.3 incompatibility.`,
   },
   cypress: {
-    javascript: `1. Install Cypress globally and create files:
-   npm install -g cypress
+    javascript: `1. Install Cypress and create files:
+   npm install cypress
    touch cypress.config.js cypress_fun.cy.js
 
 2. Save cypress.config.js content:
@@ -156,7 +157,7 @@ const instructions: Record<string, Record<string, string>> = {
    EOF
 
 3. Save the script below to cypress_fun.cy.js and run:
-   cypress run --headed`,
+   npx cypress run --headed`,
   },
   vibium: {
     python: `1. Install Vibium and create file:
@@ -167,12 +168,11 @@ const instructions: Record<string, Record<string, string>> = {
 
 3. Run the script:
    python vibium_fun.py`,
-    javascript: `1. Install Vibium globally (version 26.3.9):
-   npm install -g vibium@26.3.9
-   vibium install
+    javascript: `1. Install Vibium (version 26.3.9):
+   npm install vibium@26.3.9
+   npx vibium install
 
-2. Create and save the script below to vibium_fun.js:
-   touch vibium_fun.js
+2. Save the script below to vibium_fun.js
 
 3. Run the script:
    node vibium_fun.js`,
