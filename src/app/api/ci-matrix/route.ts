@@ -1,15 +1,31 @@
 import { NextResponse } from "next/server";
 
-const WORKFLOW_ID = 274213003;
 const REPO = "snackattas/zattas.me";
+const WORKFLOW_NAME = "Automation Detection (zattas.me)";
+
+const headers: HeadersInit = {
+  Accept: "application/vnd.github+json",
+};
 
 export async function GET() {
-  const headers: HeadersInit = {
-    Accept: "application/vnd.github+json",
-  };
+  const workflowsRes = await fetch(
+    `https://api.github.com/repos/${REPO}/actions/workflows`,
+    { headers }
+  );
+  if (!workflowsRes.ok) {
+    return NextResponse.json({ error: "Failed to fetch workflows" }, { status: 502 });
+  }
+
+  const workflowsData = await workflowsRes.json();
+  const workflow = workflowsData.workflows?.find(
+    (w: { name: string }) => w.name === WORKFLOW_NAME
+  );
+  if (!workflow) {
+    return NextResponse.json({ error: "Workflow not found" }, { status: 404 });
+  }
 
   const runsRes = await fetch(
-    `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW_ID}/runs?branch=main&per_page=1&status=success`,
+    `https://api.github.com/repos/${REPO}/actions/workflows/${workflow.id}/runs?branch=main&per_page=1&status=success`,
     { headers }
   );
   if (!runsRes.ok) {

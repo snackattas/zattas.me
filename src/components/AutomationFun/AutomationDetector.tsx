@@ -87,7 +87,7 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
       onDetected(detection);
     };
 
-    const tryDetect = async () => {
+    const tryDetectAutomation = async () => {
       if (hasDetected) return;
 
       const username = getCookie("automation_user");
@@ -137,14 +137,14 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
 
     // Resize fires when automation maximizes the window; poll as backup for
     // Cypress and Vibium which don't always trigger it
-    window.addEventListener("resize", () => tryDetect());
-    const interval = setInterval(() => tryDetect(), 500);
+    window.addEventListener("resize", () => tryDetectAutomation());
+    const interval = setInterval(() => tryDetectAutomation(), 500);
     const upgradeTimer = setTimeout(upgradeVibiumProcess, 100);
 
-    tryDetect();
+    tryDetectAutomation();
 
     return () => {
-      window.removeEventListener("resize", tryDetect);
+      window.removeEventListener("resize", tryDetectAutomation);
       clearInterval(interval);
       clearTimeout(upgradeTimer);
     };
