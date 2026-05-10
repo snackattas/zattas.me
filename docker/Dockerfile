@@ -73,9 +73,6 @@ FROM base AS java
 RUN apt-get update && apt-get install -y --no-install-recommends \
     maven && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g playwright vibium
-RUN npx playwright install-deps chromium chromium-headless-shell
-
 COPY docker/java/pom.xml /app/docker/java/pom.xml
 RUN mvn dependency:resolve -f /app/docker/java/pom.xml || true
 
@@ -85,8 +82,6 @@ COPY docker/java/run.sh /app/docker/java/run.sh
 RUN chmod +x /app/entrypoint.sh /app/docker/java/prepare.sh /app/docker/java/run.sh
 
 USER seluser
-RUN playwright install chromium chromium-headless-shell
-RUN vibium install
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # ── Ruby ──────────────────────────────────────────────────────────────────────
