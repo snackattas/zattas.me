@@ -542,8 +542,8 @@
 }
 
 @keyframes ciPulse {
-  0%, 100% { color: #3fb950; }
-  50% { color: #00ff44; }
+  0%, 100% { color: #57ca5e; }
+  50% { color: #3b8500; }
 }
 
 .ciLinks {
