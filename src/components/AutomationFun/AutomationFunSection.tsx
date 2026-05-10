@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { AutomationDetector, type AutomationDetection } from "./AutomationDetector";
@@ -526,16 +526,16 @@ export function AutomationFunSection() {
               className: `${jobUrl ? styles["ciGridCellLink"] : styles["ciGridCell"]} ${isHovered ? styles["ciGridRowHovered"] : ""}`,
             };
             return (
-              <>
-                <Cell key={`${rowKey}-lang`} {...cellProps}>{lang}</Cell>
-                <Cell key={`${rowKey}-tool`} {...cellProps}>{tool}</Cell>
-                <Cell key={`${rowKey}-status`} {...cellProps} className={`${jobUrl ? styles["ciGridCellLink"] : styles["ciGridCell"]} ${styles["ciGridCellStatus"]} ${isHovered ? styles["ciGridRowHovered"] : ""}`}>
+              <React.Fragment key={rowKey}>
+                <Cell {...cellProps}>{lang}</Cell>
+                <Cell {...cellProps}>{tool}</Cell>
+                <Cell {...cellProps} className={`${jobUrl ? styles["ciGridCellLink"] : styles["ciGridCell"]} ${styles["ciGridCellStatus"]} ${isHovered ? styles["ciGridRowHovered"] : ""}`}>
                   {ciError
                     ? <span className={styles["ciErrorStatus"]}>⚠ github api error — reload</span>
                     : <><span className={styles["ciCheck"]}>●</span> success</>
                   }
                 </Cell>
-              </>
+              </React.Fragment>
             );
           })}
         </div>
