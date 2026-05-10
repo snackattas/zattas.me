@@ -100,7 +100,7 @@ RUN groupadd -r seluser && useradd -r -g seluser -m seluser
 WORKDIR /app
 COPY scripts/ ./scripts/
 
-RUN gem install selenium-webdriver playwright-ruby-client:1.59.1
+RUN gem install selenium-webdriver:4.33.0 playwright-ruby-client:1.59.1
 RUN npm install -g playwright@1.59.1
 RUN npx playwright install-deps chromium chromium-headless-shell
 
