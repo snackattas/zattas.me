@@ -1,13 +1,17 @@
-name: Automation Detection Nightly (zattas.me)
+name: Automation Detection (zattas.me)
 
 on:
   schedule:
     - cron: '0 0 * * *'
-  push:
-    branches: [main]
+  deployment_status:
 
 jobs:
   test:
+    if: |
+      github.event_name == 'schedule' ||
+      (github.event_name == 'deployment_status' &&
+       github.event.deployment_status.state == 'success' &&
+       github.event.deployment_status.environment == 'Production')
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
