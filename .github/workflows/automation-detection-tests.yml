@@ -97,6 +97,7 @@ jobs:
             --rm \
             --shm-size=2gb \
             --cap-add SYS_ADMIN \
+            --security-opt seccomp=unconfined \
             -e TARGET_URL=http://localhost:3000 \
             -e GALLERY_SCRIPT_DIR=/app/scripts/gallery \
             -e EXPECTED_AUTOMATION_TOOL=${{ matrix.tool }} \
