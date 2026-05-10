@@ -1,11 +1,7 @@
 // TEST: Check automation_detected cookie
 await new Promise(r => setTimeout(r, 2000));
-const cookies = await page.evaluate(() => document.cookie);
-const cookieObj = cookies.split('; ').reduce((acc, c) => {
-  const [k, v] = c.split('=');
-  acc[k] = v;
-  return acc;
-}, {});
+const cookies = page.context.cookies();
+const cookieObj = cookies.reduce((acc, c) => { acc[c.name] = c.value; return acc; }, {});
 console.log('Cookies:', cookieObj);
 const detected = cookieObj.automation_detected;
 if (detected === '{{EXPECTED_TOOL}}') {
