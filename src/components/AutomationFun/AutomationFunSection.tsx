@@ -488,7 +488,10 @@ export function AutomationFunSection() {
 
       <div className={styles["ciPanel"]}>
         <div className={styles["ciHeader"]}>
-          <span className={styles["ciLabel"]}>CD matrix</span>
+          <span className={styles["ciLabelWrap"]}>
+            <span className={styles["ciLabel"]}>CD matrix</span>
+            <span className={styles["ciTooltip"]}>every deploy triggers a full matrix of automation tools across 4 languages — all verified green before going live</span>
+          </span>
           <span className={styles["ciMeta"]}>triggered on every Vercel deploy · all passing</span>
         </div>
         <div className={styles["ciGrid"]}>
@@ -527,8 +530,8 @@ export function AutomationFunSection() {
             };
             return (
               <React.Fragment key={rowKey}>
-                <Cell {...cellProps}>{lang}</Cell>
-                <Cell {...cellProps}>{tool}</Cell>
+                <Cell {...cellProps}><img src={`/icons/${lang}_logo.png`} alt="" className={styles["ciToolIcon"]} />{lang}</Cell>
+                <Cell {...cellProps}><img src={`/images/automation/${tool}-logo.png`} alt="" className={styles["ciToolIcon"]} />{tool}</Cell>
                 <Cell {...cellProps} className={`${jobUrl ? styles["ciGridCellLink"] : styles["ciGridCell"]} ${styles["ciGridCellStatus"]} ${isHovered ? styles["ciGridRowHovered"] : ""}`}>
                   {ciError
                     ? <span className={styles["ciErrorStatus"]}>⚠ github api error — reload</span>

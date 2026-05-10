@@ -438,18 +438,61 @@
   flex-wrap: wrap;
 }
 
+.ciLabelWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.ciLabelWrap:hover .ciTooltip {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.ciTooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 280px;
+  background: var(--fg);
+  color: var(--bg);
+  font-family: var(--font-space-mono);
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.5;
+  padding: 8px 12px;
+  border-radius: 4px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.ciTooltip::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 12px;
+  border: 5px solid transparent;
+  border-bottom-color: var(--fg);
+}
+
 .ciLabel {
   font-family: var(--font-space-mono);
-  font-size: 0.62rem;
+  font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--fg);
+  cursor: help;
 }
 
 .ciMeta {
   font-family: var(--font-space-mono);
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   color: var(--muted);
 }
 
@@ -459,6 +502,17 @@
   border: 1px solid var(--border);
   margin-bottom: 16px;
   overflow-x: auto;
+}
+
+.ciToolIcon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  margin-right: 6px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
 }
 
 .ciGridHeader {
@@ -560,7 +614,7 @@
 
 .ciLinks a {
   font-family: var(--font-space-mono);
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   color: var(--muted);
   text-decoration: underline;
   text-underline-offset: 3px;
