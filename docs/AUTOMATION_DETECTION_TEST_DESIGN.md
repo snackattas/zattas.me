@@ -18,11 +18,10 @@ Build a comprehensive testing suite that validates automation detection across m
 
 ```
 Tools:      Selenium | Playwright | Cypress | Vibium
-Languages:  JavaScript | Python | Java | C#
-Browsers:   Chrome | Firefox (subset per tool)
-```
+Languages:  JavaScript | Python | Java | Ruby
+Browsers:   Chrome 
 
-Total combinations: ~24-30 test scenarios (some tool/lang combos don't exist)
+Total combinations: 11 test scenarios (some tool/lang combos don't exist)
 
 ### Core Concept: Script Reuse
 

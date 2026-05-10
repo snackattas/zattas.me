@@ -13,6 +13,9 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     "zattas.me/**",
+    // Plain Node.js scripts — not part of the Next.js app, use CommonJS
+    "scripts/**",
+    "docker/**",
   ]),
 ]);
 
