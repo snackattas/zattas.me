@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate gallery data
+        run: node scripts/generate-gallery-data.js
+
       - name: Lint
         run: npm run lint:next
 

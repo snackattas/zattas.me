@@ -13,7 +13,7 @@ beforeEach(() => {
   delete window.Cypress;
   for (const key of Object.keys(window)) {
     if (key.startsWith("cdc_")) {
-      delete (window as Record<string, unknown>)[key];
+      delete (window as unknown as Record<string, unknown>)[key];
     }
   }
 });
