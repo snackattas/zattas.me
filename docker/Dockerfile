@@ -3,7 +3,11 @@ FROM selenium/standalone-chromium:latest AS base
 USER root
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    bash && rm -rf /var/lib/apt/lists/*
+    bash curl && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 24 via NodeSource (apt nodejs on Ubuntu Noble is v18)
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
+    && apt-get install -y nodejs && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY scripts/ ./scripts/
@@ -64,15 +68,10 @@ RUN vibium install
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # ── Java ──────────────────────────────────────────────────────────────────────
-FROM node:lts AS java
+FROM base AS java
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    default-jdk maven && rm -rf /var/lib/apt/lists/*
-
-RUN groupadd -r seluser && useradd -r -g seluser -m seluser
-
-WORKDIR /app
-COPY scripts/ ./scripts/
+    maven && rm -rf /var/lib/apt/lists/*
 
 RUN npm install -g playwright vibium
 RUN npx playwright install-deps chromium
