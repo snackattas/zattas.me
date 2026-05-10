@@ -168,6 +168,38 @@ Note: the script pins selenium-webdriver to 4.33.0 via a gem() directive — new
 
 3. Run the script:
    python vibium_fun.py`,
+    java: `1. Create pom.xml:
+   cat > pom.xml << 'EOF'
+   <?xml version="1.0" encoding="UTF-8"?>
+   <project xmlns="http://maven.apache.org/POM/4.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                                http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+     <groupId>com.test</groupId>
+     <artifactId>vibium-test</artifactId>
+     <version>1.0</version>
+     <properties>
+       <maven.compiler.source>21</maven.compiler.source>
+       <maven.compiler.target>21</maven.compiler.target>
+     </properties>
+     <build>
+       <sourceDirectory>.</sourceDirectory>
+     </build>
+     <dependencies>
+       <dependency>
+         <groupId>com.vibium</groupId>
+         <artifactId>vibium</artifactId>
+         <version>26.3.18</version>
+       </dependency>
+     </dependencies>
+   </project>
+   EOF
+
+2. Save the script below to VibiumFun.java (same directory as pom.xml)
+
+3. Compile and run:
+   mvn compile exec:java -Dexec.mainClass=VibiumFun`,
     javascript: `1. Install Vibium (version 26.3.9):
    npm install vibium@26.3.9
    npx vibium install
@@ -183,7 +215,7 @@ const availableLangs: Record<string, string[]> = {
   playwright: ["python", "java", "javascript", "ruby"],
   selenium: ["python", "java", "javascript", "ruby"],
   cypress: ["javascript"],
-  vibium: ["python", "javascript"],
+  vibium: ["python", "java", "javascript"],
 };
 
 export function AutomationFunSection() {

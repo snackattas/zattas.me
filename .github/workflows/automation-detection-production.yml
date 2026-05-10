@@ -27,10 +27,6 @@ jobs:
           # Vibium has no Ruby gem
           - language: ruby
             tool: vibium
-          # Vibium Java SDK can't launch Chrome without --no-sandbox, which its Go
-          # router doesn't support — no workaround exists without patching the binary
-          - language: java
-            tool: vibium
         include:
           # JavaScript-only tools
           - language: javascript
