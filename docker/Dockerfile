@@ -75,6 +75,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY docker/java/pom.xml /app/docker/java/pom.xml
 RUN mvn dependency:resolve -f /app/docker/java/pom.xml || true
+# Make Maven local repo accessible to seluser
+RUN cp -r /root/.m2 /home/seluser/.m2 && chown -R seluser:seluser /home/seluser/.m2
 
 COPY docker/java/entrypoint.sh /app/entrypoint.sh
 COPY docker/java/prepare.sh /app/docker/java/prepare.sh
