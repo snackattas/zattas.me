@@ -546,6 +546,12 @@
   50% { color: #3b8500; }
 }
 
+.ciErrorStatus {
+  font-family: var(--font-space-mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+}
+
 .ciLinks {
   display: flex;
   gap: 20px;

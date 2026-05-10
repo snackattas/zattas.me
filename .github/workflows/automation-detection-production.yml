@@ -27,6 +27,9 @@ jobs:
           # Vibium has no Ruby gem
           - language: ruby
             tool: vibium
+          # Java Vibium: JVM subprocess chain breaks Chrome's user-namespace sandbox in Docker
+          - language: java
+            tool: vibium
         include:
           # JavaScript-only tools
           - language: javascript

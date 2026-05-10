@@ -168,38 +168,6 @@ Note: the script pins selenium-webdriver to 4.33.0 via a gem() directive — new
 
 3. Run the script:
    python vibium_fun.py`,
-    java: `1. Create pom.xml:
-   cat > pom.xml << 'EOF'
-   <?xml version="1.0" encoding="UTF-8"?>
-   <project xmlns="http://maven.apache.org/POM/4.0.0"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                                http://maven.apache.org/xsd/maven-4.0.0.xsd">
-     <modelVersion>4.0.0</modelVersion>
-     <groupId>com.test</groupId>
-     <artifactId>vibium-test</artifactId>
-     <version>1.0</version>
-     <properties>
-       <maven.compiler.source>21</maven.compiler.source>
-       <maven.compiler.target>21</maven.compiler.target>
-     </properties>
-     <build>
-       <sourceDirectory>.</sourceDirectory>
-     </build>
-     <dependencies>
-       <dependency>
-         <groupId>com.vibium</groupId>
-         <artifactId>vibium</artifactId>
-         <version>26.3.18</version>
-       </dependency>
-     </dependencies>
-   </project>
-   EOF
-
-2. Save the script below to VibiumFun.java (same directory as pom.xml)
-
-3. Compile and run:
-   mvn compile exec:java -Dexec.mainClass=VibiumFun`,
     javascript: `1. Install Vibium (version 26.3.9):
    npm install vibium@26.3.9
    npx vibium install
@@ -215,7 +183,7 @@ const availableLangs: Record<string, string[]> = {
   playwright: ["python", "java", "javascript", "ruby"],
   selenium: ["python", "java", "javascript", "ruby"],
   cypress: ["javascript"],
-  vibium: ["python", "java", "javascript"],
+  vibium: ["python", "javascript"],
 };
 
 export function AutomationFunSection() {
@@ -228,6 +196,7 @@ export function AutomationFunSection() {
   const hasScrolledRef = useRef(false);
   const [ciJobUrls, setCiJobUrls] = useState<Record<string, string>>({});
   const [ciRunUrl, setCiRunUrl] = useState<string | null>(null);
+  const [ciError, setCiError] = useState(false);
   const [ciSort, setCiSort] = useState<{ col: "lang" | "tool" | "status"; dir: 1 | -1 } | null>(null);
   const [ciHoveredRow, setCiHoveredRow] = useState<string | null>(null);
 
@@ -244,12 +213,16 @@ export function AutomationFunSection() {
   // Fetch CI matrix job URLs
   useEffect(() => {
     fetch("/api/ci-matrix")
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error();
+        return r.json();
+      })
       .then((data) => {
         if (data.jobUrls) setCiJobUrls(data.jobUrls);
         if (data.runUrl) setCiRunUrl(data.runUrl);
+        if (data.error) setCiError(true);
       })
-      .catch(() => {});
+      .catch(() => setCiError(true));
   }, []);
 
   const handleDetected = useCallback((detection: AutomationDetection) => {
@@ -557,7 +530,10 @@ export function AutomationFunSection() {
                 <Cell key={`${rowKey}-lang`} {...cellProps}>{lang}</Cell>
                 <Cell key={`${rowKey}-tool`} {...cellProps}>{tool}</Cell>
                 <Cell key={`${rowKey}-status`} {...cellProps} className={`${jobUrl ? styles["ciGridCellLink"] : styles["ciGridCell"]} ${styles["ciGridCellStatus"]} ${isHovered ? styles["ciGridRowHovered"] : ""}`}>
-                  <span className={styles["ciCheck"]}>●</span> success
+                  {ciError
+                    ? <span className={styles["ciErrorStatus"]}>⚠ github api error — reload</span>
+                    : <><span className={styles["ciCheck"]}>●</span> success</>
+                  }
                 </Cell>
               </>
             );
