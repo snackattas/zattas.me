@@ -15,7 +15,7 @@ fi
 GALLERY_SCRIPT_PATH="${GALLERY_SCRIPT_DIR}/${LANGUAGE}-${EXPECTED_AUTOMATION_TOOL}-fun.java"
 TEMP_SCRIPT="/tmp/test-$(date +%s).java"
 
-/app/scripts/tests/transform.sh "$GALLERY_SCRIPT_PATH" "$TEMP_SCRIPT" "$EXPECTED_AUTOMATION_TOOL" "$TARGET_URL"
+/app/scripts/transform.sh "$GALLERY_SCRIPT_PATH" "$TEMP_SCRIPT" "$EXPECTED_AUTOMATION_TOOL" "$TARGET_URL"
 
 echo ""
 echo "===== TRANSFORMED SCRIPT ====="
