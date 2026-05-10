@@ -6,6 +6,7 @@ const os = require('os');
 
 (async () => {
   const username = os.userInfo().username;
+
   const browser_instance = browser.start({ headless: false });
   const page = browser_instance.page();
 
@@ -22,8 +23,10 @@ const os = require('os');
   console.log('Check the browser for your bonus haiku! Press Ctrl+C to exit.');
   try {
     await new Promise(r => setTimeout(r, 300000)); // Keep open for 5 minutes
-  } catch (_) {
-    // Ctrl+C or browser closed
+  } catch (error) {
+    if (error.code !== 'ERR_SCRIPT_EXECUTION_INTERRUPTED') {
+      console.error('Error:', error);
+    }
   } finally {
     browser_instance.stop();
   }

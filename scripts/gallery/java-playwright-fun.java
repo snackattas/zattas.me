@@ -2,6 +2,7 @@
 // Language: Java
 
 import java.util.Arrays;
+import java.util.List;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.Cookie;
 

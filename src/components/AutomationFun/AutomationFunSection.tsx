@@ -61,9 +61,9 @@ const instructions: Record<string, Record<string, string>> = {
 
 4. Compile and run:
    mvn compile exec:java -Dexec.mainClass=PlaywrightFun`,
-    javascript: `1. Install Playwright globally and create file:
-   npm install -g playwright
-   playwright install
+    javascript: `1. Install Playwright and create file:
+   npm install playwright
+   npx playwright install
    touch playwright_fun.js
 
 2. Save the script below to playwright_fun.js

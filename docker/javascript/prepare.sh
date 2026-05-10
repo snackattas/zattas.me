@@ -29,8 +29,10 @@ echo "===== TRANSFORMED SCRIPT ====="
 cat "$TEMP_SCRIPT"
 echo "============================="
 
-cp /app/docker/javascript/cypress.config.js /tmp/cypress.config.js
-echo ""
-echo "===== cypress.config.js ====="
-cat /tmp/cypress.config.js
-echo "============================="
+if [ "$EXPECTED_AUTOMATION_TOOL" = "cypress" ]; then
+  cp /app/docker/javascript/cypress.config.js /tmp/cypress.config.js
+  echo ""
+  echo "===== cypress.config.js ====="
+  cat /tmp/cypress.config.js
+  echo "============================="
+fi
