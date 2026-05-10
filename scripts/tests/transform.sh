@@ -22,8 +22,9 @@ mkdir -p "$(dirname "$OUTPUT_SCRIPT")"
 cp "$INPUT_SCRIPT" "$OUTPUT_SCRIPT"
 
 # Step 1: Replace production domain with test domain
+COOKIE_DOMAIN=$(echo "$TARGET_URL" | sed 's|https\?://||' | sed 's|/.*||')
 awk "{gsub(/https:\/\/zattas\.me/, \"$TARGET_URL\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
-awk "{gsub(/zattas\.me/, \"localhost\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
+awk "{gsub(/zattas\.me/, \"$COOKIE_DOMAIN\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
 
 # Step 2: Switch to headless mode for CI
 awk "{gsub(/headless[[:space:]]*=[[:space:]]*false/, \"headless=true\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"

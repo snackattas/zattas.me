@@ -1,0 +1,65 @@
+name: Automation Detection Nightly (zattas.me)
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [javascript, python, java, ruby]
+        tool: [selenium, playwright, vibium]
+        browser: [chrome]
+        exclude:
+          # Cypress only supports JavaScript
+          - language: python
+            tool: cypress
+          - language: java
+            tool: cypress
+          - language: ruby
+            tool: cypress
+          # Vibium has no Ruby gem
+          - language: ruby
+            tool: vibium
+        include:
+          # JavaScript-only tools
+          - language: javascript
+            tool: cypress
+            browser: chrome
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Test Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          target: ${{ matrix.language }}
+          tags: test-image-language-${{ matrix.language }}
+          load: true
+          cache-from: type=gha,scope=${{ matrix.language }}
+          cache-to: type=gha,scope=${{ matrix.language }},mode=max
+
+      - name: Run automation detection test
+        timeout-minutes: 1
+        run: |
+          docker run \
+            --rm \
+            --shm-size=2gb \
+            --cap-add SYS_ADMIN \
+            --security-opt seccomp=unconfined \
+            -e TARGET_URL=https://zattas.me \
+            -e GALLERY_SCRIPT_DIR=/app/scripts/gallery \
+            -e EXPECTED_AUTOMATION_TOOL=${{ matrix.tool }} \
+            -e LANGUAGE=${{ matrix.language }} \
+            test-image-language-${{ matrix.language }} \
+            bash -o pipefail -c '/app/entrypoint.sh 2>&1 | tee /tmp/test-output.log && grep -q "AUTOMATION_DETECTED_VERIFIED" /tmp/test-output.log'
