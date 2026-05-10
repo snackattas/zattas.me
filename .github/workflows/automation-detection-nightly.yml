@@ -16,13 +16,6 @@ jobs:
         tool: [selenium, playwright, vibium]
         browser: [chrome]
         exclude:
-          # Cypress only supports JavaScript
-          - language: python
-            tool: cypress
-          - language: java
-            tool: cypress
-          - language: ruby
-            tool: cypress
           # Vibium has no Ruby gem
           - language: ruby
             tool: vibium
@@ -46,8 +39,7 @@ jobs:
           target: ${{ matrix.language }}
           tags: test-image-language-${{ matrix.language }}
           load: true
-          cache-from: type=gha,scope=${{ matrix.language }}
-          cache-to: type=gha,scope=${{ matrix.language }},mode=max
+          no-cache: true
 
       - name: Run automation detection test
         timeout-minutes: 1
