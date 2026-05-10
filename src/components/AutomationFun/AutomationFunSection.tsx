@@ -17,8 +17,8 @@ const fallbackScripts: Record<string, Record<string, string>> = {};
 // Instructions per tool/language
 const instructions: Record<string, Record<string, string>> = {
   playwright: {
-    python: `1. Install Playwright and create file:
-   pip install playwright
+    python: `1. Install Playwright and create file (if the browser crashes on run, re-run this step to upgrade):
+   pip install --upgrade playwright
    playwright install
    touch playwright_fun.py
 
@@ -26,20 +26,44 @@ const instructions: Record<string, Record<string, string>> = {
 
 3. Run the script:
    python playwright_fun.py`,
-    java: `1. Add to pom.xml or build.gradle:
-   <dependency>
-       <groupId>com.microsoft.playwright</groupId>
-       <artifactId>playwright</artifactId>
-       <version>1.x.x</version>
-   </dependency>
+    java: `1. Create pom.xml:
+   cat > pom.xml << 'EOF'
+   <?xml version="1.0" encoding="UTF-8"?>
+   <project xmlns="http://maven.apache.org/POM/4.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                                http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+     <groupId>com.test</groupId>
+     <artifactId>playwright-test</artifactId>
+     <version>1.0</version>
+     <properties>
+       <maven.compiler.source>21</maven.compiler.source>
+       <maven.compiler.target>21</maven.compiler.target>
+     </properties>
+     <build>
+       <sourceDirectory>.</sourceDirectory>
+     </build>
+     <dependencies>
+       <dependency>
+         <groupId>com.microsoft.playwright</groupId>
+         <artifactId>playwright</artifactId>
+         <version>1.48.0</version>
+       </dependency>
+     </dependencies>
+   </project>
+   EOF
 
-2. Save the script below to PlaywrightFun.java
+2. Install browsers:
+   mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install"
 
-3. Compile and run:
-   javac PlaywrightFun.java && java PlaywrightFun`,
-    javascript: `1. Install Playwright globally and create file:
-   npm install -g playwright
-   playwright install
+3. Save the script below to PlaywrightFun.java (same directory as pom.xml)
+
+4. Compile and run:
+   mvn compile exec:java -Dexec.mainClass=PlaywrightFun`,
+    javascript: `1. Install Playwright and create file:
+   npm install playwright
+   npx playwright install
    touch playwright_fun.js
 
 2. Save the script below to playwright_fun.js
@@ -58,31 +82,52 @@ const instructions: Record<string, Record<string, string>> = {
   },
   selenium: {
     python: `1. Install Selenium and create file:
-   pip install selenium
+   pip install --upgrade selenium
    touch selenium_fun.py
 
 2. Save the script below to selenium_fun.py
 
-3. Run the script:
+3. Run the script (requires Chrome — if you see errors, update Chrome to the latest version):
    python selenium_fun.py`,
-    java: `1. Add to pom.xml or build.gradle:
-   <dependency>
-       <groupId>org.seleniumhq.selenium</groupId>
-       <artifactId>selenium-java</artifactId>
-       <version>4.x.x</version>
-   </dependency>
+    java: `1. Create pom.xml:
+   cat > pom.xml << 'EOF'
+   <?xml version="1.0" encoding="UTF-8"?>
+   <project xmlns="http://maven.apache.org/POM/4.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                                http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+     <groupId>com.test</groupId>
+     <artifactId>selenium-test</artifactId>
+     <version>1.0</version>
+     <properties>
+       <maven.compiler.source>21</maven.compiler.source>
+       <maven.compiler.target>21</maven.compiler.target>
+     </properties>
+     <build>
+       <sourceDirectory>.</sourceDirectory>
+     </build>
+     <dependencies>
+       <dependency>
+         <groupId>org.seleniumhq.selenium</groupId>
+         <artifactId>selenium-java</artifactId>
+         <version>4.33.0</version>
+       </dependency>
+     </dependencies>
+   </project>
+   EOF
 
-2. Save the script below to SeleniumFun.java
+2. Save the script below to SeleniumFun.java (same directory as pom.xml)
 
-3. Compile and run:
-   javac SeleniumFun.java && java SeleniumFun`,
+3. Compile and run (requires Chrome — if you see errors, update Chrome to the latest version):
+   mvn compile exec:java -Dexec.mainClass=SeleniumFun`,
     javascript: `1. Install Selenium WebDriver globally and create file:
    npm install -g selenium-webdriver
    touch selenium_fun.js
 
 2. Save the script below to selenium_fun.js
 
-3. Run the script:
+3. Run the script (requires Chrome — if you see errors, update Chrome to the latest version):
    node selenium_fun.js`,
     ruby: `1. Install Selenium WebDriver and create file:
    gem install selenium-webdriver
@@ -90,7 +135,7 @@ const instructions: Record<string, Record<string, string>> = {
 
 2. Save the script below to selenium_fun.rb
 
-3. Run the script:
+3. Run the script (requires Chrome — if you see errors, update Chrome to the latest version):
    ruby selenium_fun.rb`,
   },
   cypress: {
@@ -115,24 +160,13 @@ const instructions: Record<string, Record<string, string>> = {
   },
   vibium: {
     python: `1. Install Vibium and create file:
-   pip install vibium
+   pip install --upgrade vibium
    touch vibium_fun.py
 
 2. Save the script below to vibium_fun.py
 
 3. Run the script:
    python vibium_fun.py`,
-    java: `1. Add to pom.xml or build.gradle:
-   <dependency>
-       <groupId>com.vibium</groupId>
-       <artifactId>vibium</artifactId>
-       <version>26.3.18</version>
-   </dependency>
-
-2. Save the script below to VibiumFun.java
-
-3. Compile and run:
-   javac VibiumFun.java && java VibiumFun`,
     javascript: `1. Install Vibium globally (version 26.3.9):
    npm install -g vibium@26.3.9
    vibium install
@@ -149,7 +183,7 @@ const availableLangs: Record<string, string[]> = {
   playwright: ["python", "java", "javascript", "ruby"],
   selenium: ["python", "java", "javascript", "ruby"],
   cypress: ["javascript"],
-  vibium: ["python", "java", "javascript"],
+  vibium: ["python", "javascript"],
 };
 
 export function AutomationFunSection() {

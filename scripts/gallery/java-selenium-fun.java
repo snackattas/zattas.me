@@ -10,7 +10,9 @@ import org.openqa.selenium.chrome.ChromeOptions;
 public class SeleniumFun {
     public static void main(String[] args) throws Exception {
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless=false");
+        // Headless is intentionally not set here. On macOS, passing --headless=false causes Chrome
+        // to launch invisibly when started by a background Java process — the opposite of what you'd
+        // expect. Omitting the flag entirely lets Chrome default to headed mode and boot visibly.
         WebDriver driver = new ChromeDriver(options);
         try {
             driver.get("https://zattas.me");

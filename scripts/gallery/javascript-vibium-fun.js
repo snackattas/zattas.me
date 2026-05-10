@@ -6,29 +6,24 @@ const os = require('os');
 
 (async () => {
   const username = os.userInfo().username;
-  let browser_instance;
 
+  const browser_instance = browser.start({ headless: false });
+  const page = browser_instance.page();
+
+  page.go('https://zattas.me');
+
+  page.context.setCookies([
+    { name: 'automation_user', value: username, domain: 'zattas.me', path: '/' },
+    { name: 'automation_language', value: 'javascript', domain: 'zattas.me', path: '/' }
+  ]);
+
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  page.clock.install({ timezone: timezone });
+
+  console.log('Check the browser for your bonus haiku! Press Ctrl+C to exit.');
   try {
-    browser_instance = browser.start({ headless: false });
-    const page = browser_instance.page();
-
-    page.go('https://zattas.me');
-
-    page.context.setCookies([
-      { name: 'automation_user', value: username, domain: 'zattas.me', path: '/' },
-      { name: 'automation_language', value: 'javascript', domain: 'zattas.me', path: '/' }
-    ]);
-
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    page.clock.install({ timezone: timezone });
-
-    console.log('Check the browser for your bonus haiku! Press Ctrl+C to exit.');
     await new Promise(r => setTimeout(r, 300000)); // Keep open for 5 minutes
-  } catch (error) {
-    if (error.code !== 'ERR_SCRIPT_EXECUTION_INTERRUPTED') {
-      console.error('Error:', error);
-    }
   } finally {
-    if (browser_instance) browser_instance.stop();
+    browser_instance.stop();
   }
 })();

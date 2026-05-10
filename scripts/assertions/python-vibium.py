@@ -1,8 +1,8 @@
 # TEST: Check automation_detected cookie
 time.sleep(2)
-cookies = {c['name']: c['value'] for c in driver.get_cookies()}
+cookies = page.context.cookies()
 print(f'Cookies: {cookies}')
-detected = cookies.get('automation_detected')
+detected = next((c['value'] for c in cookies if c['name'] == 'automation_detected'), None)
 if detected == '{{EXPECTED_TOOL}}':
     print('✅ AUTOMATION_DETECTED_VERIFIED: {{EXPECTED_TOOL}}')
 else:

@@ -12,26 +12,23 @@ public class PlaywrightFun {
             Browser browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions().setHeadless(false)
             );
+            BrowserContext context = browser.newContext();
+            Page page = context.newPage();
+
+            page.navigate("https://zattas.me");
+            context.addCookies(Arrays.asList(
+                new Cookie("automation_user", System.getProperty("user.name"))
+                    .setUrl("https://zattas.me"),
+                new Cookie("automation_language", "java")
+                    .setUrl("https://zattas.me")
+            ));
+            page.setViewportSize(1920, 1080);
+
+            System.out.println("Check the browser for your bonus haiku! Press Ctrl+C to exit.");
             try {
-                BrowserContext context = browser.newContext();
-                Page page = context.newPage();
-
-                page.navigate("https://zattas.me");
-                context.addCookies(Arrays.asList(
-                    new Cookie("automation_user", System.getProperty("user.name"))
-                        .setUrl("https://zattas.me"),
-                    new Cookie("automation_language", "java")
-                        .setUrl("https://zattas.me")
-                ));
-                page.setViewportSize(1920, 1080);
-
-                System.out.println("Check the browser for your bonus haiku! Press Ctrl+C to exit.");
                 Thread.sleep(300000); // Keep open for 5 minutes
             } catch (InterruptedException e) {
-                // Ctrl+C
-            } catch (Exception e) {
-                System.err.println("Error: " + e.getMessage());
-                e.printStackTrace();
+                // Ctrl+C or browser closed
             } finally {
                 browser.close();
             }

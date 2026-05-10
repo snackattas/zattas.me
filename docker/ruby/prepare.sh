@@ -17,7 +17,7 @@ TEMP_SCRIPT="/tmp/test-$(date +%s).rb"
 
 echo "TEMP_SCRIPT=$TEMP_SCRIPT" > /tmp/prepare-env
 
-/app/scripts/tests/transform.sh "$GALLERY_SCRIPT_PATH" "$TEMP_SCRIPT" "$EXPECTED_AUTOMATION_TOOL" "$TARGET_URL"
+/app/scripts/transform.sh "$GALLERY_SCRIPT_PATH" "$TEMP_SCRIPT" "$EXPECTED_AUTOMATION_TOOL" "$TARGET_URL"
 
 echo ""
 echo "===== TRANSFORMED SCRIPT ====="

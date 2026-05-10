@@ -13,22 +13,17 @@ WORKDIR /app
 COPY scripts/ ./scripts/
 
 # ── JavaScript ────────────────────────────────────────────────────────────────
-FROM node:lts AS javascript
+FROM base AS javascript
 
-# Cypress system dependencies for Debian/Linux
+# Cypress system dependencies not already present in the selenium base image
+# (Ubuntu Noble renames: libasound2t64, no libgconf-2-4)
 # https://docs.cypress.io/app/get-started/install-cypress#Linux-Prerequisites
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    bash \
-    libgtk-3-0 libgbm1 libasound2 libxss1 \
-    libgconf-2-4 libnss3 libatk1.0-0 libatk-bridge2.0-0 \
-    libcups2 libdrm2 libxcomposite1 libxdamage1 libxfixes3 \
+    libgtk-3-0 libgbm1 libasound2t64 libxss1 \
+    libatk-bridge2.0-0 \
+    libxcomposite1 libxdamage1 libxfixes3 \
     libxrandr2 libpango-1.0-0 libcairo2 \
     && rm -rf /var/lib/apt/lists/*
-
-RUN groupadd -r seluser && useradd -r -g seluser -m seluser
-
-WORKDIR /app
-COPY scripts/ ./scripts/
 
 COPY docker/javascript/package.json ./package.json
 RUN npm install
@@ -37,6 +32,11 @@ ENV PLAYWRIGHT_BROWSERS_PATH=/home/seluser/playwright-browsers
 RUN npx playwright install chromium chromium-headless-shell --with-deps
 
 ENV NODE_PATH=/app/node_modules
+# Install Cypress into /tmp so there are no uid-mismatch permission issues at runtime
+ENV CYPRESS_CACHE_FOLDER=/tmp/cypress-cache
+RUN /app/node_modules/.bin/cypress install
+RUN chmod -R 777 /tmp/cypress-cache
+
 COPY docker/javascript/entrypoint.sh /app/entrypoint.sh
 COPY docker/javascript/prepare.sh /app/docker/javascript/prepare.sh
 COPY docker/javascript/run.sh /app/docker/javascript/run.sh
@@ -44,7 +44,7 @@ COPY docker/javascript/cypress.config.js /app/docker/javascript/cypress.config.j
 RUN chmod +x /app/entrypoint.sh /app/docker/javascript/prepare.sh /app/docker/javascript/run.sh
 
 USER seluser
-RUN /app/node_modules/.bin/cypress install
+RUN /app/node_modules/.bin/vibium install
 
 ENTRYPOINT ["/app/entrypoint.sh"]
 

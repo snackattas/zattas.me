@@ -13,8 +13,11 @@ source /tmp/prepare-env
 
 if [ "$EXPECTED_AUTOMATION_TOOL" = "cypress" ]; then
   cd /tmp
+  # Cypress's Electron binary needs a display even in --headless mode
+  Xvfb :99 -screen 0 1920x1080x24 &
+  export DISPLAY=:99
   CHROMIUM_PATH=$(find /home/seluser/playwright-browsers -name "chrome" -type f | head -1)
-  /app/node_modules/.bin/cypress run --headless --browser "$CHROMIUM_PATH" 2>&1
+  /app/node_modules/.bin/cypress run --headless --browser "$CHROMIUM_PATH" --config baseUrl="$TARGET_URL" 2>&1
   EXIT_CODE=$?
 else
   node "$TEMP_SCRIPT"

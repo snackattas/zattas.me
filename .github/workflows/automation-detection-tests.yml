@@ -91,7 +91,11 @@ jobs:
             -e LANGUAGE=${{ matrix.language }} \
             --network host \
             test-image-language-${{ matrix.language }} \
-            bash -o pipefail -c '/app/entrypoint.sh 2>&1 | tee /tmp/test-output.log && grep -q "AUTOMATION_DETECTED_VERIFIED" /tmp/test-output.log'
+            bash -o pipefail -c '
+              log=/tmp/test-output-${{ matrix.language }}-${{ matrix.tool }}.log
+              /app/entrypoint.sh 2>&1 | tee "$log"
+              grep -q "AUTOMATION_DETECTED_VERIFIED" "$log"
+            '
 
       - name: Show dev server logs on failure
         if: failure()

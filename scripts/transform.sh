@@ -32,6 +32,10 @@ awk "{gsub(/headless[[:space:]]*:[[:space:]]*false/, \"headless: true\"); print}
 awk "{gsub(/headless[[:space:]]*=[[:space:]]*False/, \"headless=True\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
 awk "{gsub(/headless[[:space:]]*:[[:space:]]*False/, \"headless: True\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
 awk "{gsub(/setHeadless\(false\)/, \"setHeadless(true)\"); print}" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
+# Inject headless arg into java-selenium in place of the "// Headless" comment block (headless is
+# omitted in the gallery script because passing --headless=false on macOS paradoxically causes
+# Chrome to launch invisibly when started by a background Java process)
+awk "/\/\/ Headless/ { match(\$0, /^[[:space:]]*/); print substr(\$0, 1, RLENGTH) \"options.addArguments(\\\"--headless=true\\\");\"; next } { print }" "$OUTPUT_SCRIPT" > "${OUTPUT_SCRIPT}.tmp" && mv "${OUTPUT_SCRIPT}.tmp" "$OUTPUT_SCRIPT"
 
 # Step 3: Replace "keep open" line with assertion from file
 EXTENSION="${OUTPUT_SCRIPT##*.}"
