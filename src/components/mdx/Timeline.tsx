@@ -114,9 +114,8 @@ function TimelineItemContent({
   const [showPreview, setShowPreview] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- standard SSR hydration guard
+  useEffect(() => { setMounted(true); }, []);
   const dateRange = formatDateRange(startDate, endDate, isCurrent, createdDate, monthDisplay, yearDisplay, showCreated);
 
   return (

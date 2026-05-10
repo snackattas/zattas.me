@@ -3,6 +3,20 @@
 import { useEffect, useState, useRef } from "react";
 import { getCookie } from "@/utils/cookies";
 
+declare global {
+  interface Window {
+    __automationDetected?: {
+      tool: string;
+      timestamp: number;
+      userAgent: string;
+      language: string | undefined;
+      username: string | undefined;
+    };
+    __vibiumClock?: unknown;
+    Cypress?: unknown;
+  }
+}
+
 export type AutomationTool = "selenium" | "playwright" | "cypress" | "vibium" | null;
 
 export interface AutomationDetection {
@@ -60,7 +74,7 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
       detectionRef.current = detection;
 
       // Set detection state for testing harnesses
-      (window as any).__automationDetected = {
+      window.__automationDetected = {
         tool,
         timestamp: Date.now(),
         userAgent: navigator.userAgent,
@@ -86,7 +100,7 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
       let hasUpgraded = false;
 
       const checkInterval = setInterval(() => {
-        if (!hasUpgraded && (window as any).__vibiumClock) {
+        if (!hasUpgraded && window.__vibiumClock) {
           clearInterval(checkInterval);
           hasUpgraded = true;
 
@@ -98,7 +112,7 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
           detectionRef.current = upgraded;
 
           // Update detection state for testing harnesses
-          (window as any).__automationDetected = {
+          window.__automationDetected = {
             tool: "vibium",
             timestamp: Date.now(),
             userAgent: navigator.userAgent,
@@ -146,14 +160,14 @@ export function AutomationDetector({ onDetected }: AutomationDetectorProps) {
 /**
  * Detect which automation tool is being used (client-side)
  */
-async function detectAutomationTool(): Promise<AutomationTool> {
+export async function detectAutomationTool(): Promise<AutomationTool> {
   if (typeof window === "undefined" || typeof navigator === "undefined") {
     return null;
   }
 
   // Check for Vibium specific globals FIRST (most specific)
   // Vibium injects __vibiumClock when page_clock_install is called
-  if ((window as any).__vibiumClock) {
+  if (window.__vibiumClock) {
     return "vibium";
   }
 
@@ -168,7 +182,7 @@ async function detectAutomationTool(): Promise<AutomationTool> {
     const { load } = await import("@fingerprintjs/botd");
     const botd = await load();
     const result = await botd.detect();
-    console.log('[BotD] Result:', { bot: result.bot, botKind: result.bot ? (result as any).botKind : undefined });
+    console.log('[BotD] Result:', { bot: result.bot });
 
     if (result.bot) {
       // BotD confirms WebDriver automation, but can't distinguish tool

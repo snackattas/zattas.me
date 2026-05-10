@@ -156,7 +156,7 @@ export function AutomationFunSection() {
   const [activeTool, setActiveTool] = useState("playwright");
   const [activeLang, setActiveLang] = useState("python");
   const [detection, setDetection] = useState<AutomationDetection | null>(null);
-  const [haiku, setHaiku] = useState<any>(null);
+  const [haiku, setHaiku] = useState<ReturnType<typeof getRandomHaiku> | null>(null);
   const [copiedMain, setCopiedMain] = useState(false);
   const [copiedCmd, setCopiedCmd] = useState<number | null>(null);
   const hasScrolledRef = useRef(false);
@@ -164,19 +164,17 @@ export function AutomationFunSection() {
   // Load Prism language definitions on client side
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      try {
-        require('prismjs/components/prism-java');
-        require('prismjs/components/prism-ruby');
-      } catch (e) {
-        // Languages may already be loaded
-      }
+      Promise.all([
+        import('prismjs/components/prism-java'),
+        import('prismjs/components/prism-ruby'),
+      ]).catch(() => { /* languages may already be loaded */ });
     }
   }, []);
 
   const handleDetected = useCallback((detection: AutomationDetection) => {
     setDetection(detection);
-    setHaiku((prev: any) => prev || getRandomHaiku());
-    setActiveTool((detection.tool as any) || "playwright");
+    setHaiku((prev) => prev ?? getRandomHaiku());
+    setActiveTool(detection.tool ?? "playwright");
 
     // Auto-scroll to section only on first detection
     if (!hasScrolledRef.current) {
@@ -241,7 +239,7 @@ export function AutomationFunSection() {
                   cypress: "🌲",
                   vibium: "⚡",
                 };
-                (e.currentTarget as any).style.display = "none";
+                e.currentTarget.style.display = "none";
                 const emoji = document.createElement("div");
                 emoji.textContent = emojiMap[detection.tool || ""] || "🤖";
                 emoji.style.fontSize = "88px";
@@ -276,7 +274,7 @@ export function AutomationFunSection() {
           // Human state
           <>
             <p className={styles["autoDesc"]}>
-              Run this page through an automation tool — it detects which one you're using and serves a custom haiku. Pick your tool and language below to get a script to run.
+              Run this page through an automation tool — it detects which one you&apos;re using and serves a custom haiku. Pick your tool and language below to get a script to run.
             </p>
 
             <div className={styles["autoStatus"]} data-detected="false">

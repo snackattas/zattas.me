@@ -36,12 +36,10 @@ export function AutomationFunModal({ isOpen, onClose, initialDetection }: Automa
   // Load Prism language definitions on client side
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      try {
-        require('prismjs/components/prism-java');
-        require('prismjs/components/prism-ruby');
-      } catch (e) {
-        // Languages may already be loaded
-      }
+      Promise.all([
+        import('prismjs/components/prism-java'),
+        import('prismjs/components/prism-ruby'),
+      ]).catch(() => { /* languages may already be loaded */ });
     }
   }, []);
 
@@ -53,11 +51,6 @@ export function AutomationFunModal({ isOpen, onClose, initialDetection }: Automa
       queueMicrotask(() => {
         setHaiku(getRandomHaiku());
         animateBackground();
-        // Set window property for test verification
-        if (typeof window !== 'undefined') {
-          (window as any).__automationModalOpened = true;
-          (window as any).__automationDetection = initialDetection;
-        }
       });
     }
   }, [initialDetection]);
