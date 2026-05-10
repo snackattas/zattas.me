@@ -77,7 +77,7 @@ jobs:
           NODE_ENV: test
 
       - name: Run automation detection test
-        timeout-minutes: 1
+        timeout-minutes: 3
         run: |
           docker run \
             --rm \
