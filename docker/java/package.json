@@ -1,0 +1,9 @@
+{
+  "name": "java-automation-tests",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "playwright": "latest",
+    "vibium": "26.3.9"
+  }
+}
