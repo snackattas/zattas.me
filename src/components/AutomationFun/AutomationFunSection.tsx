@@ -17,8 +17,8 @@ const fallbackScripts: Record<string, Record<string, string>> = {};
 // Instructions per tool/language
 const instructions: Record<string, Record<string, string>> = {
   playwright: {
-    python: `1. Install Playwright and create file:
-   pip install playwright
+    python: `1. Install Playwright and create file (if the browser crashes on run, re-run this step to upgrade):
+   pip install --upgrade playwright
    playwright install
    touch playwright_fun.py
 
@@ -82,7 +82,7 @@ const instructions: Record<string, Record<string, string>> = {
   },
   selenium: {
     python: `1. Install Selenium and create file:
-   pip install selenium
+   pip install --upgrade selenium
    touch selenium_fun.py
 
 2. Save the script below to selenium_fun.py
@@ -160,7 +160,7 @@ const instructions: Record<string, Record<string, string>> = {
   },
   vibium: {
     python: `1. Install Vibium and create file:
-   pip install vibium
+   pip install --upgrade vibium
    touch vibium_fun.py
 
 2. Save the script below to vibium_fun.py
