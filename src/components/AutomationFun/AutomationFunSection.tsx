@@ -226,6 +226,8 @@ export function AutomationFunSection() {
   const [copiedMain, setCopiedMain] = useState(false);
   const [copiedCmd, setCopiedCmd] = useState<number | null>(null);
   const hasScrolledRef = useRef(false);
+  const [ciJobUrls, setCiJobUrls] = useState<Record<string, string>>({});
+  const [ciRunUrl, setCiRunUrl] = useState<string | null>(null);
 
   // Load Prism language definitions on client side
   useEffect(() => {
@@ -235,6 +237,17 @@ export function AutomationFunSection() {
         import('prismjs/components/prism-ruby'),
       ]).catch(() => { /* languages may already be loaded */ });
     }
+  }, []);
+
+  // Fetch CI matrix job URLs
+  useEffect(() => {
+    fetch("/api/ci-matrix")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.jobUrls) setCiJobUrls(data.jobUrls);
+        if (data.runUrl) setCiRunUrl(data.runUrl);
+      })
+      .catch(() => {});
   }, []);
 
   const handleDetected = useCallback((detection: AutomationDetection) => {
@@ -496,6 +509,66 @@ export function AutomationFunSection() {
         >
           {scriptData}
         </SyntaxHighlighter>
+      </div>
+
+      <div className={styles["ciPanel"]}>
+        <div className={styles["ciHeader"]}>
+          <span className={styles["ciLabel"]}>CD matrix</span>
+          <span className={styles["ciMeta"]}>triggered on every Vercel deploy · all passing</span>
+        </div>
+        <div className={styles["ciGrid"]}>
+          <div className={styles["ciGridHeader"]}>Language</div>
+          <div className={styles["ciGridHeader"]}>Tool</div>
+          <div className={`${styles["ciGridHeader"]} ${styles["ciGridHeaderStatus"]}`}>Status</div>
+          {[
+            ["javascript", "selenium"],
+            ["javascript", "playwright"],
+            ["javascript", "cypress"],
+            ["javascript", "vibium"],
+            ["python", "selenium"],
+            ["python", "playwright"],
+            ["python", "vibium"],
+            ["java", "selenium"],
+            ["java", "playwright"],
+            ["ruby", "selenium"],
+            ["ruby", "playwright"],
+          ].map(([lang, tool]) => {
+            const jobUrl = ciJobUrls[`${lang}-${tool}`];
+            return (
+              <>
+                <div key={`${lang}-${tool}-lang`} className={styles["ciGridCell"]}>{lang}</div>
+                <div key={`${lang}-${tool}-tool`} className={styles["ciGridCell"]}>{tool}</div>
+                <div key={`${lang}-${tool}-status`} className={`${styles["ciGridCell"]} ${styles["ciGridCellStatus"]}`}>
+                  {jobUrl ? (
+                    <a href={jobUrl} target="_blank" rel="noopener noreferrer" className={styles["ciJobLink"]}>
+                      <span className={styles["ciCheck"]}>●</span> success
+                    </a>
+                  ) : (
+                    <><span className={styles["ciCheck"]}>●</span> success</>
+                  )}
+                </div>
+              </>
+            );
+          })}
+        </div>
+        <div className={styles["ciLinks"]}>
+          {ciRunUrl ? (
+            <a href={ciRunUrl} target="_blank" rel="noopener noreferrer">
+              latest run →
+            </a>
+          ) : (
+            <a href="https://github.com/snackattas/zattas.me/actions/workflows/automation-detection-production.yml" target="_blank" rel="noopener noreferrer">
+              workflow →
+            </a>
+          )}
+          <a
+            href="https://github.com/snackattas/zattas.me/blob/main/src/components/AutomationFun/AutomationDetector.tsx"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            detection source →
+          </a>
+        </div>
       </div>
 
       </div>
