@@ -228,6 +228,8 @@ export function AutomationFunSection() {
   const hasScrolledRef = useRef(false);
   const [ciJobUrls, setCiJobUrls] = useState<Record<string, string>>({});
   const [ciRunUrl, setCiRunUrl] = useState<string | null>(null);
+  const [ciSort, setCiSort] = useState<{ col: "lang" | "tool" | "status"; dir: 1 | -1 } | null>(null);
+  const [ciHoveredRow, setCiHoveredRow] = useState<string | null>(null);
 
   // Load Prism language definitions on client side
   useEffect(() => {
@@ -517,36 +519,46 @@ export function AutomationFunSection() {
           <span className={styles["ciMeta"]}>triggered on every Vercel deploy · all passing</span>
         </div>
         <div className={styles["ciGrid"]}>
-          <div className={styles["ciGridHeader"]}>Language</div>
-          <div className={styles["ciGridHeader"]}>Tool</div>
-          <div className={`${styles["ciGridHeader"]} ${styles["ciGridHeaderStatus"]}`}>Status</div>
-          {[
-            ["javascript", "selenium"],
-            ["javascript", "playwright"],
-            ["javascript", "cypress"],
-            ["javascript", "vibium"],
-            ["python", "selenium"],
-            ["python", "playwright"],
-            ["python", "vibium"],
-            ["java", "selenium"],
-            ["java", "playwright"],
-            ["ruby", "selenium"],
-            ["ruby", "playwright"],
-          ].map(([lang, tool]) => {
+          {(["lang", "tool", "status"] as const).map((col) => {
+            const active = ciSort?.col === col;
+            const handleSort = () =>
+              setCiSort(active ? { col, dir: ciSort!.dir === 1 ? -1 : 1 } : { col, dir: 1 });
+            const label = col === "lang" ? "Language" : col === "tool" ? "Tool" : "Status";
+            return (
+              <button key={col} className={`${styles["ciGridHeader"]} ${styles["ciGridHeaderSortable"]} ${active ? styles["ciGridHeaderActive"] : ""} ${col === "status" ? styles["ciGridHeaderStatus"] : ""}`} onClick={handleSort}>
+                {label}
+                <span className={styles["ciSortIndicator"]}>{active ? (ciSort!.dir === 1 ? " ↑" : " ↓") : " ↕"}</span>
+              </button>
+            );
+          })}
+          {Object.entries(scripts).flatMap(([tool, langs]) =>
+            Object.keys(langs).map((lang) => [lang, tool])
+          ).sort((a, b) => {
+            if (!ciSort) return 0;
+            const val = (row: string[]) => {
+              if (ciSort.col === "lang") return row[0]!;
+              if (ciSort.col === "tool") return row[1]!;
+              return "success";
+            };
+            return val(a).localeCompare(val(b)) * ciSort.dir;
+          }).map(([lang, tool]) => {
             const jobUrl = ciJobUrls[`${lang}-${tool}`];
+            const rowKey = `${lang}-${tool}`;
+            const isHovered = ciHoveredRow === rowKey;
+            const Cell = jobUrl ? "a" : "div";
+            const cellProps = {
+              ...(jobUrl ? { href: jobUrl, target: "_blank" as const, rel: "noopener noreferrer" } : {}),
+              onMouseEnter: () => setCiHoveredRow(rowKey),
+              onMouseLeave: () => setCiHoveredRow(null),
+              className: `${jobUrl ? styles["ciGridCellLink"] : styles["ciGridCell"]} ${isHovered ? styles["ciGridRowHovered"] : ""}`,
+            };
             return (
               <>
-                <div key={`${lang}-${tool}-lang`} className={styles["ciGridCell"]}>{lang}</div>
-                <div key={`${lang}-${tool}-tool`} className={styles["ciGridCell"]}>{tool}</div>
-                <div key={`${lang}-${tool}-status`} className={`${styles["ciGridCell"]} ${styles["ciGridCellStatus"]}`}>
-                  {jobUrl ? (
-                    <a href={jobUrl} target="_blank" rel="noopener noreferrer" className={styles["ciJobLink"]}>
-                      <span className={styles["ciCheck"]}>●</span> success
-                    </a>
-                  ) : (
-                    <><span className={styles["ciCheck"]}>●</span> success</>
-                  )}
-                </div>
+                <Cell key={`${rowKey}-lang`} {...cellProps}>{lang}</Cell>
+                <Cell key={`${rowKey}-tool`} {...cellProps}>{tool}</Cell>
+                <Cell key={`${rowKey}-status`} {...cellProps} className={`${jobUrl ? styles["ciGridCellLink"] : styles["ciGridCell"]} ${styles["ciGridCellStatus"]} ${isHovered ? styles["ciGridRowHovered"] : ""}`}>
+                  <span className={styles["ciCheck"]}>●</span> success
+                </Cell>
               </>
             );
           })}
