@@ -32,6 +32,11 @@ ENV PLAYWRIGHT_BROWSERS_PATH=/home/seluser/playwright-browsers
 RUN npx playwright install chromium chromium-headless-shell --with-deps
 
 ENV NODE_PATH=/app/node_modules
+# Install Cypress into /tmp so there are no uid-mismatch permission issues at runtime
+ENV CYPRESS_CACHE_FOLDER=/tmp/cypress-cache
+RUN /app/node_modules/.bin/cypress install
+RUN chmod -R 777 /tmp/cypress-cache
+
 COPY docker/javascript/entrypoint.sh /app/entrypoint.sh
 COPY docker/javascript/prepare.sh /app/docker/javascript/prepare.sh
 COPY docker/javascript/run.sh /app/docker/javascript/run.sh
@@ -39,7 +44,6 @@ COPY docker/javascript/cypress.config.js /app/docker/javascript/cypress.config.j
 RUN chmod +x /app/entrypoint.sh /app/docker/javascript/prepare.sh /app/docker/javascript/run.sh
 
 USER seluser
-RUN /app/node_modules/.bin/cypress install
 RUN /app/node_modules/.bin/vibium install
 
 ENTRYPOINT ["/app/entrypoint.sh"]
