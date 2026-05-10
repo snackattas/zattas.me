@@ -41,6 +41,9 @@ const instructions: Record<string, Record<string, string>> = {
        <maven.compiler.source>21</maven.compiler.source>
        <maven.compiler.target>21</maven.compiler.target>
      </properties>
+     <build>
+       <sourceDirectory>.</sourceDirectory>
+     </build>
      <dependencies>
        <dependency>
          <groupId>com.microsoft.playwright</groupId>
@@ -51,10 +54,10 @@ const instructions: Record<string, Record<string, string>> = {
    </project>
    EOF
 
-2. Install Chromium browser:
-   mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install chromium"
+2. Install browsers:
+   mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install"
 
-3. Save the script below to PlaywrightFun.java
+3. Save the script below to PlaywrightFun.java (same directory as pom.xml)
 
 4. Compile and run:
    mvn compile exec:java -Dexec.mainClass=PlaywrightFun`,
@@ -84,7 +87,7 @@ const instructions: Record<string, Record<string, string>> = {
 
 2. Save the script below to selenium_fun.py
 
-3. Run the script:
+3. Run the script (requires Chrome — if you see errors, update Chrome to the latest version):
    python selenium_fun.py`,
     java: `1. Create pom.xml:
    cat > pom.xml << 'EOF'
@@ -101,19 +104,22 @@ const instructions: Record<string, Record<string, string>> = {
        <maven.compiler.source>21</maven.compiler.source>
        <maven.compiler.target>21</maven.compiler.target>
      </properties>
+     <build>
+       <sourceDirectory>.</sourceDirectory>
+     </build>
      <dependencies>
        <dependency>
          <groupId>org.seleniumhq.selenium</groupId>
          <artifactId>selenium-java</artifactId>
-         <version>4.15.0</version>
+         <version>4.33.0</version>
        </dependency>
      </dependencies>
    </project>
    EOF
 
-2. Save the script below to SeleniumFun.java
+2. Save the script below to SeleniumFun.java (same directory as pom.xml)
 
-3. Compile and run:
+3. Compile and run (requires Chrome — if you see errors, update Chrome to the latest version):
    mvn compile exec:java -Dexec.mainClass=SeleniumFun`,
     javascript: `1. Install Selenium WebDriver globally and create file:
    npm install -g selenium-webdriver
@@ -121,7 +127,7 @@ const instructions: Record<string, Record<string, string>> = {
 
 2. Save the script below to selenium_fun.js
 
-3. Run the script:
+3. Run the script (requires Chrome — if you see errors, update Chrome to the latest version):
    node selenium_fun.js`,
     ruby: `1. Install Selenium WebDriver and create file:
    gem install selenium-webdriver
@@ -129,7 +135,7 @@ const instructions: Record<string, Record<string, string>> = {
 
 2. Save the script below to selenium_fun.rb
 
-3. Run the script:
+3. Run the script (requires Chrome — if you see errors, update Chrome to the latest version):
    ruby selenium_fun.rb`,
   },
   cypress: {
