@@ -7,6 +7,7 @@ import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { AutomationDetector, type AutomationDetection } from "./AutomationDetector";
 import { getRandomHaiku } from "@/data/haikus";
 import { galleryScripts } from "@/data/generatedGalleryScripts";
+import { Sparkle } from "@/components/Sparkle";
 import styles from "./automation.module.css";
 
 // Use pre-loaded scripts
@@ -186,6 +187,8 @@ export function AutomationFunSection() {
   const [activeLang, setActiveLang] = useState("python");
   const [detection, setDetection] = useState<AutomationDetection | null>(null);
   const [haiku, setHaiku] = useState<ReturnType<typeof getRandomHaiku> | null>(null);
+  const [discoActive, setDiscoActive] = useState(false);
+  const discoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [copiedCmd, setCopiedCmd] = useState<number | null>(null);
   const hasScrolledRef = useRef(false);
   const [ciJobUrls, setCiJobUrls] = useState<Record<string, string>>({});
@@ -226,14 +229,19 @@ export function AutomationFunSection() {
     setHaiku((prev) => prev ?? getRandomHaiku());
     setActiveTool(detection.tool ?? "playwright");
 
+    // Disco effect for 5 minutes — always on detection
+    document.body.classList.add("disco-active");
+    setDiscoActive(true);
+    if (discoTimerRef.current) clearTimeout(discoTimerRef.current);
+    discoTimerRef.current = setTimeout(() => {
+      document.body.classList.remove("disco-active");
+      setDiscoActive(false);
+    }, 300000);
+
     // Auto-scroll to section only on first detection
     if (!hasScrolledRef.current) {
       hasScrolledRef.current = true;
       document.getElementById("automation-fun")?.scrollIntoView({ block: "start" });
-
-      // Disco effect for 5 minutes
-      document.body.classList.add("disco-active");
-      setTimeout(() => document.body.classList.remove("disco-active"), 300000);
     }
   }, []);
 
@@ -259,6 +267,7 @@ const handleCmdCopy = (text: string, index: number) => {
 
   return (
     <section id="automation-fun">
+      {(discoActive || (detection && haiku)) && <Sparkle mode="fullscreen" />}
       <AutomationDetector onDetected={handleDetected} />
 
       <div className={styles["autoContainer"]}>
@@ -316,7 +325,7 @@ const handleCmdCopy = (text: string, index: number) => {
           // Human state
           <>
             <p className={styles["autoDesc"]}>
-              This website can detect if your browser is being driven by an automation tool.<br></br>Pick a tool and language below, run the script using that tool, and claim an AMAZING reward.
+              This website can <b>detect if your browser is being driven by an automation tool</b>.<br></br>Pick a tool and language below, run the script using that tool, and claim an <b>AMAZING reward</b>.
             </p>
 
             <div className={styles["autoStatus"]} data-detected="false">
@@ -518,8 +527,8 @@ const handleCmdCopy = (text: string, index: number) => {
             className={styles["ciTooltip"]}
             style={{ left: ciTooltipPos.x + 14, top: ciTooltipPos.y + 14 }}
           >
-            {ciGridHovered && <><span className={styles["ciTooltipClick"]}>click any row to open that run in github</span><br /></>}
-            every deploy triggers a full matrix of tests, testing each combo of automation tool and language — all verified green before going live
+            {ciGridHovered && <><span className={styles["ciTooltipClick"]}>click any row to open that job in github</span><br /></>}
+            every deploy triggers a full matrix of tests, verifying that each combo of automation tool and language correctly trips the detection logic, isn&apos;t mistaken for a human, and claims the <b>AMAZING reward</b>
           </div>,
           document.body
         )}
