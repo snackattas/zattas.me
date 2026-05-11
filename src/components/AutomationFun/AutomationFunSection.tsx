@@ -316,7 +316,7 @@ const handleCmdCopy = (text: string, index: number) => {
           // Human state
           <>
             <p className={styles["autoDesc"]}>
-              This website can detect if your browser is being driven by an automation tool. Pick a tool and language below, run the script through your automation tool, and claim your reward.
+              This website can detect if your browser is being driven by an automation tool.<br></br>Pick a tool and language below, run the script using that tool, and claim an AMAZING reward.
             </p>
 
             <div className={styles["autoStatus"]} data-detected="false">
@@ -328,7 +328,7 @@ const handleCmdCopy = (text: string, index: number) => {
                   Human detected
                 </div>
                 <div className={styles["autoStatusSub"]}>
-                  No automation tool found. Run one of the scripts below to receive your prize.
+                  No automation tool found.
                 </div>
               </div>
             </div>
