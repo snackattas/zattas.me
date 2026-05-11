@@ -69,7 +69,7 @@ export function ContactForm() {
           onBlur={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
         />
         <textarea
-          placeholder="Message — or paste a script error here if something didn't work"
+          placeholder="Message in, or if one of the scripts didn't work for you, paste the error you received here"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           required
