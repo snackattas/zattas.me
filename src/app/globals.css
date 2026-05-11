@@ -260,6 +260,7 @@ body.disco-active {
 }
 
 /* Copy button animation */
+
 @keyframes copyExpand {
   0% {
     padding-left: 0.75rem;

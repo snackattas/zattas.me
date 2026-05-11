@@ -41,7 +41,7 @@ export function Section({
       </div>
 
       {/* MDX content — the h1 inside MDX gets z-index:1 */}
-      <div className="reveal" style={{ position: "relative", zIndex: 1 }}>
+      <div className={`reveal${anchor === "automation-fun" ? " automation-fun-section" : ""}`} style={{ position: "relative", zIndex: 1 }}>
         {children}
       </div>
     </section>

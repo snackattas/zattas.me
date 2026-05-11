@@ -89,7 +89,9 @@ export function Nav({ sections }: { sections: NavSection[] }) {
                 >
                   {s.indexLabel}
                 </span>{" "}
-                {s.navLabel}
+                {s.anchor === "automation-fun"
+                  ? <span className="nav-disco">{s.navLabel}</span>
+                  : s.navLabel}
               </Link>
             </li>
           ))}
@@ -97,6 +99,18 @@ export function Nav({ sections }: { sections: NavSection[] }) {
       </div>
 
       <style>{`
+        @keyframes navDisco {
+          0%   { color: #e8500a; }
+          16%  { color: #d4a017; }
+          33%  { color: #2e9e4f; }
+          50%  { color: #2176ae; }
+          66%  { color: #7b3fa0; }
+          83%  { color: #c0334d; }
+          100% { color: #e8500a; }
+        }
+        .nav-disco {
+          animation: navDisco 3s linear infinite;
+        }
         @media (max-width: 767px) {
           .nav-container {
             height: auto !important;
