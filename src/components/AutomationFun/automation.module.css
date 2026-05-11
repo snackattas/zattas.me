@@ -425,6 +425,7 @@
 
 /* CI matrix panel */
 .ciPanel {
+  position: relative;
   border-top: 2px solid var(--border);
   padding-top: 24px;
   margin-top: 24px;
@@ -438,21 +439,9 @@
   flex-wrap: wrap;
 }
 
-.ciLabelWrap {
-  position: relative;
-  display: inline-block;
-}
-
-.ciLabelWrap:hover .ciTooltip {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
 .ciTooltip {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
+  position: fixed;
+  display: block;
   width: 280px;
   background: var(--fg);
   color: var(--bg);
@@ -464,20 +453,13 @@
   line-height: 1.5;
   padding: 8px 12px;
   border-radius: 4px;
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: opacity 0.15s ease, transform 0.15s ease;
   pointer-events: none;
-  z-index: 10;
+  z-index: 100;
 }
 
-.ciTooltip::before {
-  content: "";
-  position: absolute;
-  bottom: 100%;
-  left: 12px;
-  border: 5px solid transparent;
-  border-bottom-color: var(--fg);
+.ciTooltipClick {
+  opacity: 0.7;
+  font-style: italic;
 }
 
 .ciLabel {
@@ -488,6 +470,16 @@
   text-transform: uppercase;
   color: var(--fg);
   cursor: help;
+}
+
+.ciLabelHint {
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--muted);
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
 }
 
 .ciMeta {

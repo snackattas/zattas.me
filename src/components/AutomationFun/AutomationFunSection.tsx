@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useRef, useEffect } from "react";
+import ReactDOM from "react-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { AutomationDetector, type AutomationDetection } from "./AutomationDetector";
@@ -199,6 +200,8 @@ export function AutomationFunSection() {
   const [ciError, setCiError] = useState(false);
   const [ciSort, setCiSort] = useState<{ col: "lang" | "tool" | "status"; dir: 1 | -1 } | null>(null);
   const [ciHoveredRow, setCiHoveredRow] = useState<string | null>(null);
+  const [ciGridHovered, setCiGridHovered] = useState(false);
+  const [ciTooltipPos, setCiTooltipPos] = useState<{ x: number; y: number } | null>(null);
 
   // Load Prism language definitions on client side
   useEffect(() => {
@@ -486,15 +489,30 @@ export function AutomationFunSection() {
         </SyntaxHighlighter>
       </div>
 
-      <div className={styles["ciPanel"]}>
+      <div
+        className={styles["ciPanel"]}
+        onMouseMove={(e) => setCiTooltipPos({ x: e.clientX, y: e.clientY })}
+        onMouseLeave={() => setCiTooltipPos(null)}
+      >
+        {ciTooltipPos && typeof document !== "undefined" && ReactDOM.createPortal(
+          <div
+            className={styles["ciTooltip"]}
+            style={{ left: ciTooltipPos.x + 14, top: ciTooltipPos.y + 14 }}
+          >
+            {ciGridHovered && <><span className={styles["ciTooltipClick"]}>click any row to open that run in github</span><br /></>}
+            every deploy triggers a full matrix of tests, testing each combo of automation tool and language — all verified green before going live
+          </div>,
+          document.body
+        )}
         <div className={styles["ciHeader"]}>
-          <span className={styles["ciLabelWrap"]}>
-            <span className={styles["ciLabel"]}>CD matrix</span>
-            <span className={styles["ciTooltip"]}>every deploy triggers a full matrix of automation tools across 4 languages — all verified green before going live</span>
-          </span>
+          <span className={styles["ciLabel"]}>CD matrix <span className={styles["ciLabelHint"]}>[?]</span></span>
           <span className={styles["ciMeta"]}>triggered on every Vercel deploy · all passing</span>
         </div>
-        <div className={styles["ciGrid"]}>
+        <div
+          className={styles["ciGrid"]}
+          onMouseEnter={() => setCiGridHovered(true)}
+          onMouseLeave={() => setCiGridHovered(false)}
+        >
           {(["lang", "tool", "status"] as const).map((col) => {
             const active = ciSort?.col === col;
             const handleSort = () =>
