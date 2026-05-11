@@ -216,6 +216,28 @@
   }
 }
 
+
+.instrXmlDetails {
+  margin-top: 4px;
+}
+
+.instrXmlSummary {
+  font-family: var(--font-space-mono);
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+
+.instrXmlSummary::-webkit-details-marker {
+  display: none;
+}
+
+.instrXmlDetails[open] .instrXmlSummary {
+  color: rgba(255, 255, 255, 0.8);
+}
+
 .instrCmdCopy {
   font-family: var(--font-space-mono);
   font-size: 0.6rem;
@@ -238,54 +260,6 @@
 }
 
 /* Code block wrapper */
-.autoCodeWrap {
-  border: 2px solid var(--border);
-  background: #1a1815;
-  margin-bottom: 20px;
-}
-
-.autoCodeHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 10px 8px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: #1a1815;
-}
-
-.autoCodeLabel {
-  font-family: var(--font-space-mono);
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.3);
-  flex: 1;
-  min-width: 0;
-  margin-right: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.autoCopy {
-  font-family: var(--font-space-mono);
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  flex-shrink: 0;
-  transition: all 0.12s;
-}
-
-.autoCopy:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-}
 
 /* Syntax highlighter overrides */
 :global(.autoCode pre[class*="language-"]),
