@@ -241,7 +241,6 @@ export function AutomationFunSection() {
   const currentLang = langs.includes(activeLang) ? activeLang : (langs[0] || "python");
 
   const scriptData = (scripts[activeTool]?.[currentLang] || fallbackScripts[activeTool]?.[currentLang] || "");
-  const filename = scriptData.match(/^(?:\/\/|#) File: (.+)/m)?.[1] || "";
 
   const handleToolClick = (tool: string) => {
     setActiveTool(tool);
