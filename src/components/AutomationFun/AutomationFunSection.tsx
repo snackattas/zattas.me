@@ -525,7 +525,7 @@ const handleCmdCopy = (text: string, index: number) => {
         )}
         <div className={styles["ciHeader"]}>
           <span className={styles["ciLabel"]}>CD matrix <span className={styles["ciLabelHint"]}>[?]</span></span>
-          <span className={styles["ciMeta"]}>triggered on every Vercel deploy · all passing</span>
+          <span className={styles["ciMeta"]}>triggered daily and on every Vercel deploy to production · all passing</span>
         </div>
         <div
           className={styles["ciGrid"]}
