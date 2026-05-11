@@ -528,7 +528,7 @@ const handleCmdCopy = (text: string, index: number) => {
             style={{ left: ciTooltipPos.x + 14, top: ciTooltipPos.y + 14 }}
           >
             {ciGridHovered && <><span className={styles["ciTooltipClick"]}>click any row to open that run in github</span><br /></>}
-            every deploy triggers a full matrix of tests, testing each combo of automation tool and language — all verified green before going live
+            every deploy triggers a full matrix of tests, verifying that each combo of automation tool and language correctly trips the detection logic, isn&apos;t mistaken for a human, and claims the AMAZING reward
           </div>,
           document.body
         )}
