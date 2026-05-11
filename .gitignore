@@ -12,6 +12,7 @@
 # next.js
 /out
 next-env.d.ts
+*.tsbuildinfo
 
 # misc
 .DS_Store

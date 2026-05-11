@@ -73,11 +73,10 @@ FROM base AS java
 RUN apt-get update && apt-get install -y --no-install-recommends \
     maven && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g playwright vibium
-RUN npx playwright install-deps chromium
-
 COPY docker/java/pom.xml /app/docker/java/pom.xml
 RUN mvn dependency:resolve -f /app/docker/java/pom.xml || true
+# Make Maven local repo accessible to seluser
+RUN cp -r /root/.m2 /home/seluser/.m2 && chown -R seluser:seluser /home/seluser/.m2
 
 COPY docker/java/entrypoint.sh /app/entrypoint.sh
 COPY docker/java/prepare.sh /app/docker/java/prepare.sh
@@ -85,8 +84,6 @@ COPY docker/java/run.sh /app/docker/java/run.sh
 RUN chmod +x /app/entrypoint.sh /app/docker/java/prepare.sh /app/docker/java/run.sh
 
 USER seluser
-RUN npx playwright install chromium
-RUN vibium install
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # ── Ruby ──────────────────────────────────────────────────────────────────────
@@ -100,7 +97,7 @@ RUN groupadd -r seluser && useradd -r -g seluser -m seluser
 WORKDIR /app
 COPY scripts/ ./scripts/
 
-RUN gem install selenium-webdriver playwright-ruby-client:1.59.1
+RUN gem install selenium-webdriver:4.33.0 playwright-ruby-client:1.59.1
 RUN npm install -g playwright@1.59.1
 RUN npx playwright install-deps chromium chromium-headless-shell
 

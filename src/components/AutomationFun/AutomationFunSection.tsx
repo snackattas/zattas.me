@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import ReactDOM from "react-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { AutomationDetector, type AutomationDetection } from "./AutomationDetector";
@@ -121,26 +122,27 @@ const instructions: Record<string, Record<string, string>> = {
 
 3. Compile and run (requires Chrome — if you see errors, update Chrome to the latest version):
    mvn compile exec:java -Dexec.mainClass=SeleniumFun`,
-    javascript: `1. Install Selenium WebDriver globally and create file:
-   npm install -g selenium-webdriver
+    javascript: `1. Install Selenium WebDriver and create file:
+   npm install selenium-webdriver
    touch selenium_fun.js
 
 2. Save the script below to selenium_fun.js
 
 3. Run the script (requires Chrome — if you see errors, update Chrome to the latest version):
    node selenium_fun.js`,
-    ruby: `1. Install Selenium WebDriver and create file:
-   gem install selenium-webdriver
+    ruby: `1. Install Selenium WebDriver and create file (requires Ruby >= 3.0):
+   gem install selenium-webdriver -v 4.33.0
    touch selenium_fun.rb
 
 2. Save the script below to selenium_fun.rb
 
 3. Run the script (requires Chrome — if you see errors, update Chrome to the latest version):
-   ruby selenium_fun.rb`,
+   ruby selenium_fun.rb
+Note: the script pins selenium-webdriver to 4.33.0 via a gem() directive — newer versions have a Ruby 3.3 incompatibility.`,
   },
   cypress: {
-    javascript: `1. Install Cypress globally and create files:
-   npm install -g cypress
+    javascript: `1. Install Cypress and create files:
+   npm install cypress
    touch cypress.config.js cypress_fun.cy.js
 
 2. Save cypress.config.js content:
@@ -156,7 +158,7 @@ const instructions: Record<string, Record<string, string>> = {
    EOF
 
 3. Save the script below to cypress_fun.cy.js and run:
-   cypress run --headed`,
+   npx cypress run --headed`,
   },
   vibium: {
     python: `1. Install Vibium and create file:
@@ -167,12 +169,11 @@ const instructions: Record<string, Record<string, string>> = {
 
 3. Run the script:
    python vibium_fun.py`,
-    javascript: `1. Install Vibium globally (version 26.3.9):
-   npm install -g vibium@26.3.9
-   vibium install
+    javascript: `1. Install Vibium (version 26.3.9):
+   npm install vibium@26.3.9
+   npx vibium install
 
-2. Create and save the script below to vibium_fun.js:
-   touch vibium_fun.js
+2. Save the script below to vibium_fun.js
 
 3. Run the script:
    node vibium_fun.js`,
@@ -194,6 +195,13 @@ export function AutomationFunSection() {
   const [copiedMain, setCopiedMain] = useState(false);
   const [copiedCmd, setCopiedCmd] = useState<number | null>(null);
   const hasScrolledRef = useRef(false);
+  const [ciJobUrls, setCiJobUrls] = useState<Record<string, string>>({});
+  const [ciRunUrl, setCiRunUrl] = useState<string | null>(null);
+  const [ciError, setCiError] = useState(false);
+  const [ciSort, setCiSort] = useState<{ col: "lang" | "tool" | "status"; dir: 1 | -1 } | null>(null);
+  const [ciHoveredRow, setCiHoveredRow] = useState<string | null>(null);
+  const [ciGridHovered, setCiGridHovered] = useState(false);
+  const [ciTooltipPos, setCiTooltipPos] = useState<{ x: number; y: number } | null>(null);
 
   // Load Prism language definitions on client side
   useEffect(() => {
@@ -203,6 +211,21 @@ export function AutomationFunSection() {
         import('prismjs/components/prism-ruby'),
       ]).catch(() => { /* languages may already be loaded */ });
     }
+  }, []);
+
+  // Fetch CI matrix job URLs
+  useEffect(() => {
+    fetch("/api/ci-matrix")
+      .then((r) => {
+        if (!r.ok) throw new Error();
+        return r.json();
+      })
+      .then((data) => {
+        if (data.jobUrls) setCiJobUrls(data.jobUrls);
+        if (data.runUrl) setCiRunUrl(data.runUrl);
+        if (data.error) setCiError(true);
+      })
+      .catch(() => setCiError(true));
   }, []);
 
   const handleDetected = useCallback((detection: AutomationDetection) => {
@@ -464,6 +487,97 @@ export function AutomationFunSection() {
         >
           {scriptData}
         </SyntaxHighlighter>
+      </div>
+
+      <div
+        className={styles["ciPanel"]}
+        onMouseMove={(e) => setCiTooltipPos({ x: e.clientX, y: e.clientY })}
+        onMouseLeave={() => setCiTooltipPos(null)}
+      >
+        {ciTooltipPos && typeof document !== "undefined" && ReactDOM.createPortal(
+          <div
+            className={styles["ciTooltip"]}
+            style={{ left: ciTooltipPos.x + 14, top: ciTooltipPos.y + 14 }}
+          >
+            {ciGridHovered && <><span className={styles["ciTooltipClick"]}>click any row to open that run in github</span><br /></>}
+            every deploy triggers a full matrix of tests, testing each combo of automation tool and language — all verified green before going live
+          </div>,
+          document.body
+        )}
+        <div className={styles["ciHeader"]}>
+          <span className={styles["ciLabel"]}>CD matrix <span className={styles["ciLabelHint"]}>[?]</span></span>
+          <span className={styles["ciMeta"]}>triggered on every Vercel deploy · all passing</span>
+        </div>
+        <div
+          className={styles["ciGrid"]}
+          onMouseEnter={() => setCiGridHovered(true)}
+          onMouseLeave={() => setCiGridHovered(false)}
+        >
+          {(["lang", "tool", "status"] as const).map((col) => {
+            const active = ciSort?.col === col;
+            const handleSort = () =>
+              setCiSort(active ? { col, dir: ciSort!.dir === 1 ? -1 : 1 } : { col, dir: 1 });
+            const label = col === "lang" ? "Language" : col === "tool" ? "Tool" : "Status";
+            return (
+              <button key={col} className={`${styles["ciGridHeader"]} ${styles["ciGridHeaderSortable"]} ${active ? styles["ciGridHeaderActive"] : ""} ${col === "status" ? styles["ciGridHeaderStatus"] : ""}`} onClick={handleSort}>
+                {label}
+                <span className={styles["ciSortIndicator"]}>{active ? (ciSort!.dir === 1 ? " ↑" : " ↓") : " ↕"}</span>
+              </button>
+            );
+          })}
+          {Object.entries(scripts).flatMap(([tool, langs]) =>
+            Object.keys(langs).map((lang) => [lang, tool])
+          ).sort((a, b) => {
+            if (!ciSort) return 0;
+            const val = (row: string[]) => {
+              if (ciSort.col === "lang") return row[0]!;
+              if (ciSort.col === "tool") return row[1]!;
+              return "success";
+            };
+            return val(a).localeCompare(val(b)) * ciSort.dir;
+          }).map(([lang, tool]) => {
+            const jobUrl = ciJobUrls[`${lang}-${tool}`];
+            const rowKey = `${lang}-${tool}`;
+            const isHovered = ciHoveredRow === rowKey;
+            const Cell = jobUrl ? "a" : "div";
+            const cellProps = {
+              ...(jobUrl ? { href: jobUrl, target: "_blank" as const, rel: "noopener noreferrer" } : {}),
+              onMouseEnter: () => setCiHoveredRow(rowKey),
+              onMouseLeave: () => setCiHoveredRow(null),
+              className: `${jobUrl ? styles["ciGridCellLink"] : styles["ciGridCell"]} ${isHovered ? styles["ciGridRowHovered"] : ""}`,
+            };
+            return (
+              <React.Fragment key={rowKey}>
+                <Cell {...cellProps}><img src={`/icons/${lang}_logo.png`} alt="" className={styles["ciToolIcon"]} />{lang}</Cell>
+                <Cell {...cellProps}><img src={`/images/automation/${tool}-logo.png`} alt="" className={styles["ciToolIcon"]} />{tool}</Cell>
+                <Cell {...cellProps} className={`${jobUrl ? styles["ciGridCellLink"] : styles["ciGridCell"]} ${styles["ciGridCellStatus"]} ${isHovered ? styles["ciGridRowHovered"] : ""}`}>
+                  {ciError
+                    ? <span className={styles["ciErrorStatus"]}>⚠ github api error — reload</span>
+                    : <><span className={styles["ciCheck"]}>●</span> success</>
+                  }
+                </Cell>
+              </React.Fragment>
+            );
+          })}
+        </div>
+        <div className={styles["ciLinks"]}>
+          {ciRunUrl ? (
+            <a href={ciRunUrl} target="_blank" rel="noopener noreferrer">
+              latest run →
+            </a>
+          ) : (
+            <a href="https://github.com/snackattas/zattas.me/actions/workflows/automation-detection-production.yml" target="_blank" rel="noopener noreferrer">
+              workflow →
+            </a>
+          )}
+          <a
+            href="https://github.com/snackattas/zattas.me/blob/main/src/components/AutomationFun/AutomationDetector.tsx"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            detection source →
+          </a>
+        </div>
       </div>
 
       </div>

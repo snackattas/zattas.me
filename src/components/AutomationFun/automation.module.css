@@ -422,3 +422,197 @@
 .autoHaikuAuthor a:hover {
   color: rgba(255, 255, 255, 0.7);
 }
+
+/* CI matrix panel */
+.ciPanel {
+  position: relative;
+  border-top: 2px solid var(--border);
+  padding-top: 24px;
+  margin-top: 24px;
+}
+
+.ciHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.ciTooltip {
+  position: fixed;
+  display: block;
+  width: 280px;
+  background: var(--fg);
+  color: var(--bg);
+  font-family: var(--font-space-mono);
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.5;
+  padding: 8px 12px;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.ciTooltipClick {
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.ciLabel {
+  font-family: var(--font-space-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg);
+  cursor: help;
+}
+
+.ciLabelHint {
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--muted);
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+
+.ciMeta {
+  font-family: var(--font-space-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.ciGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.ciToolIcon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  margin-right: 6px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+
+.ciGridHeader {
+  font-family: var(--font-syne);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg);
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  text-align: left;
+}
+
+.ciGridHeader:last-child,
+.ciGridHeaderStatus {
+  border-right: none;
+}
+
+.ciGridHeaderSortable {
+  cursor: pointer;
+  transition: color 0.12s, background 0.12s;
+}
+
+.ciGridHeaderSortable:hover {
+  color: var(--fg);
+  background: var(--bg);
+}
+
+.ciGridHeaderActive {
+  color: var(--fg);
+}
+
+.ciSortIndicator {
+  opacity: 0.4;
+  font-weight: 400;
+}
+
+.ciGridCell,
+.ciGridCellLink {
+  font-family: var(--font-space-mono);
+  font-size: 0.62rem;
+  color: var(--fg);
+  padding: 6px 14px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background 0.1s;
+}
+
+.ciGridCell:nth-child(3n),
+.ciGridCellLink:nth-child(3n) {
+  border-right: none;
+}
+
+.ciGrid > *:nth-last-child(-n+3) {
+  border-bottom: none;
+}
+
+.ciGridRowHovered {
+  background: var(--bg);
+  cursor: pointer;
+}
+
+.ciGridCellStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 18px;
+  animation: ciPulse 2s ease-in-out infinite;
+}
+
+.ciCheck {
+  font-size: 0.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+  animation: ciPulse 2s ease-in-out infinite;
+}
+
+@keyframes ciPulse {
+  0%, 100% { color: #57ca5e; }
+  50% { color: #3b8500; }
+}
+
+.ciErrorStatus {
+  font-family: var(--font-space-mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+}
+
+.ciLinks {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.ciLinks a {
+  font-family: var(--font-space-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.12s;
+}
+
+.ciLinks a:hover {
+  color: var(--fg);
+}

@@ -27,8 +27,7 @@ jobs:
           # Vibium has no Ruby gem
           - language: ruby
             tool: vibium
-          # Vibium Java SDK can't launch Chrome without --no-sandbox, which its Go
-          # router doesn't support — no workaround exists without patching the binary
+          # Java Vibium: JVM subprocess chain breaks Chrome's user-namespace sandbox in Docker
           - language: java
             tool: vibium
         include:
@@ -54,7 +53,7 @@ jobs:
           no-cache: true
 
       - name: Run automation detection test
-        timeout-minutes: 1
+        timeout-minutes: 3
         run: |
           docker run \
             --rm \
