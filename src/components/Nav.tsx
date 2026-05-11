@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { NavSection } from "@/lib/sections";
+import { Sparkle } from "@/components/Sparkle";
 
 export function Nav({ sections }: { sections: NavSection[] }) {
   return (
@@ -90,7 +91,7 @@ export function Nav({ sections }: { sections: NavSection[] }) {
                   {s.indexLabel}
                 </span>{" "}
                 {s.anchor === "automation-fun"
-                  ? <span className="nav-disco">{s.navLabel}</span>
+                  ? <span className="nav-disco"><Sparkle mode="inline" />{s.navLabel}</span>
                   : s.navLabel}
               </Link>
             </li>
@@ -110,6 +111,8 @@ export function Nav({ sections }: { sections: NavSection[] }) {
         }
         .nav-disco {
           animation: navDisco 3s linear infinite;
+          position: relative;
+          display: inline-block;
         }
         @media (max-width: 767px) {
           .nav-container {

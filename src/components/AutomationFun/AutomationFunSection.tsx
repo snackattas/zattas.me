@@ -7,6 +7,7 @@ import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { AutomationDetector, type AutomationDetection } from "./AutomationDetector";
 import { getRandomHaiku } from "@/data/haikus";
 import { galleryScripts } from "@/data/generatedGalleryScripts";
+import { Sparkle } from "@/components/Sparkle";
 import styles from "./automation.module.css";
 
 // Use pre-loaded scripts
@@ -186,6 +187,7 @@ export function AutomationFunSection() {
   const [activeLang, setActiveLang] = useState("python");
   const [detection, setDetection] = useState<AutomationDetection | null>(null);
   const [haiku, setHaiku] = useState<ReturnType<typeof getRandomHaiku> | null>(null);
+  const [discoActive, setDiscoActive] = useState(false);
   const [copiedCmd, setCopiedCmd] = useState<number | null>(null);
   const hasScrolledRef = useRef(false);
   const [ciJobUrls, setCiJobUrls] = useState<Record<string, string>>({});
@@ -233,7 +235,11 @@ export function AutomationFunSection() {
 
       // Disco effect for 5 minutes
       document.body.classList.add("disco-active");
-      setTimeout(() => document.body.classList.remove("disco-active"), 300000);
+      setDiscoActive(true);
+      setTimeout(() => {
+        document.body.classList.remove("disco-active");
+        setDiscoActive(false);
+      }, 300000);
     }
   }, []);
 
@@ -259,6 +265,7 @@ const handleCmdCopy = (text: string, index: number) => {
 
   return (
     <section id="automation-fun">
+      {discoActive && <Sparkle mode="fullscreen" />}
       <AutomationDetector onDetected={handleDetected} />
 
       <div className={styles["autoContainer"]}>
