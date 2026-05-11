@@ -317,7 +317,7 @@ const handleCmdCopy = (text: string, index: number) => {
           // Human state
           <>
             <p className={styles["autoDesc"]}>
-              Run this page through an automation tool — it detects which one you&apos;re using and serves a custom haiku. Pick your tool and language below to get a script to run.
+              This website fingerprints if your browser is being driven by an automation tool. Pick your tool and language below, run the script, and reload for your reward.
             </p>
 
             <div className={styles["autoStatus"]} data-detected="false">
@@ -329,7 +329,7 @@ const handleCmdCopy = (text: string, index: number) => {
                   Human detected
                 </div>
                 <div className={styles["autoStatusSub"]}>
-                  No automation tool found. Run a script below and reload.
+                  No automation tool found. Run one of the scripts below to receive your prize.
                 </div>
               </div>
             </div>

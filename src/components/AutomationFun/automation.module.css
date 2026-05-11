@@ -148,9 +148,8 @@
 /* Instructions panel */
 .autoInstructions {
   border: 2px solid var(--border);
-  border-bottom: none;
   background: var(--bg);
-  padding: 32px 18px 16px 18px;
+  padding: 8px 18px 16px 18px;
   font-family: var(--font-space-mono);
   font-size: 0.72rem;
   line-height: 2;
