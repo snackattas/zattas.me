@@ -18,10 +18,9 @@ const fallbackScripts: Record<string, Record<string, string>> = {};
 // Instructions per tool/language
 const instructions: Record<string, Record<string, string>> = {
   playwright: {
-    python: `1. Install Playwright and create file (if the browser crashes on run, re-run this step to upgrade):
+    python: `1. Install Playwright (if the browser crashes on run, re-run this step to upgrade):
    pip install --upgrade playwright
    playwright install
-   touch playwright_fun.py
 
 2. Save the script below to playwright_fun.py
 
@@ -62,19 +61,17 @@ const instructions: Record<string, Record<string, string>> = {
 
 4. Compile and run:
    mvn compile exec:java -Dexec.mainClass=PlaywrightFun`,
-    javascript: `1. Install Playwright and create file:
+    javascript: `1. Install Playwright:
    npm install playwright
    npx playwright install
-   touch playwright_fun.js
 
 2. Save the script below to playwright_fun.js
 
 3. Run the script:
    node playwright_fun.js`,
-    ruby: `1. Install Playwright and create file:
+    ruby: `1. Install Playwright:
    gem install playwright-ruby-client
    playwright install
-   touch playwright_fun.rb
 
 2. Save the script below to playwright_fun.rb
 
@@ -82,9 +79,8 @@ const instructions: Record<string, Record<string, string>> = {
    ruby playwright_fun.rb`,
   },
   selenium: {
-    python: `1. Install Selenium and create file:
+    python: `1. Install Selenium:
    pip install --upgrade selenium
-   touch selenium_fun.py
 
 2. Save the script below to selenium_fun.py
 
@@ -122,17 +118,15 @@ const instructions: Record<string, Record<string, string>> = {
 
 3. Compile and run (requires Chrome — if you see errors, update Chrome to the latest version):
    mvn compile exec:java -Dexec.mainClass=SeleniumFun`,
-    javascript: `1. Install Selenium WebDriver and create file:
+    javascript: `1. Install Selenium WebDriver:
    npm install selenium-webdriver
-   touch selenium_fun.js
 
 2. Save the script below to selenium_fun.js
 
 3. Run the script (requires Chrome — if you see errors, update Chrome to the latest version):
    node selenium_fun.js`,
-    ruby: `1. Install Selenium WebDriver and create file (requires Ruby >= 3.0):
+    ruby: `1. Install Selenium WebDriver (requires Ruby >= 3.0):
    gem install selenium-webdriver -v 4.33.0
-   touch selenium_fun.rb
 
 2. Save the script below to selenium_fun.rb
 
@@ -141,11 +135,10 @@ const instructions: Record<string, Record<string, string>> = {
 Note: the script pins selenium-webdriver to 4.33.0 via a gem() directive — newer versions have a Ruby 3.3 incompatibility.`,
   },
   cypress: {
-    javascript: `1. Install Cypress and create files:
+    javascript: `1. Install Cypress:
    npm install cypress
-   touch cypress.config.js cypress_fun.cy.js
 
-2. Save cypress.config.js content:
+2. Create cypress.config.js:
    cat > cypress.config.js << 'EOF'
    const { defineConfig } = require('cypress');
    module.exports = defineConfig({
@@ -157,13 +150,14 @@ Note: the script pins selenium-webdriver to 4.33.0 via a gem() directive — new
    });
    EOF
 
-3. Save the script below to cypress_fun.cy.js and run:
+3. Save the script below to cypress_fun.cy.js
+
+4. Run the script:
    npx cypress run --headed`,
   },
   vibium: {
-    python: `1. Install Vibium and create file:
+    python: `1. Install Vibium:
    pip install --upgrade vibium
-   touch vibium_fun.py
 
 2. Save the script below to vibium_fun.py
 
@@ -192,7 +186,6 @@ export function AutomationFunSection() {
   const [activeLang, setActiveLang] = useState("python");
   const [detection, setDetection] = useState<AutomationDetection | null>(null);
   const [haiku, setHaiku] = useState<ReturnType<typeof getRandomHaiku> | null>(null);
-  const [copiedMain, setCopiedMain] = useState(false);
   const [copiedCmd, setCopiedCmd] = useState<number | null>(null);
   const hasScrolledRef = useRef(false);
   const [ciJobUrls, setCiJobUrls] = useState<Record<string, string>>({});
@@ -248,7 +241,6 @@ export function AutomationFunSection() {
   const currentLang = langs.includes(activeLang) ? activeLang : (langs[0] || "python");
 
   const scriptData = (scripts[activeTool]?.[currentLang] || fallbackScripts[activeTool]?.[currentLang] || "");
-  const filename = scriptData.match(/^(?:\/\/|#) File: (.+)/m)?.[1] || "";
 
   const handleToolClick = (tool: string) => {
     setActiveTool(tool);
@@ -258,14 +250,7 @@ export function AutomationFunSection() {
     }
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(scriptData).then(() => {
-      setCopiedMain(true);
-      setTimeout(() => setCopiedMain(false), 1000);
-    });
-  };
-
-  const handleCmdCopy = (text: string, index: number) => {
+const handleCmdCopy = (text: string, index: number) => {
     navigator.clipboard.writeText(text).then(() => {
       setCopiedCmd(index);
       setTimeout(() => setCopiedCmd(null), 1000);
@@ -331,7 +316,7 @@ export function AutomationFunSection() {
           // Human state
           <>
             <p className={styles["autoDesc"]}>
-              Run this page through an automation tool — it detects which one you&apos;re using and serves a custom haiku. Pick your tool and language below to get a script to run.
+              This website can detect if your browser is being driven by an automation tool. Pick a tool and language below, run the script through your automation tool, and claim your reward.
             </p>
 
             <div className={styles["autoStatus"]} data-detected="false">
@@ -343,7 +328,7 @@ export function AutomationFunSection() {
                   Human detected
                 </div>
                 <div className={styles["autoStatusSub"]}>
-                  No automation tool found. Run a script below and reload.
+                  No automation tool found. Run one of the scripts below to receive your prize.
                 </div>
               </div>
             </div>
@@ -420,73 +405,107 @@ export function AutomationFunSection() {
               const currentCmdIndex = cmdIndex;
               cmdIndex++;
 
-              elements.push(
-                <div key={`cmd-${currentCmdIndex}`} className={styles["instrCmd"]}>
-                  <div className={styles["instrCmdLines"]}>
-                    {normalizedCmds.map((cmd, idx) => (
-                      <code key={idx}>{cmd}</code>
-                    ))}
+              type HeredocDef = { startsWith: string; lang: string; label: string };
+              const heredocTypes: HeredocDef[] = [
+                { startsWith: "<?xml", lang: "xml", label: "pom.xml" },
+                { startsWith: "const { defineConfig }", lang: "javascript", label: "cypress.config.js" },
+              ];
+              const heredoc = heredocTypes.find((h) => normalizedCmds.some((l) => l.trimStart().startsWith(h.startsWith)));
+              if (heredoc) {
+                const contentStart = normalizedCmds.findIndex((l) => l.trimStart().startsWith(heredoc.startsWith));
+                const eofIdx = normalizedCmds.findIndex((l) => l.trim() === "EOF");
+                const shellLines = normalizedCmds.slice(0, contentStart).join("\n");
+                const contentLines = normalizedCmds.slice(contentStart, eofIdx === -1 ? undefined : eofIdx).join("\n");
+                const afterLines = eofIdx !== -1 ? normalizedCmds.slice(eofIdx).join("\n") : "";
+                const shStyle = { background: "transparent", padding: 0, margin: 0, fontSize: "0.72rem", lineHeight: "1.7" };
+                const codeProps = { style: { fontFamily: "var(--font-space-mono)" } };
+                elements.push(
+                  <div key={`cmd-${currentCmdIndex}`} className={styles["instrCmd"]}>
+                    <div className={styles["instrCmdLines"]}>
+                      <SyntaxHighlighter language="bash" style={tomorrow} customStyle={shStyle} codeTagProps={codeProps}>{shellLines}</SyntaxHighlighter>
+                      <details className={styles["instrXmlDetails"]}>
+                        <summary className={styles["instrXmlSummary"]}>{heredoc.label} ▸</summary>
+                        <SyntaxHighlighter language={heredoc.lang} style={tomorrow} customStyle={{ ...shStyle, padding: "8px 0 0" }} codeTagProps={codeProps}>{contentLines}</SyntaxHighlighter>
+                      </details>
+                      {afterLines && <SyntaxHighlighter language="bash" style={tomorrow} customStyle={shStyle} codeTagProps={codeProps}>{afterLines}</SyntaxHighlighter>}
+                    </div>
+                    <button
+                      className={styles["instrCmdCopy"]}
+                      onClick={() => handleCmdCopy(allText, currentCmdIndex)}
+                      style={{ animation: copiedCmd === currentCmdIndex ? "copyExpand 0.3s ease-out forwards" : "none" }}
+                    >
+                      {copiedCmd === currentCmdIndex ? "Copied!" : "copy"}
+                    </button>
                   </div>
-                  <button
-                    className={styles["instrCmdCopy"]}
-                    onClick={() => handleCmdCopy(allText, currentCmdIndex)}
-                    style={{
-                      animation: copiedCmd === currentCmdIndex ? "copyExpand 0.3s ease-out forwards" : "none",
-                    }}
-                  >
-                    {copiedCmd === currentCmdIndex ? "Copied!" : "copy"}
-                  </button>
-                </div>
-              );
+                );
+              } else {
+                elements.push(
+                  <div key={`cmd-${currentCmdIndex}`} className={styles["instrCmd"]}>
+                    <div className={styles["instrCmdLines"]}>
+                      <SyntaxHighlighter language="bash" style={tomorrow} customStyle={{ background: "transparent", padding: 0, margin: 0, fontSize: "0.72rem", lineHeight: "1.7" }} codeTagProps={{ style: { fontFamily: "var(--font-space-mono)" } }}>
+                        {allText}
+                      </SyntaxHighlighter>
+                    </div>
+                    <button
+                      className={styles["instrCmdCopy"]}
+                      onClick={() => handleCmdCopy(allText, currentCmdIndex)}
+                      style={{ animation: copiedCmd === currentCmdIndex ? "copyExpand 0.3s ease-out forwards" : "none" }}
+                    >
+                      {copiedCmd === currentCmdIndex ? "Copied!" : "copy"}
+                    </button>
+                  </div>
+                );
+              }
               continue;
             }
 
-            elements.push(
-              <div key={i} className={styles["instrStep"]}>
-                {line}
-              </div>
-            );
-            i++;
+            const saveMatch = line.match(/save the script below to (\S+)/i);
+            if (saveMatch) {
+              const saveFilename = saveMatch[1]!;
+              const stepLabel = line.match(/^(\d+\.)/)?.[1] ?? "";
+              const heredocText = `cat > ${saveFilename} << 'EOF'\n${scriptData}\nEOF`;
+              const scriptCmdIndex = cmdIndex++;
+              elements.push(
+                <div key={i} className={styles["instrStep"]}>{stepLabel} Create {saveFilename}:</div>
+              );
+              i++;
+              elements.push(
+                <div key={`script-wrap-${i}`} className={styles["instrCmd"]}>
+                  <div className={styles["instrCmdLines"]} style={{ width: "100%" }}>
+                    <SyntaxHighlighter language="bash" style={tomorrow} customStyle={{ background: "transparent", padding: 0, margin: 0, fontSize: "0.72rem", lineHeight: "1.7" }} codeTagProps={{ style: { fontFamily: "var(--font-space-mono)" } }}>
+                      {`cat > ${saveFilename} << 'EOF'`}
+                    </SyntaxHighlighter>
+                    <details className={styles["instrXmlDetails"]}>
+                      <summary className={styles["instrXmlSummary"]}>{saveFilename} ▸</summary>
+                      <SyntaxHighlighter language={currentLang} style={tomorrow} customStyle={{ background: "transparent", padding: "8px 0 0", margin: 0, fontSize: "0.72rem", lineHeight: "1.7", maxHeight: "400px", overflow: "auto" }} codeTagProps={{ style: { fontFamily: "var(--font-space-mono)" } }}>
+                        {scriptData}
+                      </SyntaxHighlighter>
+                    </details>
+                    <SyntaxHighlighter language="bash" style={tomorrow} customStyle={{ background: "transparent", padding: 0, margin: 0, fontSize: "0.72rem", lineHeight: "1.7" }} codeTagProps={{ style: { fontFamily: "var(--font-space-mono)" } }}>
+                      {"EOF"}
+                    </SyntaxHighlighter>
+                  </div>
+                  <button
+                    className={styles["instrCmdCopy"]}
+                    onClick={() => handleCmdCopy(heredocText, scriptCmdIndex)}
+                    style={{ animation: copiedCmd === scriptCmdIndex ? "copyExpand 0.3s ease-out forwards" : "none" }}
+                  >
+                    {copiedCmd === scriptCmdIndex ? "Copied!" : "copy"}
+                  </button>
+                </div>
+              );
+            } else {
+              elements.push(
+                <div key={i} className={styles["instrStep"]}>
+                  {line}
+                </div>
+              );
+              i++;
+            }
           }
 
           return elements;
         })()}
-      </div>
-
-      <div className={styles["autoCodeWrap"]}>
-        <div className={styles["autoCodeHeader"]}>
-          <div className={styles["autoCodeLabel"]}>{filename}</div>
-          <button
-            className={styles["autoCopy"]}
-            onClick={handleCopy}
-            style={{
-              animation: copiedMain ? "copyExpand 0.3s ease-out forwards" : "none",
-            }}
-          >
-            {copiedMain ? "Copied!" : "copy"}
-          </button>
-        </div>
-        <SyntaxHighlighter
-          language={currentLang}
-          style={tomorrow}
-          customStyle={{
-            background: "transparent",
-            padding: "16px 20px",
-            fontSize: "clamp(0.6rem, 1.8vw, 0.72rem)",
-            lineHeight: "1.7",
-            margin: 0,
-            maxHeight: "450px",
-            overflow: "auto",
-          }}
-          codeTagProps={{
-            style: {
-              fontFamily: "var(--font-space-mono)",
-              fontSize: "0.72rem",
-            },
-          }}
-        >
-          {scriptData}
-        </SyntaxHighlighter>
       </div>
 
       <div

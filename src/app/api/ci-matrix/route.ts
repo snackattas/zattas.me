@@ -61,7 +61,7 @@ export async function GET() {
     { runUrl: latestRun.html_url, jobUrls },
     {
       headers: {
-        "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
+        "Cache-Control": "public, max-age=300, stale-while-revalidate=600",
       },
     }
   );
