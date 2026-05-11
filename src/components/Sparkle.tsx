@@ -44,7 +44,7 @@ function spawnSparkle(rect: DOMRect | null, mode: SparkleMode) {
     transition: transform ${duration}ms ease-out, opacity ${duration}ms ease-out;
   `;
 
-  document.body.appendChild(el);
+  document.documentElement.appendChild(el);
   el.getBoundingClientRect();
   el.style.transform = `translate(${dx}px, ${dy}px) scale(0)`;
   el.style.opacity = "0";

@@ -188,6 +188,7 @@ export function AutomationFunSection() {
   const [detection, setDetection] = useState<AutomationDetection | null>(null);
   const [haiku, setHaiku] = useState<ReturnType<typeof getRandomHaiku> | null>(null);
   const [discoActive, setDiscoActive] = useState(false);
+  const discoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [copiedCmd, setCopiedCmd] = useState<number | null>(null);
   const hasScrolledRef = useRef(false);
   const [ciJobUrls, setCiJobUrls] = useState<Record<string, string>>({});
@@ -228,18 +229,19 @@ export function AutomationFunSection() {
     setHaiku((prev) => prev ?? getRandomHaiku());
     setActiveTool(detection.tool ?? "playwright");
 
+    // Disco effect for 5 minutes — always on detection
+    document.body.classList.add("disco-active");
+    setDiscoActive(true);
+    if (discoTimerRef.current) clearTimeout(discoTimerRef.current);
+    discoTimerRef.current = setTimeout(() => {
+      document.body.classList.remove("disco-active");
+      setDiscoActive(false);
+    }, 300000);
+
     // Auto-scroll to section only on first detection
     if (!hasScrolledRef.current) {
       hasScrolledRef.current = true;
       document.getElementById("automation-fun")?.scrollIntoView({ block: "start" });
-
-      // Disco effect for 5 minutes
-      document.body.classList.add("disco-active");
-      setDiscoActive(true);
-      setTimeout(() => {
-        document.body.classList.remove("disco-active");
-        setDiscoActive(false);
-      }, 300000);
     }
   }, []);
 
@@ -265,7 +267,7 @@ const handleCmdCopy = (text: string, index: number) => {
 
   return (
     <section id="automation-fun">
-      {discoActive && <Sparkle mode="fullscreen" />}
+      {(discoActive || (detection && haiku)) && <Sparkle mode="fullscreen" />}
       <AutomationDetector onDetected={handleDetected} />
 
       <div className={styles["autoContainer"]}>
