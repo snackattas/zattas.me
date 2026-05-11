@@ -325,7 +325,7 @@ const handleCmdCopy = (text: string, index: number) => {
           // Human state
           <>
             <p className={styles["autoDesc"]}>
-              This website can detect if your browser is being driven by an automation tool.<br></br>Pick a tool and language below, run the script using that tool, and claim an AMAZING reward.
+              This website can <b>detect if your browser is being driven by an automation tool</b>.<br></br>Pick a tool and language below, run the script using that tool, and claim an <b>AMAZING reward</b>.
             </p>
 
             <div className={styles["autoStatus"]} data-detected="false">
@@ -528,7 +528,7 @@ const handleCmdCopy = (text: string, index: number) => {
             style={{ left: ciTooltipPos.x + 14, top: ciTooltipPos.y + 14 }}
           >
             {ciGridHovered && <><span className={styles["ciTooltipClick"]}>click any row to open that job in github</span><br /></>}
-            every deploy triggers a full matrix of tests, verifying that each combo of automation tool and language correctly trips the detection logic, isn&apos;t mistaken for a human, and claims the AMAZING reward
+            every deploy triggers a full matrix of tests, verifying that each combo of automation tool and language correctly trips the detection logic, isn&apos;t mistaken for a human, and claims the <b>AMAZING reward</b>
           </div>,
           document.body
         )}
