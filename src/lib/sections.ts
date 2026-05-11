@@ -2,6 +2,7 @@ import type { ComponentType } from "react";
 
 import About from "../../content/about.mdx";
 import AutomationFun from "../../content/automation-fun.mdx";
+import Contact from "../../content/contact.mdx";
 import Experience from "../../content/experience.mdx";
 import Speaking from "../../content/speaking.mdx";
 import Stories from "../../content/stories.mdx";
@@ -32,5 +33,11 @@ export const sections: SiteSection[] = [
     navLabel: "Automation Fun",
     anchor: "automation-fun",
     Content: AutomationFun,
+  },
+  {
+    indexLabel: "07",
+    navLabel: "Contact",
+    anchor: "contact",
+    Content: Contact,
   },
 ];

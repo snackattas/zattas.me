@@ -316,7 +316,7 @@ const handleCmdCopy = (text: string, index: number) => {
           // Human state
           <>
             <p className={styles["autoDesc"]}>
-              This website fingerprints if your browser is being driven by an automation tool. Pick your tool and language below, run the script, and reload for your reward.
+              This website can detect if your browser is being driven by an automation tool. Pick a tool and language below, run the script through your automation tool, and claim your reward.
             </p>
 
             <div className={styles["autoStatus"]} data-detected="false">
