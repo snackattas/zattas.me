@@ -2,6 +2,7 @@ import type { MDXComponents } from "mdx/types";
 import type { ComponentProps } from "react";
 
 import { Timeline, TimelineItem, TimelineItemGroup } from "@/components/mdx/Timeline";
+import { TalkCard, TalkGrid } from "@/components/mdx/TalkCard";
 import { ProjectCard } from "@/components/mdx/ProjectCard";
 import { Disclosure } from "@/components/mdx/Disclosure";
 import { Headshot } from "@/components/mdx/Headshot";
@@ -48,6 +49,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     DetailPill,
     StoryCard,
     AutomationFunSection,
+    TalkCard,
+    TalkGrid,
     ...components,
   };
 }

@@ -2,6 +2,7 @@
 
 <Timeline>
   <TimelineItem
+    num="E—01"
     title={
       <a
         href="https://www.capsule.com/"
@@ -10,61 +11,78 @@
         Capsule
       </a>
     }
+    subtitle="Staff Platform Engineer (Platform Lead)"
     startDate="2022-01-01"
     isCurrent={true}
     yearDisplay={true}
-    subtitle="Staff Platform Engineer"
     imageSrc="/images/experience/capsule.jpeg"
     imageAlt="Capsule"
+    hook="Built the AI-safety & release-gate platform a 20-deploy-a-day healthcare company quietly runs on."
+    stats={[
+      { v: "75%", k: "Fewer prod incidents" },
+      { v: "20+", k: "Daily deploys gated" },
+      { v: "3", k: "QA engineers hired" },
+      { v: "1st", k: "Formal QA process" }
+    ]}
   >
     <TimelineItemGroup title="AI & ARCHITECTURAL INITIATIVES">
-    <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
-      <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
-      <div>Architected a **security-hardened MCP proxy** to gate 3rd-party and internal AI interactions, implementing automated **PII/PHI redaction, prompt injection protection, and RBAC/ABAC** for enterprise compliance</div>
-    </div>
-
-    <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
-      <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
-      <div>Built an **AI voice agent** to automate patient onboarding, significantly reducing operational overhead while improving medication routing accuracy</div>
-    </div>
-
-    <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
-      <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
-      <div>Led the migration of mission-critical workflows from a legacy in-house solution to [Temporal Cloud](https://temporal.io/), establishing a repeatable framework for all distributed services</div>
-    </div>
-
-    <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
-      <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
-      <div>Engineered message-interception middleware for **SNS, SQS, and Kafka** to facilitate consumer-driven contract testing and support the transition to a **Saga-based architecture**</div>
-    </div>
+      <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
+        <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
+        <div>Architected a **security-hardened MCP proxy** to gate 3rd-party and internal AI interactions, implementing automated **PII/PHI redaction, prompt injection protection, and RBAC/ABAC** to ensure enterprise compliance</div>
+      </div>
+      <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
+        <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
+        <div>Built an **AI voice agent** to automate patient onboarding, significantly reducing operational overhead while improving medication routing accuracy</div>
+      </div>
+      <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
+        <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
+        <div>Pioneered a **conversational AI triage agent** (Claude Agent SDK, multi-agent) that synthesizes code repository metadata (commits, PRs, version history) and codebase architecture with real-time test trends and cross-environment log data to **diagnose pipeline failures and surface SDLC bottlenecks**</div>
+      </div>
+      <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
+        <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
+        <div>Owned the **end-to-end migration** of workflows to [Temporal Cloud](https://temporal.io/); acted as **sole architect and project manager** to establish the paved path for **distributed orchestration, built-in resiliency, and unified alerting**</div>
+      </div>
+      <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
+        <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
+        <div>Engineered message-interception middleware for **SNS, SQS, and Kafka** to facilitate consumer-driven contract testing and support the transition to a **Saga-based architecture**</div>
+      </div>
     </TimelineItemGroup>
 
     <TimelineItemGroup title="QUALITY ENGINEERING & PLATFORM TOOLING">
-    <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
-      <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
-      <div>Spearheaded Capsule's first E2E test suite (Python, Pytest, Playwright) — Release Gate for **20+ daily deployments**, reducing production incidents by **75%**</div>
-    </div>
-
-    <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
-      <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
-      <div>Developed an internal data orchestration tool enabling engineers to **instantly provision specific test scenarios**, standardizing manual QA enterprise-wide</div>
-    </div>
+      <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
+        <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
+        <div>Spearheaded the creation of Capsule's first end-to-end test suite (Python, Pytest, Playwright), serving as a Release Gate for **20+ daily deployments** and reducing production incidents by **75%**</div>
+      </div>
+      <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
+        <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
+        <div>Developed an internal data orchestration tool that enables engineers to **instantly provision specific test scenarios**, standardizing manual QA enterprise-wide</div>
+      </div>
     </TimelineItemGroup>
 
     <TimelineItemGroup title="TECHNICAL LEADERSHIP & INFRASTRUCTURE">
-    <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
-      <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
-      <div>Instituted Capsule's **first formal QA process** and hired a team of **3 QA engineers**, codifying unified test-quality metrics across the organization</div>
-    </div>
-
-    <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
-      <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
-      <div>Directed cross-functional infrastructure lifecycles, including major **Spring Boot 3** and **Django** upgrades for all core services</div>
-    </div>
+      <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
+        <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
+        <div>Instituted Capsule's **first formal QA process** and hired a team of **3 QA engineers**, codifying unified test-quality metrics across the organization</div>
+      </div>
+      <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
+        <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
+        <div>Served as **Platform Lead** and sole engineer, balancing hands-on systems architecture with end-to-end project management, roadmap scoping, and stakeholder alignment across **6 cross-functional teams**</div>
+      </div>
     </TimelineItemGroup>
+
+    <PillGrid>
+      <Pill>Python</Pill>
+      <Pill>Kotlin</Pill>
+      <Pill>Temporal</Pill>
+      <Pill>Playwright</Pill>
+      <Pill>Kafka</Pill>
+      <Pill>MCP</Pill>
+      <Pill>Spring Boot</Pill>
+    </PillGrid>
   </TimelineItem>
 
   <TimelineItem
+    num="E—02"
     title={
       <a
         href="https://www.reviewtrackers.com/"
@@ -73,40 +91,53 @@
         ReviewTrackers
       </a>
     }
+    subtitle="Senior SDET → Lead SDET"
     startDate="2018-01-01"
     endDate="2022-01-01"
     yearDisplay={true}
-    subtitle="Senior SDET → Lead SDET"
     imageSrc="/images/experience/rt.svg"
     imageAlt="ReviewTrackers"
+    hook="Took an E2E suite from 15 hours to 7 minutes. Helped get the company acquired."
+    stats={[
+      { v: "15h→7m", k: "E2E suite runtime" },
+      { v: "30%", k: "Fewer critical bugs YoY" },
+      { v: "3×", k: "Peak-traffic load tested" },
+      { v: "3", k: "Direct reports" }
+    ]}
   >
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Scaled E2E suite (Ruby, RSpec, Selenium) from **15 hours** of parallelized execution to **7 minutes** of wall-clock time by migrating to a self-managed **Kubernetes Selenium Grid**</div>
     </div>
-
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Accelerated 3rd-party API verification by developing a custom **Sinatra/Redis mock server** with a dependency injection pattern for the core application</div>
     </div>
-
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Orchestrated **ephemeral cloud testing environments**, reducing critical bugs by **30% YoY** and directly supporting the company's [acquisition by InMoment](https://www.reviewtrackers.com/blog/reviewtrackers-acquired-by-inmoment/)</div>
     </div>
-
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Managed QA and DevOps departments, overseeing **3 direct reports** and setting strategic roadmaps for infrastructure and quality</div>
     </div>
-
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Validated system resilience for **3× peak traffic** on critical endpoints by architecting load tests with [Python and Locust](https://medium.com/reviewtrackers-engineering/our-load-testing-journey-with-locust-c599670bc41b)</div>
     </div>
+
+    <PillGrid>
+      <Pill>Ruby</Pill>
+      <Pill>Python</Pill>
+      <Pill>Kubernetes</Pill>
+      <Pill>Selenium</Pill>
+      <Pill>Locust</Pill>
+      <Pill>Docker</Pill>
+    </PillGrid>
   </TimelineItem>
 
   <TimelineItem
+    num="E—03"
     title={
       <a
         href="https://www.jellyvision.com/"
@@ -115,35 +146,46 @@
         Jellyvision
       </a>
     }
+    subtitle="SDET"
     startDate="2017-01-01"
     endDate="2018-01-01"
     yearDisplay={true}
-    subtitle="SDET"
     imageSrc="/images/experience/jellyvision.png"
     imageAlt="Jellyvision"
+    hook="Shipped Jellyvision's first CI/CD browser-testing pipeline."
+    stats={[
+      { v: "50%", k: "Test runtime reduction" },
+      { v: "1st", k: "CI/CD test pipeline" },
+      { v: "1st", k: "Analytics E2E suite" }
+    ]}
   >
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Deployed and maintained the **first CI/CD browser-testing pipeline** at Jellyvision, integrating automated quality gates into the standard deployment flow</div>
     </div>
-
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Reduced automated test runtime by **50%** through refactoring core engineering practices and optimizing wait-state logic</div>
     </div>
-
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Engineered the analytics team's **first E2E test suite** using **BrowserMob Proxy** to validate real-time event tracking and data integrity</div>
     </div>
-
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Developed the **first integration tests** for an ETL pipeline (**AWS Firehose, Lambda, CouchDB**), ensuring compliance with SLAs for critical customer analytics data</div>
     </div>
+
+    <PillGrid>
+      <Pill>Selenium</Pill>
+      <Pill>BrowserMob</Pill>
+      <Pill>AWS Lambda</Pill>
+      <Pill>CouchDB</Pill>
+    </PillGrid>
   </TimelineItem>
 
   <TimelineItem
+    num="E—04"
     title={
       <a
         href="https://www.facebook.com/robiniacourtyard/"
@@ -152,23 +194,22 @@
         Robinia Courtyard
       </a>
     }
+    subtitle="Prep Chef"
     startDate="2015-01-01"
     endDate="2016-01-01"
     yearDisplay={true}
-    subtitle="Prep Chef"
     imageSrc="/images/experience/robinia.jpg"
     imageAlt="Robinia Courtyard"
+    hook="Learned to code on stocks-and-mirepoix nights. Yes really."
   >
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Organized the walk-in, ground meat **daily**, cooked all house stocks</div>
     </div>
-
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Prepped ingredients and recipes for a **35+ item menu**</div>
     </div>
-
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Completed the **Intro to Programming** and [Full Stack Nanodegrees](https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd0044) while working as a chef</div>
@@ -176,6 +217,7 @@
   </TimelineItem>
 
   <TimelineItem
+    num="E—05"
     title={
       <a
         href="https://www.epic.com/"
@@ -184,23 +226,22 @@
         Epic
       </a>
     }
+    subtitle="Quality Assurance"
     startDate="2013-01-01"
     endDate="2016-01-01"
     yearDisplay={true}
-    subtitle="Quality Assurance"
     imageSrc="/images/experience/epic.jpg"
     imageAlt="Epic"
+    hook="First QA job. Validated backend systems that touch patient care."
   >
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Validated core backend APIs for **batch scheduling, indexing, and HA failover** systems using the **Caché** programming language</div>
     </div>
-
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Automated **project grading** for the education team by developing a custom scripting utility to streamline internal review processes</div>
     </div>
-
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
       <div>Managed the **RCA process** for high-priority technical issues, coordinating resolutions for low-level system failures affecting **patient care**</div>

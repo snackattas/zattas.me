@@ -1,99 +1,84 @@
 # Speaking
 
-<Timeline>
-  <TimelineItem
-    title="Appium Conference"
-    createdDate="2021-09-01"
-    startDate="2021-09-01"
-    showCreated={false}
-    yearDisplay={true}
+<div className="speaking-stats">
+  <div><span className="v">8</span><span className="k">Talks</span></div>
+  <div><span className="v">5</span><span className="k">Conferences</span></div>
+  <div><span className="v">3</span><span className="k">Countries</span></div>
+</div>
+
+<TalkGrid>
+  <TalkCard
+    kind="Conference Talk"
+    date="Sep 2021"
+    conference="Appium Conf"
+    title="What else can we automate?"
+    href="https://confengine.com/conferences/appium-conf-2021/proposal/15905/what-else-can-we-automate-how-to-extend-your-skills-and-constantly-be-learning"
     imageSrc="/images/speaking/appiumconf.png"
     imageAlt="Appium Conference"
-  >
-    <a href="https://confengine.com/conferences/appium-conf-2021/proposal/15905/what-else-can-we-automate-how-to-extend-your-skills-and-constantly-be-learning" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none" }}>What else can we automate? How to extend your skills and constantly be learning</a>
-  </TimelineItem>
-
-  <TimelineItem
-    title="RabbitMQ Summit"
-    createdDate="2021-07-01"
-    startDate="2021-07-01"
-    showCreated={false}
-    yearDisplay={true}
+  />
+  <TalkCard
+    kind="Conference Talk"
+    date="Jul 2021"
+    conference="RabbitMQ Summit"
+    title="Take the path of least resistance for your test data"
+    href="https://www.youtube.com/watch?v=uAs1ot0zN7Y"
     imageSrc="/images/speaking/rabbitmq.png"
     imageAlt="RabbitMQ Summit"
-  >
-    <a href="https://www.youtube.com/watch?v=uAs1ot0zN7Y" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none" }}>Take The Path Of Least Resistance For Your Test Data</a>
-  </TimelineItem>
-
-  <TimelineItem
-    title="Testing United"
-    createdDate="2020-11-01"
-    startDate="2020-11-01"
-    showCreated={false}
-    yearDisplay={true}
+  />
+  <TalkCard
+    kind="Conference Talk"
+    date="Nov 2020"
+    conference="Testing United"
+    title="Setting yourself up for success so anyone can write tests"
+    href="https://web.archive.org/web/20201023112524/https://www.testingunited.com/speakers/zach-attas/"
     imageSrc="/images/speaking/testing_united.png"
     imageAlt="Testing United"
-  >
-    <a href="https://web.archive.org/web/20201023112524/https://www.testingunited.com/speakers/zach-attas/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none" }}>Setting Yourself Up For Success So Anyone Can Understand And Write Tests</a>
-  </TimelineItem>
-
-  <TimelineItem
-    title="SeleniumConf India"
-    createdDate="2020-06-01"
-    startDate="2020-06-01"
-    showCreated={false}
-    yearDisplay={true}
+  />
+  <TalkCard
+    kind="Conference Talk"
+    date="Jun 2020"
+    conference="SeleniumConf India"
+    title="Selenium for all — setting your team up for success"
+    href="https://confengine.com/selenium-conf-2020/proposal/13759/selenium-for-all-setting-your-team-up-for-success-so-anyone-can-understand-and-write-tests"
     imageSrc="/images/speaking/seleniumconf.jpg"
-    imageAlt="SeleniumConf India"
+    imageAlt="SeleniumConf India 2020"
   >
-    <a href="https://confengine.com/selenium-conf-2020/proposal/13759/selenium-for-all-setting-your-team-up-for-success-so-anyone-can-understand-and-write-tests" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none" }}>Selenium For All - Setting Your Team Up For Success So Anyone Can Understand and Write Tests</a>
-
-    This talk was also presented at the <a href="https://www.continuoustestingmeetup.com/events/2020-07-29/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none" }}>Berlin Continuous Testing Meetup</a>
-  </TimelineItem>
-
-  <TimelineItem
-    title="Quest For Quality"
-    createdDate="2019-11-01"
-    startDate="2019-11-01"
-    showCreated={false}
-    yearDisplay={true}
+    Also presented at the <a href="https://www.continuoustestingmeetup.com/events/2020-07-29/" target="_blank" rel="noopener noreferrer">Berlin Continuous Testing Meetup</a>.
+  </TalkCard>
+  <TalkCard
+    kind="Conference Talk"
+    date="Nov 2019"
+    conference="Quest For Quality"
+    title="Services: how to test them when you have the keys to the castle"
+    href="https://web.archive.org/web/20191209122733/https://www.questforquality.eu/speakers/zachary-attas/"
     imageSrc="/images/speaking/quest.jpg"
     imageAlt="Quest For Quality"
-  >
-    <a href="https://web.archive.org/web/20191209122733/https://www.questforquality.eu/speakers/zachary-attas/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none" }}>Services: How to Test Them When You Have The Keys to The Castle</a>
-  </TimelineItem>
-
-  <TimelineItem
-    title="AgileTestingDays Chicago"
-    createdDate="2019-05-01"
-    startDate="2019-05-01"
-    showCreated={false}
-    yearDisplay={true}
+  />
+  <TalkCard
+    kind="Conference Talk"
+    date="May 2019"
+    conference="AgileTestingDays Chicago"
+    title="Flaky test or actual issue? You decide"
+    href="https://web.archive.org/web/20190718120434/https://agiletestingdays.us/session/flaky-test-or-actual-issue-you-decide/"
     imageSrc="/images/speaking/agiletestingdays.svg"
     imageAlt="AgileTestingDays Chicago"
-  >
-    <a href="https://web.archive.org/web/20190718120434/https://agiletestingdays.us/session/flaky-test-or-actual-issue-you-decide/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none" }}>Flaky test or actual issue? You decide</a>
-  </TimelineItem>
-
-  <TimelineItem
-    title="SeleniumConf India"
-    createdDate="2018-06-01"
-    startDate="2018-06-01"
-    showCreated={false}
-    yearDisplay={true}
+  />
+  <TalkCard
+    kind="Conference Talk"
+    date="Jun 2018"
+    conference="SeleniumConf India"
+    title="How to unflake flaky tests — a new hire's toolkit"
+    href="https://confengine.com/selenium-conf-2018/proposal/6157/how-to-un-flake-flaky-tests-a-new-hires-toolkit"
     imageSrc="/images/speaking/seleniumconf.jpg"
-    imageAlt="SeleniumConf India"
-  >
-    <a href="https://confengine.com/selenium-conf-2018/proposal/6157/how-to-un-flake-flaky-tests-a-new-hires-toolkit" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none" }}>How to UnFlake Flaky Tests - a New Hire's Toolkit</a>
-  </TimelineItem>
-
-  <TimelineItem
-    title="The Ruby Testing Podcast by Jason Swett"
-    startDate="2018-01-01"
-    yearDisplay={true}
+    imageAlt="SeleniumConf India 2018"
+  />
+  <TalkCard
+    kind="Podcast"
+    date="Jan 2018"
+    conference="Ruby Testing Podcast"
+    title="QA, Selenium & SitePrism with Jason Swett"
+    href="https://podcast.app/selenium-and-qa-with-zach-attas-e39339212/"
     imageSrc="/images/speaking/rubytestingpodcast.jpg"
-    imageAlt="The Ruby Testing Podcast"
-  >
-    <a href="https://podcast.app/selenium-and-qa-with-zach-attas-e39339212/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none" }}>Jason and I talk about QA, Selenium, and SitePrism</a>
-  </TimelineItem>
-</Timeline>
+    imageAlt="Ruby Testing Podcast"
+  />
+</TalkGrid>
