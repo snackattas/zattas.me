@@ -570,6 +570,34 @@
   color: var(--muted);
 }
 
+.ciStatusFail {
+  font-size: 0.7rem;
+  line-height: 1;
+  flex-shrink: 0;
+  color: #d9534f;
+}
+
+.ciStatusCancelled,
+.ciStatusSkipped {
+  font-size: 0.7rem;
+  line-height: 1;
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+.ciStatusProgress {
+  font-size: 0.7rem;
+  line-height: 1;
+  flex-shrink: 0;
+  color: #e0a14a;
+  animation: ciProgressPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes ciProgressPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
 .ciLinks {
   display: flex;
   gap: 20px;
