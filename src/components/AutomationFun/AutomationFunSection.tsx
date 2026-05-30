@@ -175,6 +175,21 @@ Note: the script pins selenium-webdriver to 4.33.0 via a gem() directive — new
   },
 };
 
+function formatRelative(iso: string): string {
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return "earlier";
+  const diffMs = Date.now() - then;
+  const mins = Math.round(diffMs / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.round(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.round(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  const months = Math.round(days / 30);
+  return `${months}mo ago`;
+}
+
 const availableLangs: Record<string, string[]> = {
   playwright: ["python", "java", "javascript", "ruby"],
   selenium: ["python", "java", "javascript", "ruby"],
@@ -191,8 +206,12 @@ export function AutomationFunSection() {
   const discoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [copiedCmd, setCopiedCmd] = useState<number | null>(null);
   const hasScrolledRef = useRef(false);
-  const [ciJobUrls, setCiJobUrls] = useState<Record<string, string>>({});
+  type JobConclusion = "success" | "failure" | "cancelled" | "skipped" | "in_progress" | "unknown";
+  type CiJob = { url: string; conclusion: JobConclusion };
+  const [ciJobs, setCiJobs] = useState<Record<string, CiJob>>({});
   const [ciRunUrl, setCiRunUrl] = useState<string | null>(null);
+  const [ciRunConclusion, setCiRunConclusion] = useState<string | null>(null);
+  const [ciLastSuccess, setCiLastSuccess] = useState<{ url: string; createdAt: string } | null>(null);
   const [ciError, setCiError] = useState(false);
   const [ciSort, setCiSort] = useState<{ col: "lang" | "tool" | "status"; dir: 1 | -1 } | null>(null);
   const [ciHoveredRow, setCiHoveredRow] = useState<string | null>(null);
@@ -209,7 +228,7 @@ export function AutomationFunSection() {
     }
   }, []);
 
-  // Fetch CI matrix job URLs
+  // Fetch CI matrix job statuses
   useEffect(() => {
     fetch("/api/ci-matrix")
       .then((r) => {
@@ -217,8 +236,10 @@ export function AutomationFunSection() {
         return r.json();
       })
       .then((data) => {
-        if (data.jobUrls) setCiJobUrls(data.jobUrls);
+        if (data.jobs) setCiJobs(data.jobs);
         if (data.runUrl) setCiRunUrl(data.runUrl);
+        if (data.runConclusion) setCiRunConclusion(data.runConclusion);
+        if (data.lastSuccess) setCiLastSuccess(data.lastSuccess);
         if (data.error) setCiError(true);
       })
       .catch(() => setCiError(true));
@@ -560,11 +581,13 @@ const handleCmdCopy = (text: string, index: number) => {
             const val = (row: string[]) => {
               if (ciSort.col === "lang") return row[0]!;
               if (ciSort.col === "tool") return row[1]!;
-              return "success";
+              return ciJobs[`${row[0]}-${row[1]}`]?.conclusion ?? "unknown";
             };
             return val(a).localeCompare(val(b)) * ciSort.dir;
           }).map(([lang, tool]) => {
-            const jobUrl = ciJobUrls[`${lang}-${tool}`];
+            const job = ciJobs[`${lang}-${tool}`];
+            const jobUrl = job?.url;
+            const conclusion = job?.conclusion;
             const rowKey = `${lang}-${tool}`;
             const isHovered = ciHoveredRow === rowKey;
             const Cell = jobUrl ? "a" : "div";
@@ -574,6 +597,20 @@ const handleCmdCopy = (text: string, index: number) => {
               onMouseLeave: () => setCiHoveredRow(null),
               className: `${jobUrl ? styles["ciGridCellLink"] : styles["ciGridCell"]} ${isHovered ? styles["ciGridRowHovered"] : ""}`,
             };
+            const statusGlyph =
+              conclusion === "success" ? "●" :
+              conclusion === "failure" ? "✕" :
+              conclusion === "cancelled" ? "⊘" :
+              conclusion === "skipped" ? "–" :
+              conclusion === "in_progress" ? "◐" :
+              "●";
+            const statusLabel = conclusion ?? "success";
+            const statusClass =
+              conclusion === "failure" ? styles["ciStatusFail"] :
+              conclusion === "cancelled" ? styles["ciStatusCancelled"] :
+              conclusion === "skipped" ? styles["ciStatusSkipped"] :
+              conclusion === "in_progress" ? styles["ciStatusProgress"] :
+              styles["ciCheck"];
             return (
               <React.Fragment key={rowKey}>
                 <Cell {...cellProps}><img src={`/icons/${lang}_logo.png`} alt="" className={styles["ciToolIcon"]} />{lang}</Cell>
@@ -581,7 +618,7 @@ const handleCmdCopy = (text: string, index: number) => {
                 <Cell {...cellProps} className={`${jobUrl ? styles["ciGridCellLink"] : styles["ciGridCell"]} ${styles["ciGridCellStatus"]} ${isHovered ? styles["ciGridRowHovered"] : ""}`}>
                   {ciError
                     ? <span className={styles["ciErrorStatus"]}>⚠ github api error — reload</span>
-                    : <><span className={styles["ciCheck"]}>●</span> success</>
+                    : <><span className={statusClass}>{statusGlyph}</span> {statusLabel}</>
                   }
                 </Cell>
               </React.Fragment>
@@ -591,11 +628,16 @@ const handleCmdCopy = (text: string, index: number) => {
         <div className={styles["ciLinks"]}>
           {ciRunUrl ? (
             <a href={ciRunUrl} target="_blank" rel="noopener noreferrer">
-              latest run →
+              latest run{ciRunConclusion && ciRunConclusion !== "success" ? ` (${ciRunConclusion})` : ""} →
             </a>
           ) : (
             <a href="https://github.com/snackattas/zattas.me/actions/workflows/automation-detection-production.yml" target="_blank" rel="noopener noreferrer">
               workflow →
+            </a>
+          )}
+          {ciLastSuccess && (
+            <a href={ciLastSuccess.url} target="_blank" rel="noopener noreferrer">
+              last green: {formatRelative(ciLastSuccess.createdAt)} →
             </a>
           )}
           <a
