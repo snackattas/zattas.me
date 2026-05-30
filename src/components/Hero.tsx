@@ -5,7 +5,7 @@ import Image from "next/image";
 const SOCIAL_LINKS = [
   { href: "mailto:zach.attas@gmail.com", label: "Email", icon: "/icons/mail.svg" },
   { href: "https://github.com/snackattas", label: "GitHub", icon: "/icons/github.svg" },
-  { href: "https://www.linkedin.com/in/zachary-attas-79b9a153", label: "LinkedIn", icon: "/icons/linkedin.svg" },
+  { href: "https://www.linkedin.com/in/zachary-attas", label: "LinkedIn", icon: "/icons/linkedin.svg" },
   { href: "https://www.google.com/maps/place/Chicago,+IL", label: "Chicago on Google Maps", icon: "/icons/map-pin.svg" },
   { href: "https://medium.com/@zach.attas", label: "Medium", icon: "/icons/medium.svg" },
 ];
