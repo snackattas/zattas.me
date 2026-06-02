@@ -111,7 +111,7 @@
     </div>
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
-      <div>Accelerated 3rd-party API verification by developing a custom **Sinatra/Redis mock server** with a dependency injection pattern for the core application</div>
+      <div>Architected the **eval pipeline** for ReviewTrackers' in-house **NLP categorization & sentiment engine** (pre-LLM, proprietary TensorFlow model on review data) — unit-tested the categorization/extraction layer and built a **dependency-injection framework** that let the same E2E suite run against either the real NLP engine for true end-to-end confidence, or a contract-mocked version to stress unhappy paths and edge-case review data in lower envs on every release</div>
     </div>
     <div style={{ display: "flex", gap: "0.5em", marginBottom: "1em" }}>
       <span style={{ color: "var(--accent)", fontWeight: 700, flexShrink: 0 }}>–</span>
@@ -131,6 +131,7 @@
       <Pill>Python</Pill>
       <Pill>Kubernetes</Pill>
       <Pill>Selenium</Pill>
+      <Pill>NLP</Pill>
       <Pill>Locust</Pill>
       <Pill>Docker</Pill>
     </PillGrid>
