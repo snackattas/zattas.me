@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const SKILLS = [
   "Python", "Pytest", "Playwright", "Selenium", "TypeScript",
@@ -12,6 +12,7 @@ const SKILLS = [
 
 export function SkillsMarquee() {
   const [expanded, setExpanded] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
   const doubled = [...SKILLS, ...SKILLS];
 
   return (
@@ -73,14 +74,14 @@ export function SkillsMarquee() {
           whiteSpace: "nowrap",
           padding: "14px 0",
         }}
-        onMouseEnter={(e) => {
-          (e.currentTarget.querySelector(".skills-track") as HTMLElement).style.animationPlayState = "paused";
+        onMouseEnter={() => {
+          if (trackRef.current) trackRef.current.style.animationPlayState = "paused";
         }}
-        onMouseLeave={(e) => {
-          (e.currentTarget.querySelector(".skills-track") as HTMLElement).style.animationPlayState = "running";
+        onMouseLeave={() => {
+          if (trackRef.current) trackRef.current.style.animationPlayState = "running";
         }}
       >
-        <div className="skills-track">
+        <div className="skills-track" ref={trackRef}>
           {doubled.map((skill, i) => (
             <span key={i} style={{ display: "inline-flex", alignItems: "center" }}>
               <span
